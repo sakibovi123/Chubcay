@@ -12,7 +12,7 @@ export default function Header() {
     };
 
     return (
-        <div className="flex items-center justify-between md:p-5 p-2 h-[12vh]">
+        <div className="flex items-center justify-between md:p-5 p-2 h-[90px]">
             <div className="logo-area">
                 <Link to="/"><img src={Logo} className='h-[130px] w-[150px]' alt="" /></Link>
             </div>
@@ -34,8 +34,8 @@ export default function Header() {
                 <CiMenuBurger className="text-xl cursor-pointer" />
             </div>
 
-            <div className={`flex flex-col w-[200px] gap-5 items-start p-3 fixed left-0
-                 bg-white shadow-lg rounded top-[70px] left-[200px] ${nav ? 'flex' : 'hidden'}`}>
+            <div className={`md:hidden flex flex-col w-[200px] gap-5 items-start p-3 fixed left-0
+                 bg-white shadow-lg rounded top-[60px] sm:left-[200px] left-[230px] ${nav ? 'flex' : 'hidden'}`}>
                 <Link className="transition-all hover:text-blue-700">Home</Link>
                 <Link className="transition-all hover:text-blue-700">Sign up</Link>
                 <Link className="transition-all hover:text-blue-700">Sign in</Link>

@@ -13,7 +13,7 @@ class PackageController extends Controller
     public function index() {
         try{
             $packages = Package::all();
-            return Inertia::render("", [
+            return Inertia::render("Home", [
                 "packages" => $packages
             ]);
         }
@@ -21,7 +21,6 @@ class PackageController extends Controller
         catch(Exception $e) {
             return $e->getMessage();
         }
-        
     }
 
     public function getSinglePackageDetails($slug) {
@@ -44,6 +43,7 @@ class PackageController extends Controller
 
 
     public function store(Request $request) {
+
         $validated_data = $request->validate([
             "title" => "required|string|unique",
             "sub_title" => "required|string",

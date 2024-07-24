@@ -13,9 +13,11 @@ class PackageController extends Controller
     public function index() {
         try{
             $packages = Package::all();
-            return Inertia::render("Home", [
-                "packages" => $packages
-            ]);
+            // dd($packages);
+            return response()->json([
+                "success" => true,
+                "data" => $packages
+            ], 200);
         }
 
         catch(Exception $e) {

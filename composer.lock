@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73bb13e81ab84f98e67b2e1a9b23044e",
+    "content-hash": "c2ef667f5068ce3d04b35a8765590300",
     "packages": [
         {
             "name": "brick/math",
@@ -3247,6 +3247,50 @@
                 }
             ],
             "time": "2024-04-27T21:32:50+00:00"
+        },
+        {
+            "name": "shift4/shift4-php",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shift4developer/shift4-php.git",
+                "reference": "d6cc927cada634ded65ea0b3ac42efca278d0324"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shift4developer/shift4-php/zipball/d6cc927cada634ded65ea0b3ac42efca278d0324",
+                "reference": "d6cc927cada634ded65ea0b3ac42efca278d0324",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Shift4\\": "lib/Shift4/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shift4",
+                    "homepage": "https://dev.shift4.com/"
+                }
+            ],
+            "description": "Shift4 PHP Library",
+            "homepage": "https://dev.shift4.com/",
+            "support": {
+                "issues": "https://github.com/shift4developer/shift4-php/issues",
+                "source": "https://github.com/shift4developer/shift4-php/tree/v3.1.0"
+            },
+            "time": "2024-03-28T14:54:22+00:00"
         },
         {
             "name": "symfony/clock",

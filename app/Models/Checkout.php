@@ -15,9 +15,6 @@ class Checkout extends Model
         "last_name",
         "email",
         "phone",
-        "card_number",
-        "cvc",
-        "expiry",
         "total",
         "tax",
         "grand_total",
@@ -26,12 +23,12 @@ class Checkout extends Model
     ];
 
 
-    public function packages()
+    public function package()
     {
-        return $this->hasMany(Package::class);
+        return $this->belongsTo(Package::class);
     }
 
-    public function users()
+    public function user()
     {
         return $this->hasMany(User::class);
     }

@@ -12,7 +12,10 @@ Route::get("/", [ HomeController::class, "home" ])
     ->name("home.home");
 
 // package routes
-Route::get("/packages", [ PackageController::class, "index" ])->name("package.index");
+Route::get("/api/packages", [ PackageController::class, "index" ])
+        ->name("package.index");
+
+
 
 // for admin panel
 
@@ -24,6 +27,8 @@ Route::middleware('auth')->group(function () {
     });
 
     // package management routes
+    // Route::get("/packages", [ PackageController::class, "index" ])
+    //     ->name("package.index");
 
     // user management
 

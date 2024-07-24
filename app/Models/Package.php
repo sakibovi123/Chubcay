@@ -29,8 +29,8 @@ class Package extends Model
 
     public function checkouts()
     {
-        return $this->belongsTo(Checkout::class);
+        return $this->hasMany(Checkout::class);
     }
-    
+
 
 }

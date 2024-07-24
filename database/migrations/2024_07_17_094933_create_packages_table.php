@@ -15,12 +15,18 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
 
+            $table->string("slug")->default("");
+
             $table->string('title');
             $table->string('sub_title');
             $table->decimal('price', 10, 2);
             $table->float('discount');
 
             $table->json('features')->nullable();
+
+            $table->integer("duration")->nullable();
+
+            // need to generate QR after purchasing
         });
     }
 

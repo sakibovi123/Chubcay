@@ -8,7 +8,7 @@ import { Link, Head } from '@inertiajs/react';
 
 
 
-export default function Home() {
+export default function Home({packages}) {
   return (
     <div className="h-full container md:mx-auto lg:w-[80%] md:w-[60%] w-full">
       <Header />
@@ -17,7 +17,7 @@ export default function Home() {
       <Brands />
       <Feature />
       <Testimonial />
-      <Pricing />
+      <Pricing packages={packages} />
     </div>
   )
 }

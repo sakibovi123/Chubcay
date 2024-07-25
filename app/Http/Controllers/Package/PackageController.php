@@ -7,17 +7,20 @@ use App\Models\Package;
 use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Shift4\Shift4Gateway;
+use Shift4\Request\CheckoutRequest;
+use Shift4\Request\CheckoutRequestCharge;
+
 
 class PackageController extends Controller
 {
     public function index() {
         try{
             $packages = Package::all();
-            // dd($packages);
-            return response()->json([
-                "success" => true,
-                "data" => $packages
-            ], 200);
+
+            return Inertia::render("Pages/Home", [
+                "packages" => $packages
+            ]);
         }
 
         catch(Exception $e) {
@@ -27,10 +30,22 @@ class PackageController extends Controller
 
     public function getSinglePackageDetails($slug) {
         try{
-            $package = Package::where("slug", $slug)->first();
+            $package_details = Package::where("slug", $slug)->first();
 
-            return Inertia::render("", [
-                "package" => $package
+            $shift4 = new Shift4Gateway(env('SHIFT4_SECRET'));
+                
+            $checkoutCharge = new CheckoutRequestCharge();
+            $checkoutCharge->amount($package_details->price * 100)->currency('USD');
+            // dd($checkoutCharge);
+            $checkoutRequest = new CheckoutRequest();
+            $checkoutRequest->charge($checkoutCharge);
+
+            $shift4Payment =  $shift4->signCheckoutRequest($checkoutRequest);
+
+            return Inertia::render("PackageDetails", [
+                "package_details" => $package_details,
+                "shift4Payment" => $shift4Payment,
+                "SHIFT4_PK" => env('SHIFT4_PK')
             ]);
 
         } catch( Exception $e) {
@@ -92,7 +107,7 @@ class PackageController extends Controller
                 ], 404);
             }
         } catch ( Exception $e ) {
-            throw $e->getMessage();
+            return $e->getMessage();
         }
     }
 
@@ -103,7 +118,7 @@ class PackageController extends Controller
             $package->delet();
             return redirect(route(''));
         } catch (Exception $e) {
-            throw $e->getMessage();
+            return $e->getMessage();
         }
     }
 }

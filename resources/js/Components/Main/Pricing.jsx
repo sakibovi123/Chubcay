@@ -1,7 +1,7 @@
 import React from 'react'
 import PricingCard from './PricingCard'
 
-function Pricing() {
+function Pricing({packages}) {
   return (
     <div className="my-[7rem] h-full w-full flex
         flex-col items-center text-center justify-center gap-5 p-3"
@@ -18,9 +18,14 @@ function Pricing() {
         </p>
 
         <div className="md:flex flex-wrap w-full gap-5 items-center justify-center">
-            <PricingCard />
-            <PricingCard />
-            <PricingCard />
+            {
+                packages.map((pkg) => (
+                    <PricingCard key={pkg.id} price={pkg.price} desc="lorem ipsum dolor sit amet dolor ipsum" slug={pkg.slug} />
+                ))
+            }
+{/*             
+            <PricingCard price="50" desc="lorem ipsum dolor sit amet dolor ipsum" />
+            <PricingCard price="150" desc="lorem ipsum dolor sit amet dolor ipsum" /> */}
         </div>
         
     </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Checkout\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Package\PackageController;
 use App\Http\Controllers\ProfileController;
@@ -12,8 +13,16 @@ Route::get("/", [ HomeController::class, "home" ])
     ->name("home.home");
 
 // package routes
-Route::get("/api/packages", [ PackageController::class, "index" ])
+Route::get("/packages", [ PackageController::class, "index" ])
         ->name("package.index");
+
+// get single package
+Route::get("/package/{slug}", [ PackageController::class, 'getSinglePackageDetails' ])
+    ->name('package.single');
+
+// shift4
+Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])
+    ->name('checkout.handle');
 
 
 

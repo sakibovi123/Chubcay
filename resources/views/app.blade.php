@@ -15,8 +15,19 @@
         @viteReactRefresh
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
     </head>
     <body class="font-sans antialiased">
         @inertia
     </body>
+    <script src="https://dev.shift4.com/checkout.js"
+        className="shift4-button"
+        data-key="pk_test_uEasbndcT9gzaQoWJl5usCqZ"
+        data-checkout-request={shift4Payment}
+        data-name="Chubcay"
+        data-description="Checkout example"
+        data-amount={package_details.price}
+        data-checkout-button="Pay now">
+    </script>
 </html>

@@ -10,5 +10,5 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 
-Route::post('/checkout', [ CheckoutController::class, 'handleCheckout' ])
-    ->name('checkout.handleCheckout');
+// Route::post('/checkout', [ CheckoutController::class, 'handleCheckout' ])
+//     ->name('checkout.handleCheckout');

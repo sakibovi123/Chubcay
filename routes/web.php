@@ -1,24 +1,34 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Package\PackageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 // root directory => landing
-Route::get('/', function () {
-    return Inertia::render('Home');
-});
+Route::get("/", [ HomeController::class, "home" ])
+    ->name("home.home");
+
+// package routes
+Route::get("/api/packages", [ PackageController::class, "index" ])
+        ->name("package.index");
+
+
 
 // for admin panel
 
 Route::middleware('auth')->group(function () {
+
     // main dashboard
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     });
 
     // package management routes
+    // Route::get("/packages", [ PackageController::class, "index" ])
+    //     ->name("package.index");
 
     // user management
 

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\PackageExpiration;
 
 class User extends Authenticatable
 {
@@ -50,5 +51,15 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_admin' => 'boolean'
         ];
+    }
+
+    public function package_expirations()
+    {
+        return $this->belongsTo(PackageExpiration::class);
+    }
+
+    public function checkouts()
+    {
+        return $this->belongsTo(Checkout::class);
     }
 }

@@ -10,14 +10,27 @@ class Package extends Model
     use HasFactory;
 
     protected $fillable = [
+        'slug',
         'title',
         'sub_title',
         'price',
         'discount',
-        'features'
+        'features',
+        'duration'
     ];
 
     protected $casts = [
         'features' => 'array'
     ];
+
+    public function package_expirations() {
+        return $this->belongsTo(PackageExpiration::class);
+    }
+
+    public function checkouts()
+    {
+        return $this->hasMany(Checkout::class);
+    }
+
+
 }

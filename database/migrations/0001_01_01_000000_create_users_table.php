@@ -26,6 +26,9 @@ return new class extends Migration
             $table->string('country');
             $table->string('phone')->nullable();
             $table->string('city');
+
+            // Admin
+            $table->boolean('is_admin')->default(0);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

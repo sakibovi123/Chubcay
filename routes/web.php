@@ -15,7 +15,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     // main dashboard
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard')->name('dashboard'); 
+        return Inertia::render('Dashboard');
     });
 
     // package management routes

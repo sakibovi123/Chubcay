@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+    
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
@@ -36,6 +37,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    // dashboard urls
+    // Route::get('/dashboard', RegisteredUserController::class, '/')
+
+
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

@@ -9,7 +9,7 @@ export default function Testimonial() {
         <p className="text-xl font-semibold">
             Testimonials
         </p>
-        <p className="text-purple-600 text-4xl font-semibold">
+        <p className="text-purple-600 md:text-4xl text-3xl font-semibold">
             What Our Clients Say
         </p>
         <p className="text-lg md:w-[50%] w-full font-semibold text-gray-400">
@@ -18,6 +18,11 @@ export default function Testimonial() {
 
         <div className="grid md:grid-cols-2 grid-cols-1 gap-5 md:w-[75%] w-full">
             <TestimonialCard />
+            
+            <TestimonialCard />
+
+            <TestimonialCard />
+
             <TestimonialCard />
         </div>
         

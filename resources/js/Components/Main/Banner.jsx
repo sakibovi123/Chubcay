@@ -20,6 +20,23 @@ export default function Banner() {
                     Explore Features
                 </button>
             </div>
+
+
+            {/* <div className="
+        absolute bg-red-50 rounded-full w-[50px] h-[50px] left-[180px] top-[280px]"></div>
+
+        <div className="
+        absolute bg-red-50 rounded-full w-[80px] h-[80px] left-[150px] top-[470px]"></div>
+        <div className="
+        absolute bg-red-50 rounded-full w-[50px] h-[50px] left-[280px]"></div>
+        <div className="
+        absolute bg-red-50 rounded-full w-[50px] h-[50px] left-[1680px]"></div>
+
+        <div className="
+            absolute bg-red-50 rounded-full w-[50px] h-[50px] top-[220px] left-[1380px]"></div> */}
+
+{/* <div className="
+        absolute bg-red-50 rounded-full w-[50px] h-[50px] left-[1180px] top-[3270px]"></div> */}
             
         </div>
     ) 

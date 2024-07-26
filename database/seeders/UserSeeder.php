@@ -34,6 +34,16 @@ class UserSeeder extends Seeder
                 "country" => "Bangladesh",
                 "phone" => "+988233234",
                 "city" => "Dhaka"
+            ],
+            [
+                "first_name" => "Daimao",
+                "last_name" => "Chan",
+                "email" => "daimao@gmail.com",
+                "password" => Hash::make("admin123123"),
+                "image" => "https://w7.pngwing.com/pngs/910/606/png-transparent-head-the-dummy-avatar-man-tie-jacket-user.png",
+                "country" => "Bangladesh",
+                "phone" => "+988233234",
+                "city" => "Dhaka"
             ]
         ]);
     }

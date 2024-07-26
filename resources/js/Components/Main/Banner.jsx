@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function Banner() {
     return (
-        <div className="md:h-[550px] w-full flex flex-col items-center md:justify-center text-center">
+        <div id="banner" className="md:h-[550px] w-full flex flex-col items-center md:justify-center text-center">
             <div className="md:w-[60%] w-full p-2">
                 {/* title section */}
             

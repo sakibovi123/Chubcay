@@ -15,6 +15,8 @@ use Shift4\Shift4Gateway;
 use Shift4\Request\CheckoutRequest;
 use Shift4\Request\CheckoutRequestCharge;
 use Inertia\Inertia;
+use Shift4\Exception\Shift4Exception;
+
 
 
 class CheckoutController extends Controller
@@ -27,34 +29,41 @@ class CheckoutController extends Controller
     }
 
     public function handleCheckout( Request $request ) 
-    {
-        
+    {   
         try {
-
+            $auth = auth()->user();
             $currency = 'USD';
-            // $package = Package::where("id", $request->get('package_id'))->first();
-            $package = Package::where("id", 2)->first();
+            $package = Package::where("id", $request->get('package_id'))->first();
+            // $package = Package::where("id", 2)->first();
             // validation
-            // $request->validate([
-            //     "first_name" => "required|string",
-            //     "last_name" => "required|string",
-            //     "email" => "required|email",
-            // ]);
-
+            $request->validate([
+                "first_name" => "required|string",
+                "last_name" => "required|string",
+                "email" => "required|email",
+                "phone" => "required|string|max:11",
+                // "card_number" => "required|number|max:16",
+                // "cvc" => "required|number|max:3"
+            ]);
+            // dd(auth()->user()->id);
             // $data = $request->all();
             $data = [
-                "first_name" => "John",
-                "last_name" => "die",
-                "email" => "john@example.com",
+                "first_name" => $request->get('first_name'),
+                "last_name" => $request->get('last_name'),
+                "email" => $request->get('email'),
                 "package_id" => $package->id,
-                "user_id" => 1,
+                "user_id" => auth()->user()->id, // just testing for now
             ];
-            dd($data);
+
+            // getting mm and yy
+            $mm = $request->get('mm');
+            $yy = $request->get('year');
+
+            $expiry = $mm."/".$yy;
+            // dd($expiry);
+            // dd($data);
             if ( $package ) {
                 $checkout = Checkout::create($data);
                 $checkout->total = $checkout->package->price;
-
-                // dd($checkout->total);
                 
                 // $checkout->total = $checkout->package_id->price;
                 if( $checkout->tax ) 
@@ -64,9 +73,37 @@ class CheckoutController extends Controller
                 $checkout->grand_total += $checkout->total;
                 // dd($checkout->grand_total);
                 $checkout->save();
-                
-                return redirect(route('home.home'));
 
+                $gateway = new Shift4Gateway(env('SHIFT4_SECRET'));
+
+                $sh_request = [
+                    'amount' => $checkout->grand_total,
+                    'currency' => 'USD',
+                    'card' => [
+                        'number' => $request->get('card_number'),
+                        'expMonth' => $mm,
+                        'expYear' => $yy
+                    ]
+                ];
+                // dd("asdasd");
+                try{
+                    $charge = $gateway->createCharge($sh_request);
+                    
+                    $chargeId = $charge->getId();
+                    
+                    if( $charge->getStatus() == "successful" ) {
+                        $checkout->status = "Success";
+                        $checkout->save();
+                        return redirect(route('checkout.success'));
+                    }
+                } catch( Shift4Exception $se ) {
+                    $checkout->status = "Cancelled";
+                    $checkout->save();
+                    return Inertia::render("Failed", [
+                        "error" => $se->getMessage()
+                    ]);
+                }
+            
             }
             else {
                 return response()->json([
@@ -83,4 +120,13 @@ class CheckoutController extends Controller
     }
 
 
+    public function handleSuccess()
+    {
+        return Inertia::render("Success");
+    }
+
+    public function handleFailed()
+    {
+        return Inertia::render("Failed");
+    }
 }

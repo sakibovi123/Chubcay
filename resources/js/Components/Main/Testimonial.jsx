@@ -4,7 +4,7 @@ import TestimonialCard from "./TestimonialCard";
 
 export default function Testimonial() {
     return (
-    <div className="h-full w-full flex flex-col items-center text-center justify-center gap-5 p-3">
+    <div id="testimonial" className="h-full w-full flex flex-col items-center text-center justify-center gap-5 p-3">
 
         <p className="text-xl font-semibold">
             Testimonials

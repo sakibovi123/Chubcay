@@ -20,10 +20,6 @@ Route::get("/packages", [ PackageController::class, "index" ])
 Route::get("/package/{slug}", [ PackageController::class, 'getSinglePackageDetails' ])
     ->name('package.single');
 
-// shift4
-Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])
-    ->name('checkout.handle');
-
 
 
 // for admin panel
@@ -35,11 +31,17 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard');
     });
 
-    // package management routes
-    // Route::get("/packages", [ PackageController::class, "index" ])
-    //     ->name("package.index");
+    // checkout
 
-    // user management
+    Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])
+        ->name('checkout.handle');
+
+    // shift 4 checkout success & failure
+    Route::get("/success", [ CheckoutController::class, "handleSuccess" ])
+    ->name('checkout.success');
+
+    Route::get("/failed", [ CheckoutController::class, "handleFailed" ])
+    ->name('checkout.failed');
 
     
 });

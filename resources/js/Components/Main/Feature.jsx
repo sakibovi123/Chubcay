@@ -12,7 +12,7 @@ import { MdOutlineSupportAgent } from "react-icons/md";
 
 export default function Feature(){
   return(
-    <div id="#features" className="md:my-[6rem] h-full w-full flex flex-col items-center text-center gap-5 p-3">
+    <div id="feature" className="md:my-[6rem] h-full w-full flex flex-col items-center text-center gap-5 p-3">
         <p className="text-purple-600 text-xl font-semibold">
           Our Membership's Core Features
         </p>

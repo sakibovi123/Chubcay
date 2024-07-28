@@ -11,10 +11,10 @@ function PricingCard({price, desc, slug}) {
         <div className="w-[100%] text-gray-400 font-semibold p-1">
             {desc}
         </div>
-        <div className="font-bold flex gap-4">All UI Components</div>
-        <div className="font-bold flex gap-4">Use with Unlimited Projects</div>
-        <div className="font-bold flex gap-4">Commercial Use</div>
-        <div className="font-bold flex gap-4">Email Support</div>
+        <div className="font-bold flex gap-4">Swimming Access</div>
+        <div className="font-bold flex gap-4">1 Spa access</div>
+        <div className="font-bold flex gap-4">1 Match Golf Access</div>
+        <div className="font-bold flex gap-4">1 Buffet Lunch</div>
 
         <Link href={route('package.single', slug)} className="bg-blue-500 p-3 w-[300px] text-white font-bold">
             Purchase now

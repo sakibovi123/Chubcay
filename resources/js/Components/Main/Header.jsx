@@ -1,8 +1,10 @@
 import { Link, Head, usePage } from '@inertiajs/react';
 import Logo from '../../Assets/Images/saas.png';
-import {react, useState, useEffect} from 'react';
+import {react, useState, useEffect, useRef} from 'react';
 import { CiMenuBurger } from "react-icons/ci";
 import { RxCross1 } from "react-icons/rx";
+import { CiUser } from "react-icons/ci";
+
 
 export default function Header() {
     const [ nav, showNav ] = useState(false);
@@ -13,9 +15,30 @@ export default function Header() {
         showNav(prevNav => !prevNav);
     };
 
+    const [ userDrop, setUserDrop ] = useState(false);
+
+    const userDropRef = useRef(null);
+
+    const toggleUserDrop = () => {
+        setUserDrop(prevUserDrop => !prevUserDrop);
+    }
+
+    useEffect(()=> {
+        const handleClickOutside = (event) => {
+            if (userDropRef.current && !userDropRef.current.contains(event.target)) {
+                setUserDrop(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [userDropRef])
+
 
     return (
-        <div className="flex items-center justify-between md:p-5 p-2 h-[90px]">
+        <div ref={userDropRef} className="flex items-center justify-between md:p-5 p-2 h-[90px]">
             <div className="logo-area">
                 <Link href="/"><img src={Logo} className='h-[130px] w-[150px]' alt="" /></Link>
             </div>
@@ -31,7 +54,17 @@ export default function Header() {
             <div className="auth-area flex gap-5 font-bold text-lg md:flex hidden">
                 {
                     auth.user ? (
-                        <Link href={route('logout')} className="text-red-500 p-2 transition-all hover:text-red-700">Logout</Link>
+                        <div>
+                            <CiUser onClick={toggleUserDrop} className="text-2xl cursor-pointer transition-all delay-5 hover:text-rose-600" />
+                            <div className={`${userDrop ? 'block' : 'hidden'} bg-white fixed w-[200px] p-4 top-[75px] right-[110px]`}>
+                                <Link href="/" className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br />
+                                <Link href="" className="text-md font-normal transition-all delay-5 hover:border-b-2">Profile</Link><br />
+                                <Link href="" className="text-md font-normal transition-all delay-5 hover:border-b-2">Logout</Link>
+                            </div>
+                            
+                            {/* <Link href={route('logout')} className="text-red-500 p-2 transition-all hover:text-red-700">Logout</Link> */}
+                        </div>
+                        
                     ) : (
                         <div>
                             <Link href={route('login')} className="text-gray-500 p-2 transition-all hover:text-blue-700">Sign in</Link>

@@ -3,7 +3,7 @@ import author_2 from "../../Assets/Images/author-02.png"
 import { CiStar } from "react-icons/ci";
 
 
-export default function TestimonialCard()
+export default function TestimonialCard({ name, desg, review })
  {
     return (
         <div className="bg-white shadow-xl rounded-xl md:h-[310px] h-[360px] p-4 w-full">
@@ -12,8 +12,8 @@ export default function TestimonialCard()
                 <div className="flex gap-3 p-3 w-full">
                     <img src={author_2} alt="" />
                     <div>
-                        <p className="text-xl font-semibold">David Miller</p>
-                        <p className="text-left text-gray-400 font-semibold">Tourist</p>
+                        <p className="text-xl font-semibold">{name}</p>
+                        <p className="text-left text-gray-400 font-semibold">{desg}</p>
                     </div>
                     
                 </div>
@@ -30,7 +30,7 @@ export default function TestimonialCard()
             </div>
 
             <p className="p-3 text-gray-400 font-semibold">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, amet ad. Animi sapiente harum aspernatur dolore ex corrupti modi voluptatem repellat earum, officia necessitatibus placeat exercitationem! Ipsam, sunt exercitationem? Dicta.
+                {review}
             </p>
             
         </div>

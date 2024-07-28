@@ -57,7 +57,7 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
     <div className="h-full container md:mx-auto lg:w-[80%] md:w-[60%] w-full">
       <Header />
       {/* shift4: {shift4Payment} */}
-    <div className=" gap-5 flex items-start justify-between my-5 p-5 bg-white border rounded shadow-md">
+    <div className=" gap-5 md:flex items-start justify-between my-5 p-5 bg-white border rounded shadow-md">
         <div className="w-full">
             {/* User: {auth.name} */}
             <h1 className="p-2 text-3xl font-bold">Package Name: {package_details.title}</h1>

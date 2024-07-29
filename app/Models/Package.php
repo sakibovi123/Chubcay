@@ -24,7 +24,7 @@ class Package extends Model
     ];
 
     public function package_expirations() {
-        return $this->belongsTo(PackageExpiration::class);
+        return $this->hasMany(PackageExpiration::class);
     }
 
     public function checkouts()

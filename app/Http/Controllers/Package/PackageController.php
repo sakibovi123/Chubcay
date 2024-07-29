@@ -30,7 +30,7 @@ class PackageController extends Controller
 
     public function getSinglePackageDetails($slug) {
         try{
-            // $auth = auth()->user();
+            $auth = auth()->user();
             $package_details = Package::where("slug", $slug)->first();
 
             $shift4 = new Shift4Gateway(env('SHIFT4_SECRET'));
@@ -43,11 +43,13 @@ class PackageController extends Controller
 
             $shift4Payment =  $shift4->signCheckoutRequest($checkoutRequest);
 
+
+
             return Inertia::render("PackageDetails", [
                 "package_details" => $package_details,
                 "shift4Payment" => $shift4Payment,
                 "SHIFT4_PK" => env('SHIFT4_PK'),
-                // 'auth' => $auth
+                'auth' => $auth
             ]);
 
         } catch( Exception $e) {

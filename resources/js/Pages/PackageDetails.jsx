@@ -15,7 +15,7 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
         // amount: 809
         first_name: '',
         last_name: '',
-        email: '',
+        email: auth.email || '',
         phone: '',
         package_id: package_details.id,
         card_number: '',
@@ -94,10 +94,11 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
                 <label htmlFor="Email">Email</label>
                 <input
                     required
-                    value={data.email}
+                    disabled
+                    defaultValue={auth.email}
                     onChange={(e) => setData('email', e.target.value)}
                     type="email"
-                    className="w-full rounded border-gray-300" />
+                    className="bg-red-100 w-full rounded border-gray-300" />
 
                     {errors.email && <div>{errors.email}</div>}
 
@@ -148,7 +149,7 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
                 <div className="w-full flex items-center gap-2">
                     <input
                         required
-                        type="text"                  
+                        type="number"                  
                         id="card-expiration-input"
                         value={data.mm}
                         onChange={(e) => setData('mm', e.target.value)}
@@ -159,7 +160,7 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
 
                         <input
                             required
-                            type="text"
+                            type="number"
                             id="card-expiration-input"
                             value={data.year}
                             onChange={(e) => setData('year', e.target.value)}
@@ -172,7 +173,7 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
                         
                         <input
                             required
-                            type="text"
+                            type="number"
                             id="card-expiration-input"
                             value={data.cvc}
                             onChange={(e) => setData('cvc', e.target.value)}

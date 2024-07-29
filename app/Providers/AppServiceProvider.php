@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\PackageExpiration;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -38,7 +39,8 @@ class AppServiceProvider extends ServiceProvider
                 return [
                     'user' => auth()->user()
                 ];
-            }
+            },
+            
         ]);
     }
 

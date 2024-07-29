@@ -10,14 +10,14 @@ class PackageExpiration extends Model
     use HasFactory;
 
     protected $fillable = [
-        "package_id", "user_id", "is_expired"
+        "package_id", "user_id", "is_expired", "duration", "token"
     ];
 
-    public function packages() {
-        return $this->hasMany(Package::class);
+    public function package() {
+        return $this->belongsTo(Package::class);
     }
 
-    public function users() {
-        return $this->hasMany(User::class);
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

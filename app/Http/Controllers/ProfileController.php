@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\PackageExpiration;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ProfileController extends Controller
 {
@@ -19,11 +21,27 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        // dd(auth()->user()->package->title);
+
+        $existing_package = PackageExpiration::where("user_id", $request->user()->id)
+            ->first();
+        $package_token = null;
+
+        if( $existing_package ) 
+        {
+            $package_name = $existing_package->package->title;
+            $package_user = $existing_package->user->email;
+
+            // $package_token = QrCode::format('png')->generate($existing_package->token);
+        }
+        
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
             'user' => auth()->user(),
+            'existing_package' => $existing_package,
+            'package_token' => $package_token
+            // 'package_name' => $package_name
         ]);
     }
 
@@ -34,9 +52,7 @@ class ProfileController extends Controller
     {
         // dd($request->user()->email);
         $request->user()->fill($request->validated());
-        // if( $ )
-        // if( $request->get('') )
-        // {}
+
         if( $request->get('first_name')
              | $request->get('last_name')
              | $request->get('last_name')

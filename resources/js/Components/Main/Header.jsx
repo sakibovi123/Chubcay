@@ -68,8 +68,8 @@ export default function Header() {
                         <div ref={userDropRef}>
                             <CiUser onClick={toggleUserDrop} className="text-2xl cursor-pointer transition-all delay-5 hover:text-rose-600" />
                             <div className={`${userDrop ? 'block' : 'hidden'} bg-white fixed w-[200px] p-4 top-[75px] right-[110px]`}>
-                                <Link href={route('home.home')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br />
-                                <Link href={route('profile.edit')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Profile</Link><br />
+                                {/* <Link href={route('home.home')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br /> */}
+                                <Link href={route('profile.edit')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br />
                                 <Link href={route('logout')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Logout</Link>
                             </div>
                             

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Checkout;
 use App\Http\Controllers\Controller;
 use App\Models\Checkout;
 use App\Models\Package;
+use App\Models\PackageExpiration;
 use App\Services\Shift4Service;
 use Exception;
 use Illuminate\Http\Request;
@@ -94,6 +95,32 @@ class CheckoutController extends Controller
                     if( $charge->getStatus() == "successful" ) {
                         $checkout->status = "Success";
                         $checkout->save();
+                        
+                        // saving package expiration model
+                        // need to check if one already exist then replace the package
+                        
+                        $existed_package = PackageExpiration::where("user_id", $request->user()->id)
+                            ->first();
+
+                        if( !$existed_package )
+                        {
+                            // dd($checkout->package->duration);
+                            $pkg_exp = PackageExpiration::create([
+                                "package_id" => $checkout->package->id,
+                                "user_id" => auth()->user()->id,
+                                "duration" => $checkout->package->duration
+                            ]);
+
+                            // dd($pkg_exp->duration);
+                        }
+                        else
+                        {
+                            $existed_package->package_id = $checkout->package->id;
+                            $existed_package->duration = $checkout->package->duration;
+
+                            $existed_package->save();
+                        }
+                        
                         return redirect(route('checkout.success'));
                     }
                 } catch( Shift4Exception $se ) {

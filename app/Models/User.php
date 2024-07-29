@@ -53,12 +53,12 @@ class User extends Authenticatable
         ];
     }
 
-    public function package_expirations()
+    public function package_expiration()
     {
-        return $this->belongsTo(PackageExpiration::class);
+        return $this->hasMany(PackageExpiration::class);
     }
 
-    public function checkouts()
+    public function checkout()
     {
         return $this->belongsTo(Checkout::class);
     }

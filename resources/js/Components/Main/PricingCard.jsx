@@ -2,12 +2,12 @@ import React from 'react'
 import { Link } from '@inertiajs/react';
 
 
-function PricingCard({price, desc, slug}) {
+function PricingCard({price, desc, slug, duration}) {
   return (
     <div className="bg-white h-[480px] md:w-[360px] w-full p-[5rem] shadow-xl
      flex flex-col items-center justify-center gap-5 rounded md:my-0 my-5"
     >
-        <div className="text-3xl font-bold">${price} / Month</div>
+        <div className="text-3xl font-bold">${price}</div>
         <div className="w-[100%] text-gray-400 font-semibold p-1">
             {desc}
         </div>

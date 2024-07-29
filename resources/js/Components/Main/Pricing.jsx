@@ -20,7 +20,11 @@ function Pricing({packages}) {
         <div className="md:flex flex-wrap w-full gap-5 items-center justify-center">
             {
                 packages.map((pkg) => (
-                    <PricingCard key={pkg.id} price={pkg.price} desc="lorem ipsum dolor sit amet dolor ipsum" slug={pkg.slug} />
+                    <PricingCard key={pkg.id} price={pkg.price}
+                        desc={pkg.title}
+                        slug={pkg.slug}
+                        duration={""}
+                    />
                 ))
             }
 {/*             

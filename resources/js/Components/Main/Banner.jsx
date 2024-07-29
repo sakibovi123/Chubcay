@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
+import { Link } from "@inertiajs/react";
 
 
 export default function Banner() {
+
+    const scrollToFeatures = () => {
+        window.location.href = "#feature"
+    }
+
     return (
         <div id="banner" className="md:h-[550px] w-full flex flex-col items-center md:justify-center text-center">
             <div className="md:w-[60%] w-full p-2">
@@ -16,7 +22,7 @@ export default function Banner() {
                 </p>
                 {/* button sectio */}
 
-                <button className="rounded w-[300px] my-6 text-center bg-purple-600 p-3 text-white transition-all hover:bg-purple-500 delay-5">
+                <button onClick={scrollToFeatures} className="cursor-pointer rounded w-[300px] my-3 md:my-6 text-center bg-purple-600 p-3 text-white transition-all hover:bg-purple-500 delay-5">
                     Explore Features
                 </button>
             </div>

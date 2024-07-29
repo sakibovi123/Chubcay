@@ -22,6 +22,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
 
             $table->boolean("is_expired")->default(0);
+
+            $table->integer('duration')->nullable();
         });
     }
 

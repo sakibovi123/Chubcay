@@ -34,6 +34,11 @@ class AppServiceProvider extends ServiceProvider
                     'user' => Auth::user(),
                 ];
             },
+            'user' => function () {
+                return [
+                    'user' => auth()->user()
+                ];
+            }
         ]);
     }
 

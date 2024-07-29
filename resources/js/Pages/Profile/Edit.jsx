@@ -38,7 +38,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             <Head title='Profile' />
             <Header />
 
-            <div className="my-[4rem] w-[50%] bg-white border rounded p-3">
+            <div className="my-[4rem] p-3">
 
             </div>
 

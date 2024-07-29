@@ -8,6 +8,7 @@ import { CiUser } from "react-icons/ci";
 
 export default function Header() {
     const [ nav, showNav ] = useState(false);
+    const navRef = useRef(null);
 
     const { auth } = usePage().props;
     
@@ -28,17 +29,27 @@ export default function Header() {
             if (userDropRef.current && !userDropRef.current.contains(event.target)) {
                 setUserDrop(false);
             }
+
+            if( navRef.current && !navRef.current.contains(event.target) ) {
+                showNav(false);
+            }
         };
 
+        // const hanndleMenuDropDown = (event) => {
+            
+        // }
+
         document.addEventListener('mousedown', handleClickOutside);
+        // document.addEventListener('mousedown', hanndleMenuDropDown);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+
         };
-    }, [userDropRef])
+    }, [userDropRef, navRef])
 
 
     return (
-        <div ref={userDropRef} className="flex items-center justify-between md:p-5 p-2 h-[90px]">
+        <div className="flex items-center justify-between md:p-5 p-2 h-[90px]">
             <div className="logo-area">
                 <Link href="/"><img src={Logo} className='h-[130px] w-[150px]' alt="" /></Link>
             </div>
@@ -54,7 +65,7 @@ export default function Header() {
             <div className="auth-area flex gap-5 font-bold text-lg md:flex hidden">
                 {
                     auth.user ? (
-                        <div>
+                        <div ref={userDropRef}>
                             <CiUser onClick={toggleUserDrop} className="text-2xl cursor-pointer transition-all delay-5 hover:text-rose-600" />
                             <div className={`${userDrop ? 'block' : 'hidden'} bg-white fixed w-[200px] p-4 top-[75px] right-[110px]`}>
                                 <Link href={route('home.home')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br />
@@ -80,7 +91,7 @@ export default function Header() {
                 <CiMenuBurger className="text-xl cursor-pointer" />
             </div>
 
-            <div className={`md:hidden flex flex-col w-[200px] gap-5 items-start p-3 fixed left-0
+            <div ref={navRef} className={`md:hidden flex flex-col w-[200px] gap-5 items-start p-3 fixed left-0
                  bg-white shadow-lg rounded top-[60px] sm:left-[200px] left-[230px] ${nav ? 'flex' : 'hidden'}`}>
                 <Link href="#header" className="transition-all hover:text-blue-700">Home</Link>
                 <Link className="transition-all hover:text-blue-700">Sign up</Link>

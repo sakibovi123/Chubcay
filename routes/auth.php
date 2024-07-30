@@ -10,8 +10,11 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Checkout\CheckoutController;
+
 
 Route::middleware('guest')->group(function () {
+    
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
@@ -36,6 +39,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    // dashboard urls
+    // Route::get('/dashboard', RegisteredUserController::class, '/')
+
+
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
@@ -54,6 +61,18 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+
+        // checkout
+
+    // Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])
+    // ->name('checkout.handle');
+
+    // // shift 4 checkout success & failure
+    // Route::get("/success", [ CheckoutController::class, "handleSuccess" ])
+    // ->name('checkout.success');
+
+    // Route::get("/failed", [ CheckoutController::class, "handleFailed" ])
+    // ->name('checkout.failed');
 });

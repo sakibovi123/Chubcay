@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
+import { Link } from "@inertiajs/react";
 
 
 export default function Banner() {
+
+    const scrollToFeatures = () => {
+        window.location.href = "#feature"
+    }
+
     return (
-        <div className="md:h-[550px] w-full flex flex-col items-center md:justify-center text-center">
+        <div id="banner" className="md:h-[550px] w-full flex flex-col items-center md:justify-center text-center">
             <div className="md:w-[60%] w-full p-2">
                 {/* title section */}
             
@@ -16,10 +22,27 @@ export default function Banner() {
                 </p>
                 {/* button sectio */}
 
-                <button className="rounded w-[300px] my-6 text-center bg-purple-600 p-3 text-white transition-all hover:bg-purple-500 delay-5">
+                <button onClick={scrollToFeatures} className="cursor-pointer rounded w-[300px] my-3 md:my-6 text-center bg-purple-600 p-3 text-white transition-all hover:bg-purple-500 delay-5">
                     Explore Features
                 </button>
             </div>
+
+
+            {/* <div className="
+        absolute bg-red-50 rounded-full w-[50px] h-[50px] left-[180px] top-[280px]"></div>
+
+        <div className="
+        absolute bg-red-50 rounded-full w-[80px] h-[80px] left-[150px] top-[470px]"></div>
+        <div className="
+        absolute bg-red-50 rounded-full w-[50px] h-[50px] left-[280px]"></div>
+        <div className="
+        absolute bg-red-50 rounded-full w-[50px] h-[50px] left-[1680px]"></div>
+
+        <div className="
+            absolute bg-red-50 rounded-full w-[50px] h-[50px] top-[220px] left-[1380px]"></div> */}
+
+{/* <div className="
+        absolute bg-red-50 rounded-full w-[50px] h-[50px] left-[1180px] top-[3270px]"></div> */}
             
         </div>
     ) 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Checkout\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Package\PackageController;
 use App\Http\Controllers\ProfileController;
@@ -12,8 +13,12 @@ Route::get("/", [ HomeController::class, "home" ])
     ->name("home.home");
 
 // package routes
-Route::get("/api/packages", [ PackageController::class, "index" ])
+Route::get("/packages", [ PackageController::class, "index" ])
         ->name("package.index");
+
+// get single package
+Route::get("/package/{slug}", [ PackageController::class, 'getSinglePackageDetails' ])
+    ->name('package.single');
 
 
 
@@ -23,21 +28,27 @@ Route::middleware('auth')->group(function () {
 
     // main dashboard
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard')->name('dashboard'); 
+        return Inertia::render('Dashboard');
     });
 
-    // package management routes
-    // Route::get("/packages", [ PackageController::class, "index" ])
-    //     ->name("package.index");
+    // checkout
 
-    // user management
+    Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])
+        ->name('checkout.handle');
+
+    // shift 4 checkout success & failure
+    Route::get("/success", [ CheckoutController::class, "handleSuccess" ])
+    ->name('checkout.success');
+
+    Route::get("/failed", [ CheckoutController::class, "handleFailed" ])
+    ->name('checkout.failed');
 
     
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

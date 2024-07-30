@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import WebCam from 'react-webcam';
+import Webcam from 'react-webcam';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -16,7 +18,33 @@ export default function Register() {
         city: '',
         password: '',
         password_confirmation: '',
+        image: ''
     });
+
+    // function capturing selfie
+    const webcamRef = useRef(null);
+    const [ image, setImage ] = useState('');
+    const [ captured, setCaptured ] = useState(false);
+
+    const capture = () => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        setImage(imageSrc);
+        // setData('image', imageSrc);
+
+        if(captured === false) {
+            setCaptured(true);
+            setData('image', imageSrc);
+        }
+        
+    };
+
+    const recapture = () => {
+        setCaptured(false);
+    }
+
+    const confirmImage = () => {
+        // capture()?
+    }
 
     useEffect(() => {
         return () => {
@@ -26,7 +54,6 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route('register'));
     };
 
@@ -36,10 +63,64 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
+                    <InputLabel
+                        htmlFor="selfie"
+                        value="Upload Profile Image"
+                        className="font-bold"
+                    />
+                    {/* webcam section */}
+                    {
+                        captured == false ? (
+                            <div>
+                                <WebCam
+                                    className='w-full'
+                                    audio={false}
+                                    ref={webcamRef}
+                                    screenshotFormat='image/jpeg'
+                                    width={320}
+                                    height={240}
+                                />
+
+                                <button type="button" onClick={capture} className="cursor-pointer bg-blue-700 p-1 font-bold rounded text-white mt-2">
+                                    Capture Selfie
+                                </button>
+                            </div>
+                            
+                        ):(
+                            <div>
+                                {image && (
+                                    <div>
+                                        <h2>Preview:</h2>
+                                        <img src={image} alt="Selfie Preview" className="mt-2" />
+                                        <input type="text"
+                                            name="image"
+                                            value={image}
+                                            onChange={(e) => setData('image', e.target.value)}
+                                        />
+                                        <InputError message={errors.image} className="mt-2" />
+                                    </div>
+                                )}
+                                <button onClick={confirmImage}
+                                 className="cursor-pointer p-2 bg-green-500 rounded">Upload</button>
+                                <button type="button" onClick={recapture}
+                                    className="cursor-pointer mx-3 p-2 rounded bg-orange-300 m-2">
+                                        Recapture
+                                </button>
+                                {/* <img src={image} alt="" /> */}
+                            </div>
+
+                        )
+                    }
+                    
+
+                    
+ 
+                    
+                    {/* <input type="text" defaultValue={imageSrc} /> */}
                     <InputLabel htmlFor="name" value="First Name" />
 
                     <TextInput
-                        id="name"
+                        id="first_name"
                         name="first_name"
                         value={data.first_name}
                         className="mt-1 block w-full"
@@ -47,6 +128,7 @@ export default function Register() {
                         isFocused={true}
                         onChange={(e) => setData('first_name', e.target.value)}
                         required
+                        maxLength={10}
                     />
 
                     <InputError message={errors.first_name} className="mt-2" />
@@ -56,7 +138,7 @@ export default function Register() {
                     <InputLabel htmlFor="name" value="Last Name" />
 
                     <TextInput
-                        id="name"
+                        id="last_name"
                         name="last_name"
                         value={data.last_name}
                         className="mt-1 block w-full"
@@ -81,6 +163,7 @@ export default function Register() {
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
+                        // maxLength={12}
                     />
 
                     <InputError message={errors.email} className="mt-2" />
@@ -98,6 +181,7 @@ export default function Register() {
                         autoComplete="phone"
                         onChange={(e) => setData('phone', e.target.value)}
                         required
+                        maxLength={12}
                     />
 
                     <InputError message={errors.email} className="mt-2" />

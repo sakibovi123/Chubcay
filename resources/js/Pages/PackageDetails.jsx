@@ -95,7 +95,7 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
                 <input
                     required
                     disabled
-                    defaultValue={auth.email}
+                    defaultValue={auth.email ? auth.email : ''}
                     onChange={(e) => setData('email', e.target.value)}
                     type="email"
                     className="bg-red-100 w-full rounded border-gray-300" />

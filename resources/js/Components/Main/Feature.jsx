@@ -31,7 +31,7 @@ export default function Feature(){
           <FeatureCard
             icon={<CiDiscount1  />}
             title={"Swimming Access"}
-            desc={"Full time swimming support. Life support gurranteed. Spa and massag available"}
+            desc={"Full time swimming support. Life support guaranteed. Spa and massage available"}
           />
           <FeatureCard
             icon={<RiSecurePaymentLine />}

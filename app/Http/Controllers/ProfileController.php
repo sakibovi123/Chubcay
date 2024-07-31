@@ -75,18 +75,28 @@ class ProfileController extends Controller
 
             $request->user()->city = $request->get('city');
             
-
+            // $image = $request->user()->image = $request->get('image');
+            $image = $request->get('image');
+            // dd($image);
             // updating image
-            if( $request->get('image') ) {
-                $image = $request->get('image');
+            if (!$request->user()->image && !Storage::disk('public')->exists($image)) {
                 $image_parts = explode(";base64,", $image);
                 $image_type_aux = explode("image/", $image_parts[0]);
                 $image_type = $image_type_aux[1];
                 $image_base64 = base64_decode($image_parts[1]);
                 $fileName = Str::random(10) . '.' . ($image_type === 'jpeg' ? 'jpg' : 'png');
                 $filePath = 'selfies/' . $fileName;
+        
+                // Save the image to the storage
                 Storage::disk('public')->put($filePath, $image_base64);
+        
+                // Update user's image path
                 $request->user()->image = $filePath;
+                $request->user()->save();
+            } else {
+                // Use the existing image path
+                $imagePath = $request->user()->image;
+                $request->user()->image = $imagePath;
                 $request->user()->save();
             }
 

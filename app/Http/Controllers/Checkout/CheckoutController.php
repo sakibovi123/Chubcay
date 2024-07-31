@@ -80,6 +80,7 @@ class CheckoutController extends Controller
                 $sh_request = [
                     'amount' => $checkout->grand_total,
                     'currency' => 'USD',
+                    'customerId' => $checkout->user_id,
                     'card' => [
                         'number' => $request->get('card_number'),
                         'expMonth' => $mm,
@@ -94,6 +95,7 @@ class CheckoutController extends Controller
                     
                     if( $charge->getStatus() == "successful" ) {
                         $checkout->status = "Success";
+                        $checkout->payment_status = "Paid";
                         $checkout->save();
                         
                         // saving package expiration model
@@ -125,6 +127,7 @@ class CheckoutController extends Controller
                     }
                 } catch( Shift4Exception $se ) {
                     $checkout->status = "Cancelled";
+                    $checkout->payment_status = "Unpaid";
                     $checkout->save();
                     return Inertia::render("Failed", [
                         "error" => $se->getMessage()

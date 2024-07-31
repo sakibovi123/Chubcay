@@ -19,7 +19,8 @@ class Checkout extends Model
         "tax",
         "grand_total",
         "package_id",
-        "user_id"
+        "user_id",
+        "payment_status"
     ];
 
 

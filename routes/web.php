@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Checkout\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Package\PackageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -42,6 +43,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get("/failed", [ CheckoutController::class, "handleFailed" ])
     ->name('checkout.failed');
+
+    // generate invoice
+    Route::get('/generate-invoice', [ InvoiceController::class, 'generateInvoice' ])
+        ->name('invoice.generate');
 
     
 });

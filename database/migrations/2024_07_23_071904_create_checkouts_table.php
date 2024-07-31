@@ -37,6 +37,10 @@ return new class extends Migration
                 "Cancelled", "Success", "Returned", "Pending"
             ])->default("Pending");
 
+            $table->enum('payment_status', [
+                'Paid', 'Unpaid'
+            ])->nullable();
+
         });
     }
 

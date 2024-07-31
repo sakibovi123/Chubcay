@@ -9,15 +9,19 @@ import InputError from '@/Components/InputError';
 import QRCode from "react-qr-code";
 import 'react-notifications-component/dist/theme.css'
 import { ReactNotifications, Store } from 'react-notifications-component'
+import Webcam from 'react-webcam';
+import { useState, useRef } from 'react';
+import dummyImg from '../../Assets/Images/dummy.png';
 
 
-
-
-
-
-export default function Edit({user, existing_package}) {
+export default function Edit({user, existing_package, profile_image}) {
     
     // const { existed_package } = usePage().props;
+    const [ hasImage, setHasImage ] = useState(false)
+    const webcamRef = useRef(null);
+    const [ image, setImage ] = useState('');
+    const [ captured, setCaptured ] = useState(false);
+    const [ cam, showCam ] = useState(false);
 
     const {data, setData, post, processing, errors, reset} = useForm({
         first_name: user.first_name || '',
@@ -28,11 +32,27 @@ export default function Edit({user, existing_package}) {
         city: user.city || '',
         current_password: '',
         new_password: '',
+        image: profile_image || ''
     });
 
     const handleChange = (e) => {
         setData(e.target.name, e.target.value);
     };
+
+    const capture = () => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        setImage(imageSrc);
+        // setCam(false);
+        setData('image', imageSrc);
+    };
+
+    const handleCam = () => {
+        showCam(true);
+    }
+
+    const closeCam = () => {
+        showCam(false);
+    }
 
     const patchUser = (e) => {
         e.preventDefault()
@@ -54,39 +74,11 @@ export default function Edit({user, existing_package}) {
 
     const redirectToHome = () => {
         window.location.href = route('home.home') + "#pricing"
-
-        // window.location.href = "#pricing"
-        
     }
 
+    const displayImage = user.image ? profile_image : dummyImg;
+
     return (
-        // <AuthenticatedLayout
-        //     user={auth.user}
-        //     header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>}
-        // >
-        //     <Head title="Profile" />
-
-        //     <div className="py-12">
-        //         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-        //             <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-        //                 <UpdateProfileInformationForm
-        //                     mustVerifyEmail={mustVerifyEmail}
-        //                     status={status}
-        //                     className="max-w-xl"
-        //                 />
-        //             </div>
-
-        //             <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-        //                 <UpdatePasswordForm className="max-w-xl" />
-        //             </div>
-
-        //             <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-        //                 <DeleteUserForm className="max-w-xl" />
-        //             </div>
-        //         </div>
-        //     </div>
-        // </AuthenticatedLayout>
-        
         <div className="w-full container md:mx-auto">
             <Head title='Profile' />
             <ReactNotifications />
@@ -152,6 +144,74 @@ export default function Edit({user, existing_package}) {
 
                     <div className="p-2 md:w-[70%] bg-white border rounded">
                         <h1 className="text-2xl font-bold p-2">Profile</h1>
+                    <div>
+                        {cam ? (
+                            <div className="w-[20%] border">
+                                {
+                                    image ? (
+                                        <img src={image} />
+                                        
+                                    ):(
+                                        <div>
+                                            <Webcam
+                                                className="w-full"
+                                                audio={false}
+                                                ref={webcamRef}
+                                                screenshotFormat="image/jpeg"
+                                                width={320}
+                                                height={240}
+                                            />
+                                            <button type="button" onClick={capture} className="cursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
+                                                Capture
+                                            </button>
+                                            <button type="button" onClick={closeCam} className="cursor-pointer p-2 bg-red-600 text-white m-2 rounded font-bold">
+                                                Close
+                                            </button>
+                                        </div>
+                                        
+                                    )
+                                }
+                                
+                                
+                            </div>
+                        ) : (
+                            <div className="border w-[20%]">
+                                {
+                                    user.image ? (
+                                        <img className="w-full" src={profile_image} alt="Profile" />        
+                                    )
+                                    :(
+                                        <img className="w-full" src={displayImage} alt="Profile" />
+                                    )
+                                }
+                                
+                            </div>
+                            
+                        )}
+                    </div>
+
+                    {!cam && !user.image && (
+                        <button type="button" onClick={handleCam} className="cursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
+                            Upload
+                        </button>
+                    )}
+                    <button type="button" onClick={handleCam}
+                        className="w-fullcursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
+                        Upload Image
+                    </button>
+                        
+                        {/* {
+                            cam == true && (
+                                <button type="button" onClick={closeCam}
+                                    className="cursor-pointer p-2 bg-red-600 text-white m-2 rounded font-bold">
+                                    Close
+                                </button>
+                            )
+                        }
+                         */}
+
+                        
+                        
                         <form onSubmit={patchUser}
                              className="w-full p-2 flex flex-col items-start gap-3" action="">
                             <label htmlFor="Email">Email</label>
@@ -197,7 +257,8 @@ export default function Edit({user, existing_package}) {
                                  type="password" className="w-full rounded border-gray-200" placeholder="*********" />
                             <InputError message={errors.new_passwoqrd} className="mt-2" />
 
-
+                            <input onChange={(e) => setData('image', e.target.value)}
+                             type="hidden" defaultValue={image}  name="image" />
                             <button type="submit"
                                  className="w-full text-center bg-blue-600 rounded
                                   shadow-md p-2 text-white font-bold transition-all delay-5 hover:bg-blue-700">

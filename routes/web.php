@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard');
     });
 
+    // get single package
+    Route::get("/package/{slug}", [ PackageController::class, 'getSinglePackageDetails' ])
+    ->name('package.single');
+
     // checkout
 
     Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])

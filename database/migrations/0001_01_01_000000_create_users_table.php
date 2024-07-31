@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('city');
 
+            // // user selfie field 
+            // $table->string('image')->nullable();
+
             // Admin
             $table->boolean('is_admin')->default(0);
         });

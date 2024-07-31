@@ -64,4 +64,26 @@ class InvoiceController extends Controller
             return $e->getMessage();
         }
     }
+
+
+    public function statementGenerator()
+    {
+        $user = auth()->user();
+
+        $orders = Checkout::where("user_id", $user->id)
+            ->get();
+
+        // $items = ( new InvoiceItem() )
+        foreach( $orders as $order )
+        {
+            $items = [
+                InvoiceItem::make($order->package->title)
+                    ->description(json_encode($order->package->features))
+                    ->pricePerUnit($order->grand_total)
+            ];
+        }
+
+        dd($items);
+        
+    }
 }

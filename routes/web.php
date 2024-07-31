@@ -51,6 +51,10 @@ Route::middleware('auth')->group(function () {
     // generate invoice
     Route::get('/generate-invoice', [ InvoiceController::class, 'generateInvoice' ])
         ->name('invoice.generate');
+    
+    // generate statement
+    Route::get('/generate-statement', [ InvoiceController::class, 'statementGenerator' ])
+        ->name('invoice.statement');
 
     
 });

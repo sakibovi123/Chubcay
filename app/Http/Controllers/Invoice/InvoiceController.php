@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Invoice;
 
 use App\Http\Controllers\Controller;
 use App\Models\Checkout;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use LaravelDaily\Invoices\Classes\Buyer;
@@ -72,18 +73,70 @@ class InvoiceController extends Controller
 
         $orders = Checkout::where("user_id", $user->id)
             ->get();
+        
+        $latest_order = Checkout::where("user_id", $user->id)
+            ->latest()
+            ->first();
 
-        // $items = ( new InvoiceItem() )
+        $client = new Party([
+            'name'          => 'CHUBCAY',
+            
+        ]);
+        
+        $customer = new Party([
+            'name'          => $user->first_name . $user->last_name,
+            // 'address'       => 'The Green Street 12',
+            // 'code'          => '#22663214',
+            'phone' => $user->phone,
+            'custom_fields' => [
+                'Country' => $user->country,
+                'City' => $user->city
+            ],
+        ]);
+        
+
+        $items = [];
         foreach( $orders as $order )
         {
-            $items = [
-                InvoiceItem::make($order->package->title)
-                    ->description(json_encode($order->package->features))
-                    ->pricePerUnit($order->grand_total)
-            ];
+            $items[] = InvoiceItem::make($order->package->title)
+                ->description(json_encode($order->package->features))
+                ->pricePerUnit($order->grand_total)
+                ->subTotalPrice($order->total);
         }
+        
+        // $date = Carbon::now()->toDateString();
 
-        dd($items);
+        $notes = [
+            ''
+        ];
+        $invoice = Invoice::make('BANK STATEMENT BY SHIFT4')
+            ->series('CHB')
+            // ability to include translated invoice status
+            // in case it was paid
+            ->status(__('invoices::invoice.paid'))
+            ->sequence(667)
+            ->serialNumberFormat('{SEQUENCE}/{SERIES}')
+            ->seller($client)
+            ->buyer($customer)
+            ->date(Carbon::now())
+            ->dateFormat('m/d/Y')
+            ->payUntilDays($latest_order->package->duration)
+            ->currencySymbol('$')
+            ->currencyCode('USD')
+            ->currencyFormat('{SYMBOL}{VALUE}')
+            ->currencyThousandsSeparator(',')
+            ->currencyDecimalPoint('.')
+            ->filename($client->name . ' ' . $customer->name)
+            ->addItems($items);
+
+
+        // $link = $invoice->url();
+        // Then send email to party with link
+
+        // And return invoice itself to browser or have a different view
+        return $invoice->stream();
+
+
         
     }
 }

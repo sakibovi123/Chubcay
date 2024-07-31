@@ -80,7 +80,7 @@ class CheckoutController extends Controller
                 $sh_request = [
                     'amount' => $checkout->grand_total,
                     'currency' => 'USD',
-                    'customerId' => $checkout->user_id,
+                    // 'customerId' => $checkout->user_id,
                     'card' => [
                         'number' => $request->get('card_number'),
                         'expMonth' => $mm,

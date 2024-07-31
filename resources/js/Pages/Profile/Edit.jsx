@@ -78,6 +78,16 @@ export default function Edit({user, existing_package, profile_image}) {
 
     const displayImage = user.image ? profile_image : dummyImg;
 
+    // handle download invoice
+
+    const downloadInvoice = () => {
+        window.location.href = route('invoice.generate')
+    }
+
+    const generateStatement = () => {
+        window.location.href = route('invoice.statement')
+    }
+
     return (
         <div className="w-full container md:mx-auto">
             <Head title='Profile' />
@@ -89,7 +99,7 @@ export default function Edit({user, existing_package, profile_image}) {
                     {
                         existing_package ? 
                         (
-                            <div className="bg-white md:w-[30%] my-3 md:my-0 border rounded p-2">
+                            <div className="bg-white md:w-[40%] my-3 md:my-0 border rounded p-2">
                                 <h2 className="p-2 font-extrabold">Active package: <span>{existing_package?.package.title}</span></h2>
                                 <div className="p-2 text-start text-black font-extrabold">
                                     Expired in {existing_package?.duration} days
@@ -105,16 +115,18 @@ export default function Edit({user, existing_package, profile_image}) {
                                     </button>
                                 </div>
                                 <div className="w-full flex justify-center gap-3">
-                                    <button type="button" data-tooltip-target="tooltip-default" className="text-center w-[50%] bg-blue-600
+                                    <button onClick={downloadInvoice} type="button" data-tooltip-target="tooltip-default" className="text-center w-full bg-blue-600
                                         p-2 my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
                                     >
                                        Download Invoice
                                     </button>
-                                    <div id="tooltip-default" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                        Tooltip content
-                                        <div class="tooltip-arrow" data-popper-arrow></div>
-                                    </div>
-                                    <button className="text-center w-[50%] bg-blue-600
+                                    
+                                    <button onClick={generateStatement} className="text-center w-full bg-blue-600
+                                        p-2 my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
+                                    >
+                                        Get Statement
+                                    </button>
+                                    <button className="text-center w-full bg-blue-600
                                         p-2 my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
                                     >
                                         Sell Membership

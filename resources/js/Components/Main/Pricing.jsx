@@ -2,6 +2,18 @@ import React from 'react'
 import PricingCard from './PricingCard'
 
 function Pricing({packages}) {
+
+const duration = (pkg_dur) => {
+    if( pkg_dur === 30 ) {
+        return 'monthly'
+    }
+    else if( pkg_dur === 183 ) {
+        return 'quaterly'
+    }
+    else if ( pkg_dur === 365 ){
+        return 'yearly'
+    }
+}
   return (
     <div id="pricing" className="my-[7rem] h-full w-full flex
         flex-col items-center text-center justify-center gap-5 p-3"
@@ -23,7 +35,7 @@ function Pricing({packages}) {
                     <PricingCard key={pkg.id} price={pkg.price}
                         desc={pkg.title}
                         slug={pkg.slug}
-                        duration={""}
+                        duration={duration(pkg.duration)}
                     />
                 ))
             }

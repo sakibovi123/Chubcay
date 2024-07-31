@@ -80,7 +80,6 @@ class InvoiceController extends Controller
 
         $client = new Party([
             'name'          => 'CHUBCAY',
-            
         ]);
         
         $customer = new Party([
@@ -130,8 +129,6 @@ class InvoiceController extends Controller
             ->addItems($items);
 
 
-        // $link = $invoice->url();
-        // Then send email to party with link
 
         // And return invoice itself to browser or have a different view
         return $invoice->stream();

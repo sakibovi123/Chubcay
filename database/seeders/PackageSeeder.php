@@ -41,7 +41,7 @@ class PackageSeeder extends Seeder
                     "Free Buffet" => "No"
                 ]),
     
-                "duration" => 286
+                "duration" => 183
             ],
             [
                 "slug" => Str::uuid(),

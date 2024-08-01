@@ -16,16 +16,12 @@ createInertiaApp({
 
     root.render(
         <div>
-            {/* <Header /> */}
-            {/* <Header id="header"> */}
-                <App {...props} />
-            {/* </Header> */}
-            
+            <App {...props} />
         </div>
         
     );
     },
     progress: {
-        color: '#4B5563',
+        color: '#c3232a',
     },
 });

@@ -6,7 +6,8 @@
 
         <title inertia>{{ config('app.name', 'Chubcay') }}</title>
         <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
-
+        {{-- favicon --}}
+        <link rel="favicon" href="{{ asset('images/logo-sml.svg') }}">
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

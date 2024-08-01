@@ -4,8 +4,8 @@ import { Link, Head, useForm, usePage } from '@inertiajs/react';
 import '../Assets/css/main.css'
 
 
-function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
-    // const { shift4Payment } = usePage().props;
+function PackageDetails({package_details}) {
+    const { user } = usePage().props;
 
     const [ token, setToken ] = useState("");
     
@@ -15,7 +15,7 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
         // amount: 809
         first_name: '',
         last_name: '',
-        email: auth.email || '',
+        email: user.email || '',
         phone: '',
         package_id: package_details.id,
         card_number: '',
@@ -30,36 +30,18 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
         post(route('checkout.handle'),
          {data});
     }
-
-
-    // useEffect(() => {
-    //     console.log(JSON.stringify(shift4Payment))
-    //     const script = document.createElement('script');
-    //     script.src = 'https://dev.shift4.com/checkout.js';
-    //     script.className = 'shift4-button';
-    //     script.dataset.key = SHIFT4_PK; // Your public key
-    //     script.dataset.checkoutRequest = shift4Payment
-    //     script.dataset.name = 'Chubcay';
-    //     script.dataset.description = 'Checkout Membership  Payment';
-    //     script.dataset.checkoutButton = 'Pay Now';
-    //     document.body.appendChild(script);
-
-    //     return () => {
-    //         document.body.removeChild(script);
-    //     };
-    // }, [shift4Payment]);
-
-   
     
 
   return (
-    
-    <div className="h-full container md:mx-auto lg:w-[80%] md:w-[60%] w-full">
-      <Header />
+    <div className="w-full">
+        
+        <Header />
+        <div className="h-full container md:mx-auto lg:w-[80%] md:w-[60%] w-full">
+      
       {/* shift4: {shift4Payment} */}
     <div className=" gap-5 md:flex items-start justify-between my-5 p-5 bg-white border rounded shadow-md">
         <div className="w-full">
-            {/* User: {auth.name} */}
+            {/* User: {auth.first_name} */}
             <h1 className="p-2 text-3xl font-bold">Package Name: {package_details.title}</h1>
             <p className="p-2 text-md text-gray-500 my-3 font-semibold">{package_details.sub_title}</p>
             <p className="p-2 font-bold font-semibold">
@@ -95,7 +77,7 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
                 <input
                     required
                     disabled
-                    defaultValue={auth.email ? auth.email : ''}
+                    defaultValue={user.email ? user.email : ''}
                     onChange={(e) => setData('email', e.target.value)}
                     type="email"
                     className="bg-red-100 w-full rounded border-gray-300" />
@@ -219,6 +201,8 @@ function PackageDetails({auth, package_details, shift4Payment, SHIFT4_PK}) {
     </div>
 
     </div>
+    </div>
+    
   )
 }
 

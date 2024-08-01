@@ -1,5 +1,5 @@
 import { Link, Head, usePage } from '@inertiajs/react';
-import Logo from '../../Assets/Images/saas.png';
+import Logo from '../../Assets/Images/logo-1.svg';
 import {react, useState, useEffect, useRef} from 'react';
 import { CiMenuBurger } from "react-icons/ci";
 import { RxCross1 } from "react-icons/rx";
@@ -49,12 +49,12 @@ export default function Header() {
 
 
     return (
-        <div className="flex items-center justify-between md:p-5 p-2 h-[90px]">
-            <div className="logo-area">
-                <Link href="/"><img src={Logo} className='h-[130px] w-[150px]' alt="" /></Link>
+        <div className="bg-slate-800 flex items-center justify-between md:p-5 p-2 h-[90px]">
+            <div className="logo-area p-0">
+                <Link href="/"><img src={Logo} className='h-[110px] w-[150px] p-3' alt="" /></Link>
             </div>
 
-            <div className="menu-area flex items-center gap-5 text-lg text-semibold md:flex hidden">
+            <div className="text-white menu-area flex items-center gap-5 text-lg font-bold md:flex hidden">
                 <a href="/" className="transition-all hover:text-blue-700">Home</a>
                 <a href="#feature" className="transition-all hover:text-blue-700">Features</a>
                 <a href="#testimonial" className="transition-all hover:text-blue-700">Testimonial</a>
@@ -66,8 +66,9 @@ export default function Header() {
                 {
                     auth.user ? (
                         <div ref={userDropRef}>
-                            <CiUser onClick={toggleUserDrop} className="text-2xl cursor-pointer transition-all delay-5 hover:text-rose-600" />
-                            <div className={`${userDrop ? 'block' : 'hidden'} bg-white fixed w-[200px] p-4 top-[75px] right-[110px]`}>
+                            <CiUser onClick={toggleUserDrop} className="text-white text-3xl cursor-pointer transition-all delay-5 hover:text-rose-600" />
+                            <div className={`${userDrop ? 'block' : 'hidden'} bg-white fixed
+                             w-[200px] p-4 top-[75px] xl:right-[10px] md:right-[150px] right-[2px]`}>
                                 {/* <Link href={route('home.home')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br /> */}
                                 <Link href={route('profile.edit')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br />
                                 <Link href={route('logout')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Logout</Link>
@@ -78,8 +79,8 @@ export default function Header() {
                         
                     ) : (
                         <div>
-                            <Link href={route('login')} className="text-gray-500 p-2 transition-all hover:text-blue-700">Sign in</Link>
-                            <Link href={route('register')} className="bg-slate-700 text-white p-2 transition-all hover:shadow-xl delay-5">Sign up</Link>
+                            <Link href={route('login')} className="text-white p-2 transition-all hover:text-blue-700">Sign in</Link>
+                            <Link href={route('register')} className="bg-purple-600 rounded text-white p-2 transition-all hover:shadow-xl delay-5 hover:bg-purple-500">Sign up</Link>
                         </div>
                         
                     )
@@ -87,7 +88,7 @@ export default function Header() {
                 
             </div>
 
-            <div className={`burger-menu md:hidden flex p-2`} onClick={toggleFloatingBar}>
+            <div className={`text-white burger-menu md:hidden flex p-2`} onClick={toggleFloatingBar}>
                 <CiMenuBurger className="text-xl cursor-pointer" />
             </div>
 

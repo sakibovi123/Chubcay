@@ -92,7 +92,7 @@ export default function Register() {
                                     <div>
                                         <h2>Preview:</h2>
                                         <img src={image} alt="Selfie Preview" className="mt-2" />
-                                        <input type="text"
+                                        <input type="hidden"
                                             name="image"
                                             value={image}
                                             onChange={(e) => setData('image', e.target.value)}

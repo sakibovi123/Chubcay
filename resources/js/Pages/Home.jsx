@@ -14,17 +14,20 @@ import Footer from '@/Components/Main/Footer';
 
 export default function Home({packages}) {
   return (
+    <div>
+      <Header />
     <div className="h-full container md:mx-auto lg:w-[80%] md:w-[60%] w-full">
-      <Header id="header" />
-     
-      <Banner />
+     <Banner />  
       <Brands />
       <Feature />
       <Testimonial />
       <Pricing packages={packages} />
       <Contact />
-      <Footer />
+      
     </div>
+    <Footer />
+    </div>
+    
   )
 }
 

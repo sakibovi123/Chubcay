@@ -14,7 +14,7 @@ function Contact() {
             We are available 24/7 to assist you with all your needs.
         </p>
 
-        <div className="form flex flex-col items-center gap-5 w-full my-5">
+        <form className="form flex flex-col items-center gap-5 w-full my-5">
             <div className="flex-col md:flex items-center justify-center gap-5 w-full md:w-[73%]">
                 <input className="p-2 w-full border border-gray-300 rounded"
                  type="text" placeholder="Enter your name" />
@@ -22,7 +22,11 @@ function Contact() {
                  type="email" placeholder="Enter your email" />
             </div>
             <textarea name="" rows={8} className="border-gray-300 rounded w-full md:w-[73%]" id="">Enter your message</textarea>
-        </div>
+        
+            <button className="bg-blue-600 w-full md:w-[73%] p-2 rounded text-white font-bold">
+                Send
+            </button>
+        </form>
         
     </div>
   )

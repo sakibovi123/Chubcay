@@ -89,10 +89,12 @@ export default function Edit({user, existing_package, profile_image}) {
     }
 
     return (
-        <div className="w-full container md:mx-auto">
+        <div className="w-full">
+            <Header />
+             <div className="w-full container md:mx-auto">
             <Head title='Profile' />
             <ReactNotifications />
-            <Header />
+            
 
             <div className="w-full md:my-[1rem] p-3">
                 <div className="md:flex items-start justify-between gap-5">
@@ -282,5 +284,7 @@ export default function Edit({user, existing_package, profile_image}) {
             </div>
 
         </div>
+        </div>
+       
     );
 }

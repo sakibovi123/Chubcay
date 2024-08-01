@@ -17,7 +17,10 @@ createInertiaApp({
     root.render(
         <div>
             {/* <Header /> */}
-            <App {...props} />
+            {/* <Header id="header"> */}
+                <App {...props} />
+            {/* </Header> */}
+            
         </div>
         
     );

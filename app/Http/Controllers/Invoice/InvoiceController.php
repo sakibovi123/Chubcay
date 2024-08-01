@@ -36,7 +36,8 @@ class InvoiceController extends Controller
                 ]
             ]);
 
-            $order = Checkout::where("user_id", $user->id)
+            $order = Checkout::with('package:id,title,features,duration')
+                ->where("user_id", $user->id)
                 ->latest()
                 ->first();
             $item = (new InvoiceItem())->title($order->package->title)
@@ -71,12 +72,11 @@ class InvoiceController extends Controller
     {
         $user = auth()->user();
 
-        $orders = Checkout::where("user_id", $user->id)
+        $orders = Checkout::with('package:id,title,features,duration')
+            ->where("user_id", $user->id)
             ->get();
         
-        $latest_order = Checkout::where("user_id", $user->id)
-            ->latest()
-            ->first();
+        $latest_order = $orders->last();
 
         $client = new Party([
             'name'          => 'CHUBCAY',
@@ -94,20 +94,24 @@ class InvoiceController extends Controller
         ]);
         
 
-        $items = [];
-        foreach( $orders as $order )
-        {
-            $items[] = InvoiceItem::make($order->package->title)
+        $items = $orders->map(function($order) {
+            return (new InvoiceItem())
+                ->title($order->package->title)
                 ->description(json_encode($order->package->features))
                 ->pricePerUnit($order->grand_total)
                 ->subTotalPrice($order->total);
-        }
-        
-        // $date = Carbon::now()->toDateString();
+        });
 
-        $notes = [
-            ''
-        ];
+        
+        // dd($latest_order->package);
+        return $this->createStatement(
+            $client, $customer, $items, $latest_order->package->duration
+        );
+        
+    }
+
+    public function createStatement($client, $customer, $items, $untilDays)
+    {
         $invoice = Invoice::make('BANK STATEMENT BY SHIFT4')
             ->series('CHB')
             // ability to include translated invoice status
@@ -119,21 +123,22 @@ class InvoiceController extends Controller
             ->buyer($customer)
             ->date(Carbon::now())
             ->dateFormat('m/d/Y')
-            ->payUntilDays($latest_order->package->duration)
+            ->payUntilDays($untilDays)
             ->currencySymbol('$')
             ->currencyCode('USD')
             ->currencyFormat('{SYMBOL}{VALUE}')
             ->currencyThousandsSeparator(',')
             ->currencyDecimalPoint('.')
-            ->filename($client->name . ' ' . $customer->name)
-            ->addItems($items);
+            ->filename($client->name . ' ' . $customer->name);
+
+            foreach($items as $item)
+            {
+                $invoice->addItem($item);
+            }
 
 
 
         // And return invoice itself to browser or have a different view
         return $invoice->stream();
-
-
-        
     }
 }

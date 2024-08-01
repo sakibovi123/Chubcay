@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Package\PackageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Qr\QrController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -55,6 +56,10 @@ Route::middleware('auth')->group(function () {
     // generate statement
     Route::get('/generate-statement', [ InvoiceController::class, 'statementGenerator' ])
         ->name('invoice.statement');
+
+    // get qr on mail
+    Route::get('/get-qr', [ QrController::class, 'sendQrToMail' ])
+        ->name('qr.generate');
 
     
 });

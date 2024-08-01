@@ -143,7 +143,7 @@
             <tbody>
                 <tr>
                     <td class="border-0 pl-0" width="70%">
-                        <h4 class="text-uppercase">
+                        <h4 class="text-uppercase" style="font-size:18px;">
                             <strong>{{ $invoice->name }}</strong>
                         </h4>
                     </td>
@@ -153,8 +153,8 @@
                                 <strong>{{ $invoice->status }}</strong>
                             </h4>
                         @endif
-                        <p>Invoice Number <strong>{{ $invoice->getSerialNumber() }}</strong></p>
-                        <p>Invoice Date: <strong>{{ $invoice->getDate() }}</strong></p>
+                        <!-- <p>Invoice Number <strong>{{ $invoice->getSerialNumber() }}</strong></p>
+                        <p>Invoice Date: <strong>{{ $invoice->getDate() }}</strong></p> -->
                     </td>
                 </tr>
             </tbody>
@@ -384,9 +384,9 @@
             </p>
         @endif
 
-        <p class="inv">
+        <!-- <p class="inv">
             INVOICE PAID BY CREDIT CARD 
-        </p>
+        </p> -->
         <!-- <p>
             {{ __('invoices::invoice.pay_until') }}: {{ $invoice->getPayUntilDate() }}
         </p> -->

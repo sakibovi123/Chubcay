@@ -42,16 +42,17 @@ class InvoiceController extends Controller
                 ->first();
             $item = (new InvoiceItem())->title($order->package->title)
                 ->pricePerUnit($order->grand_total)
+                ->units($order->package->duration)
                 ->description(json_encode($order->package->features));
                 // dd($item);
             
             $invoice = Invoice::make()
-                ->status($order->payment_status)
+                // ->status($order->payment_status)
                 ->buyer($customer)
                 ->seller($seller)
                 ->dateFormat('m/d/y')
                 ->date($order->created_at)
-                ->serialNumberFormat('{SEQUENCE}/{SERIES}')
+                ->serialNumberFormat('{SEQUENCE}')
                 ->currencySymbol('$')
                 ->currencyCode('USD')
                 ->currencyFormat('{SYMBOL}{VALUE}')
@@ -99,6 +100,7 @@ class InvoiceController extends Controller
                 ->title($order->package->title)
                 ->description(json_encode($order->package->features))
                 ->pricePerUnit($order->grand_total)
+                ->units($order->package->duration)
                 ->subTotalPrice($order->total);
         });
 
@@ -112,13 +114,13 @@ class InvoiceController extends Controller
 
     public function createStatement($client, $customer, $items, $untilDays)
     {
-        $invoice = Invoice::make('BANK STATEMENT BY SHIFT4')
+        $invoice = Invoice::make('Chubcay Membership Statement')
             ->series('CHB')
             // ability to include translated invoice status
             // in case it was paid
-            ->status(__('invoices::invoice.paid'))
+            // ->status(__('invoices::invoice.paid'))
             ->sequence(667)
-            ->serialNumberFormat('{SEQUENCE}/{SERIES}')
+            ->serialNumberFormat('{SEQUENCE}')
             ->seller($client)
             ->buyer($customer)
             ->date(Carbon::now())
@@ -129,6 +131,7 @@ class InvoiceController extends Controller
             ->currencyFormat('{SYMBOL}{VALUE}')
             ->currencyThousandsSeparator(',')
             ->currencyDecimalPoint('.')
+            ->template('statement')
             ->filename($client->name . ' ' . $customer->name);
 
             foreach($items as $item)

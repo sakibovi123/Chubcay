@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 return [
     'date' => [
 
@@ -15,8 +17,8 @@ return [
     ],
 
     'serial_number' => [
-        'series'   => 'AA',
-        'sequence' => 1,
+        'series'   => '',
+        'sequence' => hexdec(uniqid()),
 
         /*
          * Sequence will be padded accordingly, for ex. 00001

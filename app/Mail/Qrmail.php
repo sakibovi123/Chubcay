@@ -29,9 +29,7 @@ class Qrmail extends Mailable
     {
         return $this->subject('QR Information')
             ->view('mail.qr')
-            ->attachData($this->qrImage, 'qrcode.png', [
-                'mime' => 'image/png'
-            ]);
+            ->with('qrImage', $this->qrImage);
      }
     /**
      * Get the attachments for the message.

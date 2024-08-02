@@ -6,6 +6,7 @@
     <title>QR Code</title>
 </head>
 <body>
-    <p>Please find your QR code attached.</p>
+    <p>Please find your QR code attached.</p><br>
+    <p><img src="{{ $message->embed(storage_path('app/public/' . $qrImage)) }}" alt="QR Code"></p>
 </body>
 </html>

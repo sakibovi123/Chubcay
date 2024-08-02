@@ -35,17 +35,26 @@ class ProfileController extends Controller
 
             // $package_token = QrCode::format('png')->generate($existing_package->token);
         }
+
+        // generate QR
+        $qr = $this->generateQrCode(
+            $existing_package->package->title,
+            $existing_package->package->price,
+            $existing_package->price
+        );
         
         $profile_image = Storage::url(auth()->user()->image);
-        // dd($profile_image);
+        // echo "<img src='storage_path('app/public/' . $qr)'>";
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
             'user' => auth()->user(),
             'profile_image' => $profile_image,
             'existing_package' => $existing_package,
-            'package_token' => $package_token
-            // 'package_name' => $package_name
+            'package_token' => $package_token,
+            'qr' => storage_path('app/public/'.$qr)
+            
         ]);
     }
 
@@ -93,8 +102,10 @@ class ProfileController extends Controller
                 // Update user's image path
                 $request->user()->image = $filePath;
                 $request->user()->save();
+                // dd("IF");
             } else {
                 // Use the existing image path
+                // dd("ELSE");
                 $imagePath = $request->user()->image;
                 $request->user()->image = $imagePath;
                 $request->user()->save();
@@ -114,15 +125,20 @@ class ProfileController extends Controller
             }
         }
 
-        // if ($request->user()->isDirty('email')) {
-        //     $request->user()->email_verified_at = null;
-        // }
         
         $request->user()->save();
 
         return Redirect::route('profile.edit');
     }
 }
+
+    public function generateQrCode($packageName, $price, $packageDuration, $size = 300)
+    {
+        $qrData = "Package name: $packageName\nPrice: $$price\nDuration: $packageDuration days";
+        $qrCodeImage = 'qrcode-' . time() . '.png';
+        QrCode::format('png')->size(256)->generate($qrData, storage_path('app/public/' . $qrCodeImage));
+        return $qrCodeImage;
+    }
 
     /**
      * Delete the user's account.

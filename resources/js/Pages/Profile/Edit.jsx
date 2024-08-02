@@ -14,7 +14,7 @@ import { useState, useRef } from 'react';
 import dummyImg from '../../Assets/Images/dummy.png';
 
 
-export default function Edit({user, existing_package, profile_image}) {
+export default function Edit({user, existing_package, profile_image, qr}) {
     
     // const { existed_package } = usePage().props;
     const [ hasImage, setHasImage ] = useState(false)
@@ -42,12 +42,19 @@ export default function Edit({user, existing_package, profile_image}) {
     const capture = () => {
         const imageSrc = webcamRef.current.getScreenshot();
         setImage(imageSrc);
-        // setCam(false);
         setData('image', imageSrc);
+        // showCam(false);
     };
 
     const handleCam = () => {
-        showCam(true);
+        if( cam == false ){
+            showCam(true);
+        }
+        else {
+            showCam(false);
+        }
+        
+        
     }
 
     const closeCam = () => {
@@ -88,6 +95,12 @@ export default function Edit({user, existing_package, profile_image}) {
         window.location.href = route('invoice.statement')
     }
 
+    const packageData = {
+        "title": existing_package.title,
+        "price": existing_package.price,
+        "duration": existing_package.duration
+    }
+
     return (
         <div className="w-full">
             <Header />
@@ -109,9 +122,11 @@ export default function Edit({user, existing_package, profile_image}) {
 
                                 <div className="p-2 border">
                                     <QRCode
-                                        value={existing_package?.token}
+                                        value={JSON.stringify(packageData)}
                                         style={{ textAlign: "center", width: "100%" }}
                                     />
+                                    {/* <p>{qr}</p>
+                                    <img src={qr} alt="" /> */}
                                     <button className="w-full bg-blue-600 p-2 rounded text-white font-bold my-3">
                                         Get QR on Email
                                     </button>
@@ -211,7 +226,7 @@ export default function Edit({user, existing_package, profile_image}) {
                     )}
                     <button type="button" onClick={handleCam}
                         className="w-fullcursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
-                        Upload Image
+                        Update Image
                     </button>
                         
                         {/* {

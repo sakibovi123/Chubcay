@@ -174,7 +174,7 @@ export default function Register() {
 
                     <TextInput
                         id="phone"
-                        type="number"
+                        type="text"
                         name="phone"
                         value={data.phone}
                         className="mt-1 block w-full"

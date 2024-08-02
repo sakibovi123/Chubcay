@@ -283,8 +283,8 @@ export default function Edit({user, existing_package, profile_image}) {
                             <InputError message={errors.country} className="mt-2" />
 
                             <label htmlFor="Phone">Phone</label>
-                            <input maxLength={16} onChange={(e) => setData('phone', e.target.value)}
-                                    type="number"
+                            <input onChange={(e) => setData('phone', e.target.value)}
+                                    type="text"
                                     className="w-full rounded border-gray-200"
                                     value={data.phone} />
                             <InputError message={errors.phone} className="mt-2" />

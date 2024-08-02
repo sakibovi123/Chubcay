@@ -58,10 +58,11 @@ class InvoiceController extends Controller
                 ->currencyFormat('{SYMBOL}{VALUE}')
                 ->currencyThousandsSeparator('.')
                 ->payUntilDays($order->package->duration)
+                ->filename('invoice'.time())
                 // ->currencyDecimalPoint(',')
                 ->addItem($item);
             
-            return $invoice->stream();
+            return $invoice->download();
 
         } catch( Exception $e ) {
             return $e->getMessage();
@@ -116,9 +117,6 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::make('Chubcay Membership Statement')
             ->series('CHB')
-            // ability to include translated invoice status
-            // in case it was paid
-            // ->status(__('invoices::invoice.paid'))
             ->sequence(667)
             ->serialNumberFormat('{SEQUENCE}')
             ->seller($client)
@@ -132,7 +130,7 @@ class InvoiceController extends Controller
             ->currencyThousandsSeparator(',')
             ->currencyDecimalPoint('.')
             ->template('statement')
-            ->filename($client->name . ' ' . $customer->name);
+            ->filename('invoice'.time());
 
             foreach($items as $item)
             {
@@ -142,6 +140,6 @@ class InvoiceController extends Controller
 
 
         // And return invoice itself to browser or have a different view
-        return $invoice->stream();
+        return $invoice->download();
     }
 }

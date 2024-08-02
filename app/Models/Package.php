@@ -16,7 +16,8 @@ class Package extends Model
         'price',
         'discount',
         'features',
-        'duration'
+        'duration',
+        'duration_title'
     ];
 
     protected $casts = [

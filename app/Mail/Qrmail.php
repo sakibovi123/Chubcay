@@ -13,13 +13,13 @@ class Qrmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $qrImage;
+    public $pdfLink;
     /**
      * Create a new message instance.
      */
-    public function __construct($qrImage)
+    public function __construct($pdfLink)
     {
-        $this->qrImage = $qrImage;
+        $this->pdfLink = $pdfLink;
     }
 
     /**
@@ -29,7 +29,8 @@ class Qrmail extends Mailable
     {
         return $this->subject('QR Information')
             ->view('mail.qr')
-            ->with('qrImage', $this->qrImage);
+            // ->with('qrImage', $this->pdfLink)
+            ->attach($this->pdfLink);
      }
     /**
      * Get the attachments for the message.

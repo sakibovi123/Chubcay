@@ -37,11 +37,11 @@ class ProfileController extends Controller
         }
 
         // generate QR
-        $qr = $this->generateQrCode(
-            $existing_package->package->title,
-            $existing_package->package->price,
-            $existing_package->price
-        );
+        // $qr = $this->generateQrCode(
+        //     $existing_package->package->title,
+        //     $existing_package->package->price,
+        //     $existing_package->price
+        // );
         
         $profile_image = Storage::url(auth()->user()->image);
         // echo "<img src='storage_path('app/public/' . $qr)'>";
@@ -53,7 +53,7 @@ class ProfileController extends Controller
             'profile_image' => $profile_image,
             'existing_package' => $existing_package,
             'package_token' => $package_token,
-            'qr' => storage_path('app/public/'.$qr)
+            // 'qr' => storage_path('app/public/'.$qr)
             
         ]);
     }

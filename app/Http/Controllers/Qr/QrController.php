@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\Qrmail;
 use App\Models\Checkout;
 use App\Services\QrCodeService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -32,22 +33,36 @@ class QrController extends Controller
         {
             $user = auth()->user();
            
-            $latestOrder = Checkout::with('package:id,title,duration')
+            $latestOrder = Checkout::with('package:id,title,duration,duration_title')
                 ->where('user_id', $user->id)
                 ->latest()
                 ->first();
+
+            // dd($latestOrder->package->duration_title);
             
             $generateQr = $this->generateQrCode(
                 $latestOrder->package->title,
                 $latestOrder->package->price,
                 $latestOrder->duration
             );
+
+            $pdf = Pdf::loadView('pdf.pdf', [
+                'qrImage' => $generateQr,
+                'title' => $latestOrder->package->title,
+                'price' => $latestOrder->grand_total,
+                'duration' => $latestOrder->package->duration,
+                'duration_title' => $latestOrder->package->duration_title,
+                'name' => $user->first_name . $user->last_name
+            ]);
             // dd($generateQr);
+            $pdfPath = storage_path('app/public/qrcode-' . time() . '.pdf');
+            $pdf->save($pdfPath);
+
             Mail::to($user->email)
-                ->send(new Qrmail($generateQr));
+                ->send(new Qrmail($pdfPath));
 
      
-            return response('Success');
+            return redirect()->route('profile.edit');
         }
         catch( Exception $e )
         {

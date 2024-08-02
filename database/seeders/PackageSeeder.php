@@ -27,6 +27,7 @@ class PackageSeeder extends Seeder
                     "Swimming access" => "No",
                     "Free Buffet" => "No"
                 ]),
+                "duration_title" => "Monthly",
                 "duration" => 30
             ],
             [
@@ -40,6 +41,7 @@ class PackageSeeder extends Seeder
                     "Swimming access" => "No",
                     "Free Buffet" => "No"
                 ]),
+                "duration_title" => "Quaterly",
     
                 "duration" => 183
             ],
@@ -54,7 +56,7 @@ class PackageSeeder extends Seeder
                     "Swimming access" => "Yes",
                     "Free Buffet" => "Yes"
                 ]),
-    
+                "duration_title" => "Yearly",
                 "duration" => 365
             ]
             

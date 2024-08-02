@@ -14,7 +14,7 @@ import { useState, useRef } from 'react';
 import dummyImg from '../../Assets/Images/dummy.png';
 
 
-export default function Edit({user, existing_package, profile_image, qr}) {
+export default function Edit({user, existing_package, profile_image}) {
     
     // const { existed_package } = usePage().props;
     const [ hasImage, setHasImage ] = useState(false)
@@ -96,9 +96,25 @@ export default function Edit({user, existing_package, profile_image, qr}) {
     }
 
     const packageData = {
-        "title": existing_package.title,
-        "price": existing_package.price,
-        "duration": existing_package.duration
+        "title": existing_package?.title,
+        "price": existing_package?.price,
+        "duration": existing_package?.duration
+    }
+
+    const getQrOnMail = () => {
+        window.location.href = route('qr.generate')
+        setTimeout(() => {
+            Store.addNotification({
+                title: 'Success',
+                message: 'Mail sent',
+                type: 'success',
+                insert: 'top',
+                container: 'top-right',
+                dismiss: {
+                    duration: 2000
+                }
+            }, 2000)
+        })
     }
 
     return (
@@ -127,7 +143,7 @@ export default function Edit({user, existing_package, profile_image, qr}) {
                                     />
                                     {/* <p>{qr}</p>
                                     <img src={qr} alt="" /> */}
-                                    <button className="w-full bg-blue-600 p-2 rounded text-white font-bold my-3">
+                                    <button onClick={getQrOnMail} className="w-full bg-blue-600 p-2 rounded text-white font-bold my-3">
                                         Get QR on Email
                                     </button>
                                 </div>

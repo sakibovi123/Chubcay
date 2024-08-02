@@ -26,6 +26,8 @@ return new class extends Migration
 
             $table->integer("duration")->nullable();
 
+            $table->string('duration_title')->nullable();
+
             // need to generate QR after purchasing
         });
     }

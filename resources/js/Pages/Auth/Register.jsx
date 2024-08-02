@@ -100,8 +100,8 @@ export default function Register() {
                                         <InputError message={errors.image} className="mt-2" />
                                     </div>
                                 )}
-                                <button onClick={confirmImage}
-                                 className="cursor-pointer p-2 bg-green-500 rounded">Upload</button>
+                                {/* <button onClick={confirmImage}
+                                 className="cursor-pointer p-2 bg-green-500 rounded">Upload</button> */}
                                 <button type="button" onClick={recapture}
                                     className="cursor-pointer mx-3 p-2 rounded bg-orange-300 m-2">
                                         Recapture
@@ -181,7 +181,7 @@ export default function Register() {
                         autoComplete="phone"
                         onChange={(e) => setData('phone', e.target.value)}
                         required
-                        maxLength={12}
+                        // maxLength={12}
                     />
 
                     <InputError message={errors.email} className="mt-2" />

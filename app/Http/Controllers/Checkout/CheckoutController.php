@@ -41,7 +41,7 @@ class CheckoutController extends Controller
                 "first_name" => "required|string",
                 "last_name" => "required|string",
                 "email" => "required|email",
-                "phone" => "required|string|max:11",
+                "phone" => "required|string",
                 // "card_number" => "required|number|max:16",
                 // "cvc" => "required|number|max:3"
             ]);

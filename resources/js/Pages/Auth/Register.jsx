@@ -57,6 +57,13 @@ export default function Register() {
         post(route('register'));
     };
 
+    const handlePhone = (e) => {
+        const value = e.target.value;
+        const numericValue = value.replace(/[^0-9+()\s-]/g, '');
+        setData('phone', numericValue);
+
+    }
+
     return (
         <GuestLayout>
             <Head title="Register" />
@@ -179,7 +186,8 @@ export default function Register() {
                         value={data.phone}
                         className="mt-1 block w-full"
                         autoComplete="phone"
-                        onChange={(e) => setData('phone', e.target.value)}
+                        // onChange={(e) => setData('phone', e.target.value)}
+                        onChange={(e) => handlePhone(e)}
                         required
                         // maxLength={12}
                     />

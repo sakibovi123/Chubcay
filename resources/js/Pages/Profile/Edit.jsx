@@ -117,6 +117,13 @@ export default function Edit({user, existing_package, profile_image}) {
         })
     }
 
+    const handlePhone = (e) => {
+        const value = e.target.value;
+        const numericValue = value.replace(/[^0-9+()\s-]/g, '');
+        setData('phone', numericValue);
+        // console.log(numericValue);
+    }
+
     return (
         <div className="w-full">
             <Header />
@@ -283,8 +290,9 @@ export default function Edit({user, existing_package, profile_image}) {
                             <InputError message={errors.country} className="mt-2" />
 
                             <label htmlFor="Phone">Phone</label>
-                            <input onChange={(e) => setData('phone', e.target.value)}
+                            <input onChange={(e) => setData('phone', e.target.value.replace(/[^0-9+()\s-]/g, ''))}
                                     type="text"
+                                    name="phone"
                                     className="w-full rounded border-gray-200"
                                     value={data.phone} />
                             <InputError message={errors.phone} className="mt-2" />

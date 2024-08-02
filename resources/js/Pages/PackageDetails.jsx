@@ -107,9 +107,9 @@ function PackageDetails({package_details}) {
                 <label htmlFor="Email">Phone</label>
                 <input
                     required
-                    type="number"
+                    type="text"
                     value={data.phone}
-                    onChange={(e) => setData('phone', e.target.value)}
+                    onChange={(e) => setData('phone', e.target.value.replace(/[^0-9+()\s-]/g, ''))}
                     className="w-full rounded border-gray-300" />
 
                     {errors.phone && <div>{errors.phone}</div>}
@@ -131,10 +131,10 @@ function PackageDetails({package_details}) {
                 <div className="w-full flex items-center gap-2">
                     <input
                         required
-                        type="number"                  
+                        type="text"              
                         id="card-expiration-input"
                         value={data.mm}
-                        onChange={(e) => setData('mm', e.target.value)}
+                        onChange={(e) => setData('mm', e.target.value.replace(/[^0-9]/g, ''))}
                         placeholder="mm"
                         className="w-full rounded border-gray-300" maxLength={2} />
 
@@ -142,10 +142,10 @@ function PackageDetails({package_details}) {
 
                         <input
                             required
-                            type="number"
+                            type="text"
                             id="card-expiration-input"
                             value={data.year}
-                            onChange={(e) => setData('year', e.target.value)}
+                            onChange={(e) => setData('year', e.target.value.replace(/[^0-9]/g, ''))}
                             placeholder="yy"
                             maxLength={2}
                             // min={2}
@@ -155,7 +155,7 @@ function PackageDetails({package_details}) {
                         
                         <input
                             required
-                            type="number"
+                            type="text"
                             id="card-expiration-input"
                             value={data.cvc}
                             onChange={(e) => setData('cvc', e.target.value)}

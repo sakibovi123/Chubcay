@@ -16,7 +16,7 @@ export default function Testimonial() {
         There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form.
         </p>
 
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-5 md:w-[75%] w-full">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-5 md:w-[85%] w-full">
             <TestimonialCard
                 name={"John Travolta"}
                 desg={"Professional Vlogger"}

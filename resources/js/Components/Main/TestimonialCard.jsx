@@ -6,9 +6,9 @@ import { CiStar } from "react-icons/ci";
 export default function TestimonialCard({ name, desg, review })
  {
     return (
-        <div className="bg-white shadow-xl rounded-xl md:h-[310px] h-[360px] p-4 w-full">
-            <div className="md:p-3 w-full md:flex items-center
-             justify-between md:w-[520px] border-b-2">
+        <div className="bg-white shadow-xl rounded-xl md:h-[360px] h-[360px] p-5 w-full">
+            <div className="md:p-3 md:flex items-center
+             justify-between w-full lg:w-full md:w-[520px] border-b-2">
                 <div className="flex gap-3 p-3 w-full">
                     <img src={author_2} alt="" />
                     <div>

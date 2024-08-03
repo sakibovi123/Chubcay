@@ -71,3 +71,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require base_path('app/Http/Controllers/Admin/routes/routes.php');
+

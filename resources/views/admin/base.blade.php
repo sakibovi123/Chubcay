@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Chubcay</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('javascript/package.js') }}"></script>
 
     <!-- Add your additional CSS and JS links here -->
 </head>
@@ -76,7 +77,8 @@
             console.error('element not found');
         }
     });
-    
+
+
     </script>
 </body>
 </html>

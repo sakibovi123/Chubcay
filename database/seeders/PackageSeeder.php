@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Package;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -17,6 +18,7 @@ class PackageSeeder extends Seeder
         Package::insert(
         [
             [
+                "created_at" => Carbon::now(),
                 "slug" => Str::uuid(),
                 "title" => "Starter",
                 "sub_title" => "Best for startup",
@@ -31,6 +33,7 @@ class PackageSeeder extends Seeder
                 "duration" => 30
             ],
             [
+                "created_at" => Carbon::now(),
                 "slug" => Str::uuid(),
                 "title" => "Premium",
                 "sub_title" => "Best for Business",
@@ -46,6 +49,7 @@ class PackageSeeder extends Seeder
                 "duration" => 183
             ],
             [
+                "created_at" => Carbon::now(),
                 "slug" => Str::uuid(),
                 "title" => "Diamond",
                 "sub_title" => "Best for Big Business",

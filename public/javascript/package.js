@@ -33,6 +33,45 @@ document.addEventListener('DOMContentLoaded', function () {
             container.appendChild(newFeatureContainer);
         }
     });
+
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const container = document.getElementById('container');
+
+    // Event delegation for adding new feature containers
+    container.addEventListener('click', function (event) {
+        if (event.target && event.target.classList.contains('add-container')) {
+            const featureContainer = event.target.closest('.feature-container');
+            const newFeatureContainer = featureContainer.cloneNode(true);
+
+            // Clear the values in the cloned inputs
+            newFeatureContainer.querySelectorAll('input').forEach(input => input.value = '');
+
+            // Update the names of the cloned inputs
+            const featureCount = container.querySelectorAll('.feature-container').length;
+            newFeatureContainer.querySelectorAll('input').forEach((input, index) => {
+                const name = input.getAttribute('name');
+                const newName = name.replace(/\d+/, featureCount);
+                input.setAttribute('name', newName);
+            });
+
+            // Add event listener to remove button in the cloned container
+            newFeatureContainer.querySelector('.remove-container').addEventListener('click', function () {
+                this.closest('.feature-container').remove();
+            });
+
+            // Append the cloned featureContainer to the container
+            container.appendChild(newFeatureContainer);
+        }
+    });
+
+    // Event delegation for removing feature containers
+    container.addEventListener('click', function (event) {
+        if (event.target && event.target.classList.contains('remove-container')) {
+            event.target.closest('.feature-container').remove();
+        }
+    });
 });
 
 

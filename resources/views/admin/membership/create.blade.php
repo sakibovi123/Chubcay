@@ -24,6 +24,16 @@
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md" for="">Price</label>
                 <input required name="price" id="price" type="text" placeholder="Enter price..." class="p-2 rounded w-full border">
+                
+            </div> 
+
+            <div class="w-full">
+                <label class="text-gray-600 font-bold text-md" for="">Activate this package</label>
+                <select required name="status" class="p-2 rounded w-full border">
+                    {{-- <option selected value="">Select Status</option> --}}
+                    <option value="Active">Activate</option>
+                    <option selected value="Deactive">Deactive</option>
+                </select>
             </div> 
         </div>
 

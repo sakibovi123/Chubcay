@@ -63,17 +63,25 @@ class MembershipController extends Controller
                     $processedFeatures[$feature['key']] = $feature['value'];
                 }
             }
-
-            // Convert to JSON if needed
-            // $featuresJson = json_encode($processedFeatures);
     
             // Save to the model
             
             $package->features = $processedFeatures;
+
+            // if active package len is getter than 3 then
+            // saved package will be deactivated automatically
+            $active_package = Package::where('status', 'Active')
+                ->get();
+            
+            if ( count($active_package) > 3 )
+            {
+                $package->status = 'Deactive';
+            }
+
             $package->save();
         }
 
-        return back()->with('message', 'Plan added successfully!');
+        return redirect()->route('membership.index')->with('message', 'Plan added successfully!');
     }
 
     // edit
@@ -88,6 +96,12 @@ class MembershipController extends Controller
     // update
     public function updateMembership( Request $request, $slug )
     {
+        $request->validate([
+            'features' => 'array',
+            'features.*.key' => 'nullable|string',
+            'features.*.value' => 'nullable|string',
+        ]);
+
         $package = Package::where('slug', $slug)->first();
 
         if ( $package )
@@ -103,7 +117,20 @@ class MembershipController extends Controller
                 $package->price = $request->input('price') * $discount / 100;
             }
             
-            $package->features = $request->input('features'); // only accepts array
+            if(  $request->has('features') ) {
+                $features = $request->input('features'); 
+                $processedFeatures = [];
+            
+                foreach ($features as $feature) {
+                    if (isset($feature['key']) && isset($feature['value'])) {
+                        // dd('asdasd');
+                        $processedFeatures[$feature['key']] = $feature['value'];
+                    }
+                }
+
+                $package->features = $processedFeatures;
+            }
+            
             $duration_title = $request->input('duration_title');
  
             if( $duration_title == 'monthly' ) {
@@ -122,11 +149,27 @@ class MembershipController extends Controller
             $package->status = $request->input('status');
 
             $package->save();
-            return redirect()->back();
+            return back()->with('error', 'Updated successfully');
 
         }
         else {
             return back()->with('error', 'Package not found!');
         }
+    }
+
+    public function destroyPackage( $package_id )
+    {
+        $packageId = Package::where('id', $package_id)
+            ->first();
+
+        if( $packageId ){
+            $packageId->delete();
+            return back()->with('success', 'Package removed');
+        }
+        else {
+            return back()->with('error', 'Failed to find package');
+        }
+
+        
     }
 }

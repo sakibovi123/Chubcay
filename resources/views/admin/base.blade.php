@@ -6,6 +6,7 @@
     <title>Dashboard - Chubcay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="{{ asset('javascript/package.js') }}"></script>
+    <script src="{{ asset('javascript/sidebar.js') }}"></script>
 
     <!-- Add your additional CSS and JS links here -->
 </head>
@@ -58,7 +59,7 @@
         const dashboard = document.getElementById('dashboard');
         const membership = document.getElementById('membership');
         
-        // const user = document.getElementById('user');
+        const user = document.getElementById('manage-users');
         // const orders = document.getElementById('order');
 
         if (dashboard) {
@@ -71,6 +72,14 @@
                 window.location.href = "{{ route('membership.index') }}";
             });
         }
+
+        if(user) {
+            user.addEventListener('click', function (){
+                window.location.href = "{{ route('users.index') }}"
+            })
+        }
+
+        // users.index
         // else if( user ) {}
         // else if ( orders ) {}
         else {

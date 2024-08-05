@@ -20,7 +20,7 @@ export default function Home({packages}) {
      <Banner />  
       <Brands />
       <Feature />
-      <Testimonial />
+      {/* <Testimonial /> */}
       <Pricing packages={packages} />
       <Contact />
       

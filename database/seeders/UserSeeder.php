@@ -49,7 +49,8 @@ class UserSeeder extends Seeder
                 "image" => "https://w7.pngwing.com/pngs/910/606/png-transparent-head-the-dummy-avatar-man-tie-jacket-user.png",
                 "country" => "Bangladesh",
                 "phone" => "+988233234",
-                "city" => "Dhaka"
+                "city" => "Dhaka",
+                "is_admin" => 0
             ]
         ]);
     }

@@ -11,11 +11,11 @@
         <div class="hidden lg:flex lg:items-center w-full lg:w-auto" id="navbarNav">
             <ul class="flex flex-col lg:flex-row lg:space-x-4 mt-4 lg:mt-0">
                 <li>
-                    <a onclick="toogleNotificationDropDown()" class="text-gray-800 hover:text-blue-600" href="#">
+                    {{-- <a onclick="toogleNotificationDropDown()" class="text-gray-800 hover:text-blue-600" href="#">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M17.133 12.632v-1.8a5.406 5.406 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.955.955 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z"/>
                         </svg>
-                    </a>
+                    </a> --}}
 
                     <div id="notification_dropdown" class="w-full fixed top-[70px] right-[-1370px] hidden">
                         <ul class="w-[18%] p-2 bg-white border rounded">
@@ -59,7 +59,7 @@
                     </div>
                 </li>
                 <li>
-                    <a class="text-gray-800 hover:text-blue-600" href="#">
+                    <a class="text-gray-800 hover:text-blue-600" href="{{ route('logout') }}">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
                         </svg>

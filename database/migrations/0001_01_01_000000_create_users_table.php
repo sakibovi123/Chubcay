@@ -32,7 +32,12 @@ return new class extends Migration
 
             // Admin
             $table->boolean('is_admin')->default(0);
+            $table->enum('status', [
+                'Active', 'Pending', 'Cancel'
+            ]);
         });
+
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

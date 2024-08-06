@@ -18,7 +18,7 @@ export default function Home({packages}) {
       <Header />
     <div className="h-full container md:mx-auto lg:w-[80%] md:w-[60%] w-full">
      <Banner />  
-      <Brands />
+      {/* <Brands /> */}
       <Feature />
       {/* <Testimonial /> */}
       <Pricing packages={packages} />

@@ -6,9 +6,9 @@
     <div class="w-full my-5 p-3 container md:mx-auto">
         <div class="flex items-center justify-between w-full">
             <h1 class="text-xl font-bold">Manage Users</h1>
-            <a href="{{ route('membership.create') }}" class="p-2 bg-sky-600 rounded-xl text-white transition-all delay-5 hover:bg-sky-700">
+            {{-- <a href="{{ route('membership.create') }}" class="p-2 bg-sky-600 rounded-xl text-white transition-all delay-5 hover:bg-sky-700">
                 Add user
-            </a>
+            </a> --}}
         </div>
         <div class="w-full bg-white rounded-xl shadow-md p-3 my-5">
             <div class="w-full flex items-center justify-between gap-3">
@@ -30,7 +30,7 @@
                 
                 <tbody class="text-center">
                     @foreach ($users as $user)
-                    <tr class="border-b-2 border-gray-100 cursor-pointer transition-all delay-5 hover:bg-gray-50">
+                    <tr id="tr_{{ $user->id }}" class="border-b-2 border-gray-100 cursor-pointer transition-all delay-5 hover:bg-gray-50">
                         <td class="p-3">{{ $user->id }}</td>
                         <td class="p-3">{{ $user->created_at }}</td>
                         <td class="p-3">{{ $user->first_name }} {{ $user->last_name }}</td>
@@ -39,8 +39,13 @@
                         <td class="p-3">
                             {{ $user->email }}
                         </td>
-                        <td class="p-3">
-                            <p class="bg-yellow-400 p-1 rounded-full">PENDING</p>
+                        <td>
+                            <input id="user_id_{{ $user->id }}" type="hidden" value="{{ $user->id }}" name="user_id">
+                            <select id="statusChange_{{ $user->id }}" class="p-1 rounded-full border" name="status">
+                                <option value="Active" {{ $user->status == 'Active' ? 'selected' : '' }}>Active</option>
+                                <option value="Pending" {{ $user->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="Cancel" {{ $user->status == 'Cancel' ? 'selected' : '' }}>Cancel</option>
+                            </select>
                         </td>
                         <td class="p-3">
                             {{-- {{ gettype($user->is_admin) }} --}}
@@ -58,23 +63,23 @@
                               </svg>
                             </a> --}}
                               
-                            <a href="">
+                            {{-- <a href="">
                                 <svg class="w-6 h-6 text-gray-800 transition-all delay-10 hover:text-yellow-600"
                                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
                                     <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                                 </svg>
-                            </a>
-                            <form action="" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit">
+                            </a> --}}
+                            {{-- <form action="" method="POST"> --}}
+                                {{-- @csrf --}}
+                                {{-- @method('DELETE') --}}
+                                <a href="javascript:void(0)" onclick="deleteUser({{ $user->id }})">
                                     <svg class="w-6 h-6 text-gray-800 transition-all delay-10 hover:text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                                     </svg>
-                                </button>
+                                </a>
                                  
-                            </form>
+                            {{-- </form> --}}
                             
                         </td>
                     </tr>

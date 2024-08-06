@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +17,7 @@ class UserSeeder extends Seeder
     {
         User::insert([
             [
+                "created_at" => Carbon::now(),
                 "first_name" => "sakib",
                 "last_name" => "ovi",
                 "email" => "sakibovi123@gmail.com",
@@ -26,6 +28,7 @@ class UserSeeder extends Seeder
                 "city" => "London"
             ],
             [
+                "created_at" => Carbon::now(),
                 "first_name" => "Mohona",
                 "last_name" => "Chan",
                 "email" => "mohona@gmail.com",
@@ -36,6 +39,7 @@ class UserSeeder extends Seeder
                 "city" => "Dhaka"
             ],
             [
+                "created_at" => Carbon::now(),
                 "first_name" => "Daimao",
                 "last_name" => "Chan",
                 "email" => "daimao@gmail.com",

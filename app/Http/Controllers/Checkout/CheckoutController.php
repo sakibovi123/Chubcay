@@ -52,7 +52,8 @@ class CheckoutController extends Controller
                 "last_name" => $request->get('last_name'),
                 "email" => $request->get('email'),
                 "package_id" => $package->id,
-                "user_id" => auth()->user()->id, // just testing for now
+                "user_id" => auth()->user()->id,
+                "invoice" => mt_rand(1, 9999)
             ];
 
             // getting mm and yy

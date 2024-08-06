@@ -20,7 +20,8 @@ class Checkout extends Model
         "grand_total",
         "package_id",
         "user_id",
-        "payment_status"
+        "payment_status",
+        "invoice"
     ];
 
 
@@ -31,6 +32,6 @@ class Checkout extends Model
 
     public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
 }

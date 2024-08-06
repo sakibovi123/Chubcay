@@ -69,8 +69,18 @@ export default function Header() {
                             <CiUser onClick={toggleUserDrop} className="text-white text-3xl cursor-pointer transition-all delay-5 hover:text-rose-600" />
                             <div className={`${userDrop ? 'block' : 'hidden'} bg-white fixed
                              w-[200px] p-4 top-[75px] xl:right-[10px] md:right-[150px] right-[2px]`}>
-                                {/* <Link href={route('home.home')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br /> */}
-                                <Link href={route('profile.edit')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Dashboard</Link><br />
+                                {
+                                    auth.user.is_admin == true && (
+                                        <div>
+                                            <a href={route('admin.index')} className="text-md font-normal transition-all delay-5 hover:border-b-2">
+                                                Dashboard
+                                            </a> <br />
+                                        </div>
+                                        
+                                    )
+                                }
+                                
+                                <Link href={route('profile.edit')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Profile</Link><br />
                                 <Link href={route('logout')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Logout</Link>
                             </div>
                             

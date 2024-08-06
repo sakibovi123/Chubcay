@@ -41,6 +41,10 @@ return new class extends Migration
                 'Paid', 'Unpaid'
             ])->nullable();
 
+            // invoice
+            $table->integer('invoice')
+                ->nullable();
+
         });
     }
 

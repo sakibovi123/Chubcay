@@ -52,6 +52,63 @@ class InvoiceController extends Controller
                 ->seller($seller)
                 ->dateFormat('m/d/y')
                 ->date($order->created_at)
+                ->sequence(mt_rand(1, 9999))
+                ->serialNumberFormat('{SEQUENCE}')
+                ->currencySymbol('$')
+                ->currencyCode('USD')
+                ->currencyFormat('{SYMBOL}{VALUE}')
+                ->currencyThousandsSeparator('.')
+                ->payUntilDays($order->package->duration)
+                ->filename('invoice'.time())
+                // ->currencyDecimalPoint(',')
+                ->addItem($item);
+            
+            return $invoice->download();
+
+        } catch( Exception $e ) {
+            return $e->getMessage();
+        }
+    }
+
+
+    public function generateSingleInvoice($orderId)
+    {
+        try {
+            $user = auth()->user();
+            // dd($user);
+            $customer = new Buyer([
+                'name' => $user->first_name . $user->last_name,
+                'phone' => $user->phone,
+                'custom_fields' => [
+                    'email' => $user->email
+                ]
+            ]);
+
+            $seller = new Party([
+                'name' => 'Chubcay',
+                'phone' => '+345345345',
+                'custom_fields' => [
+                    'vat_id' => '234423432'
+                ]
+            ]);
+
+            $order = Checkout::with('package:id,title,features,duration')
+                ->where("id", $orderId)
+                ->first();
+
+            $item = (new InvoiceItem())->title($order->package->title)
+                ->pricePerUnit($order->grand_total)
+                ->units($order->package->duration)
+                ->description(json_encode($order->package->features));
+                // dd($item);
+            
+            $invoice = Invoice::make()
+                // ->status($order->payment_status)
+                ->buyer($customer)
+                ->seller($seller)
+                ->dateFormat('m/d/y')
+                ->date($order->created_at)
+                ->sequence(mt_rand(1, 9999))
                 ->serialNumberFormat('{SEQUENCE}')
                 ->currencySymbol('$')
                 ->currencyCode('USD')
@@ -113,11 +170,53 @@ class InvoiceController extends Controller
         
     }
 
+
+    public function statementGeneratorAll()
+    {
+        $user = auth()->user();
+
+        $orders = Checkout::all();
+        
+        $latest_order = $orders->last();
+
+        $customer = new Party([
+            // 'name'          => $user->first_name . $user->last_name,
+            // // 'address'       => 'The Green Street 12',
+            // // 'code'          => '#22663214',
+            // 'phone' => $user->phone,
+            // 'custom_fields' => [
+            //     'Country' => $user->country,
+            //     'City' => $user->city
+            // ],
+        ]);
+
+        $client = new Party([
+            'name'          => 'CHUBCAY',
+        ]);
+        
+    
+        $items = $orders->map(function($order) {
+            return (new InvoiceItem())
+                ->title($order->package->title)
+                ->description(json_encode($order->package->features))
+                ->pricePerUnit($order->grand_total)
+                ->units($order->package->duration)
+                ->subTotalPrice($order->total);
+        });
+
+        
+        // dd($latest_order->package);
+        return $this->allCreateStatement(
+            $client, $customer, $items, $latest_order->package->duration
+        );
+        
+    }
+
     public function createStatement($client, $customer, $items, $untilDays)
     {
         $invoice = Invoice::make('Chubcay Membership Statement')
             ->series('CHB')
-            ->sequence(667)
+            ->sequence(mt_rand(1, 9999))
             ->serialNumberFormat('{SEQUENCE}')
             ->seller($client)
             ->buyer($customer)
@@ -137,9 +236,35 @@ class InvoiceController extends Controller
                 $invoice->addItem($item);
             }
 
-
-
         // And return invoice itself to browser or have a different view
+        return $invoice->download();
+    }
+
+
+    public function allCreateStatement($client, $customer, $items, $untilDays)
+    {
+        $invoice = Invoice::make('Chubcay Membership Statement')
+            ->series('CHB')
+            ->sequence(mt_rand(1, 9999))
+            ->serialNumberFormat('{SEQUENCE}')
+            ->seller($client)
+            ->buyer($customer)
+            ->date(Carbon::now())
+            ->dateFormat('m/d/Y')
+            ->payUntilDays($untilDays)
+            ->currencySymbol('$')
+            ->currencyCode('USD')
+            ->currencyFormat('{SYMBOL}{VALUE}')
+            ->currencyThousandsSeparator(',')
+            ->currencyDecimalPoint('.')
+            ->template('admin_statement')
+            ->filename('invoice'.time());
+
+            foreach($items as $item)
+            {
+                $invoice->addItem($item);
+            }
+
         return $invoice->download();
     }
 }

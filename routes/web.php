@@ -10,6 +10,12 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+// test route
+Route::get('/test', function () {
+    phpinfo();
+});
+
 // root directory => landing
 Route::get("/", [ HomeController::class, "home" ])
     ->name("home.home");

@@ -183,7 +183,7 @@ export default function Edit({user, existing_package, profile_image}) {
                             </div>
                         ) :
                         (
-                            <div className="bg-white md:w-[30%] my-3 md:my-0 border rounded p-2">
+                            <div className="bg-white md:w-full my-3 md:my-0 border rounded p-2">
                                 <h2 className="p-2 font-extrabold">No Active Package</h2>
                                 <div className="p-2 text-start text-black font-extrabold">
                                     {/* Expired in {existing_package?.duration} days */}

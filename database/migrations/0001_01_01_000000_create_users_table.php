@@ -34,7 +34,7 @@ return new class extends Migration
             $table->boolean('is_admin')->default(0);
             $table->enum('status', [
                 'Active', 'Pending', 'Cancel'
-            ]);
+            ])->default('Pending');
         });
 
 

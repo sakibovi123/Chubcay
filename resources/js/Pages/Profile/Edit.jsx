@@ -135,9 +135,16 @@ export default function Edit({user, existing_package, profile_image}) {
             <div className="w-full md:my-[1rem] p-3">
                 <div className="md:flex items-start justify-between gap-5">
                     {
+                        user.status === 'Pending' ? (
+                            <div className="text-2xl font-bold p-2">
+                                Your request is in progress please wait
+                            </div>
+                        ) : (
+                            <div className="md:w-[30%] w-full">
+                                {
                         existing_package ? 
                         (
-                            <div className="bg-white md:w-[40%] my-3 md:my-0 border rounded p-2">
+                            <div className="bg-white md:w-full my-3 md:my-0 border rounded p-2">
                                 <h2 className="p-2 font-extrabold">Active package: <span>{existing_package?.package.title}</span></h2>
                                 <div className="p-2 text-start text-black font-extrabold">
                                     Expired in {existing_package?.duration} days
@@ -155,19 +162,19 @@ export default function Edit({user, existing_package, profile_image}) {
                                     </button>
                                 </div>
                                 <div className="w-full flex justify-center gap-3">
-                                    <button onClick={downloadInvoice} type="button" data-tooltip-target="tooltip-default" className="text-center w-full bg-blue-600
-                                        p-2 my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
+                                    <button onClick={downloadInvoice} type="button" data-tooltip-target="tooltip-default" className="text-sm text-center w-full bg-blue-600
+                                        p-1 my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
                                     >
                                        Download Invoice
                                     </button>
                                     
                                     <button onClick={generateStatement} className="text-center w-full bg-blue-600
-                                        p-2 my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
+                                        p-1 text-sm my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
                                     >
                                         Get Statement
                                     </button>
                                     <button className="text-center w-full bg-blue-600
-                                        p-2 my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
+                                        p-1 text-sm my-5 text-white font-extrabold rounded transition-all delay-5 hover:bg-blue-500"
                                     >
                                         Sell Membership
                                     </button>
@@ -192,6 +199,10 @@ export default function Edit({user, existing_package, profile_image}) {
                             </div>
                         )
                     }
+                            </div>
+                        )
+                    }
+                    
                     
 
                     <div className="p-2 md:w-[70%] bg-white border rounded">
@@ -205,20 +216,28 @@ export default function Edit({user, existing_package, profile_image}) {
                                         
                                     ):(
                                         <div>
-                                            <Webcam
-                                                className="w-full"
-                                                audio={false}
-                                                ref={webcamRef}
-                                                screenshotFormat="image/jpeg"
-                                                width={320}
-                                                height={240}
-                                            />
-                                            <button type="button" onClick={capture} className="cursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
-                                                Capture
-                                            </button>
-                                            <button type="button" onClick={closeCam} className="cursor-pointer p-2 bg-red-600 text-white m-2 rounded font-bold">
-                                                Close
-                                            </button>
+                                            {
+                                                user.status == 'Active' && (
+                                                    <div>
+                                                        <Webcam
+                                                        className="w-full"
+                                                        audio={false}
+                                                        ref={webcamRef}
+                                                        screenshotFormat="image/jpeg"
+                                                        width={320}
+                                                        height={240}
+                                                    />
+                                                    <button type="button" onClick={capture} className="cursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
+                                                        Capture
+                                                    </button>
+                                                    <button type="button" onClick={closeCam} className="cursor-pointer p-2 bg-red-600 text-white m-2 rounded font-bold">
+                                                        Close
+                                                    </button>
+                                                    </div>
+                                                    
+                                                )
+                                            }
+                                            
                                         </div>
                                         
                                     )
@@ -227,15 +246,25 @@ export default function Edit({user, existing_package, profile_image}) {
                                 
                             </div>
                         ) : (
-                            <div className="border w-[20%]">
+                            <div className="w-[20%]">
                                 {
-                                    user.image ? (
-                                        <img className="w-full" src={profile_image} alt="Profile" />        
-                                    )
-                                    :(
-                                        <img className="w-full" src={displayImage} alt="Profile" />
+                                    user.status == 'Active' && (
+                                        <div className="w-full">
+                                            {
+                                                user.image ?
+                                                (
+                                                    <img className="w-full" src={profile_image} alt="Profile" />        
+                                                )
+                                                :
+                                                SS(
+                                                    <img className="w-full" src={displayImage} alt="Profile" />
+                                                )
+                                            }
+                                        </div>
                                     )
                                 }
+
+                                
                                 
                             </div>
                             
@@ -247,79 +276,72 @@ export default function Edit({user, existing_package, profile_image}) {
                             Upload
                         </button>
                     )}
-                    <button type="button" onClick={handleCam}
-                        className="w-fullcursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
-                        Update Image
-                    </button>
-                        
-                        {/* {
-                            cam == true && (
-                                <button type="button" onClick={closeCam}
-                                    className="cursor-pointer p-2 bg-red-600 text-white m-2 rounded font-bold">
-                                    Close
-                                </button>
-                            )
-                        }
-                         */}
 
-                        
-                        
-                        <form onSubmit={patchUser}
-                             className="w-full p-2 flex flex-col items-start gap-3" action="">
-                            <label htmlFor="Email">Email</label>
-                            <input maxLength={16} type="email" disabled className="bg-red-200 w-full rounded border-gray-200"
-                                defaultValue={user.email} />
-                            <InputError message={errors.email} className="mt-2" />
+                    {
+                        user.status == 'Active' && (
+                            <button type="button" onClick={handleCam}
+                                className="w-fullcursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
+                                Update Image
+                            </button>
+                        )
+                    }
+                    
+                    <form onSubmit={patchUser}
+                            className="w-full p-2 flex flex-col items-start gap-3" action="">
+                        <label htmlFor="Email">Email</label>
+                        <input maxLength={16} type="email" disabled className="bg-red-200 w-full rounded border-gray-200"
+                            defaultValue={user.email} />
+                        <InputError message={errors.email} className="mt-2" />
 
-                            <label htmlFor="FirstName">First Name</label>
-                            <input maxLength={16} onChange={(e) => setData('first_name', e.target.value)}
-                             type="text" className="w-full rounded border-gray-200"
-                                value={data.first_name} />
-                            <InputError message={errors.first_name} className="mt-2" />
+                        <label htmlFor="FirstName">First Name</label>
+                        <input maxLength={16} onChange={(e) => setData('first_name', e.target.value)}
+                            type="text" className="w-full rounded border-gray-200"
+                            value={data.first_name} />
+                        <InputError message={errors.first_name} className="mt-2" />
 
-                            <label htmlFor="LastEmail">Last Name</label>
-                            <input maxLength={16} onChange={(e) => setData('last_name', e.target.value)}
-                             type="text" className="w-full rounded border-gray-200"
-                             value={data.last_name} />
-                            <InputError message={errors.last_name} className="mt-2" />
+                        <label htmlFor="LastEmail">Last Name</label>
+                        <input maxLength={16} onChange={(e) => setData('last_name', e.target.value)}
+                            type="text" className="w-full rounded border-gray-200"
+                            value={data.last_name} />
+                        <InputError message={errors.last_name} className="mt-2" />
 
-                            <label htmlFor="Country">Country</label>
-                            <input maxLength={16} onChange={(e) => setData('country', e.target.value)}
-                                type="text" className="w-full rounded border-gray-200"
-                                     value={data.country} />
-                            <InputError message={errors.country} className="mt-2" />
+                        <label htmlFor="Country">Country</label>
+                        <input maxLength={16} onChange={(e) => setData('country', e.target.value)}
+                            type="text" className="w-full rounded border-gray-200"
+                                    value={data.country} />
+                        <InputError message={errors.country} className="mt-2" />
 
-                            <label htmlFor="Phone">Phone</label>
-                            <input onChange={(e) => setData('phone', e.target.value.replace(/[^0-9+()\s-]/g, ''))}
-                                    type="text"
-                                    name="phone"
-                                    className="w-full rounded border-gray-200"
-                                    value={data.phone} />
-                            <InputError message={errors.phone} className="mt-2" />
+                        <label htmlFor="Phone">Phone</label>
+                        <input onChange={(e) => setData('phone', e.target.value.replace(/[^0-9+()\s-]/g, ''))}
+                                type="text"
+                                name="phone"
+                                className="w-full rounded border-gray-200"
+                                value={data.phone} />
+                        <InputError message={errors.phone} className="mt-2" />
 
-                            <label htmlFor="City">City</label>
-                            <input maxLength={16} onChange={(e) => setData('city', e.target.value)}
-                                 type="text" className="w-full rounded border-gray-200" value={data.city} />
-                            <InputError message={errors.city} className="mt-2" />
+                        <label htmlFor="City">City</label>
+                        <input maxLength={16} onChange={(e) => setData('city', e.target.value)}
+                                type="text" className="w-full rounded border-gray-200" value={data.city} />
+                        <InputError message={errors.city} className="mt-2" />
 
-                            <label htmlFor="Current Password">Current Password</label>
-                            <input onChange={handleChange} name="current_password"
-                                 type="password" className="w-full rounded border-gray-200" placeholder="*********" />
-                            <InputError message={errors.current_password} className="mt-2" />
+                        <label htmlFor="Current Password">Current Password</label>
+                        <input onChange={handleChange} name="current_password"
+                                type="password" className="w-full rounded border-gray-200" placeholder="*********" />
+                        <InputError message={errors.current_password} className="mt-2" />
 
-                            <label htmlFor="New Password">New Password</label>
-                            <input name="new_password" onChange={handleChange}
-                                 type="password" className="w-full rounded border-gray-200" placeholder="*********" />
-                            <InputError message={errors.new_passwoqrd} className="mt-2" />
+                        <label htmlFor="New Password">New Password</label>
+                        <input name="new_password" onChange={handleChange}
+                                type="password" className="w-full rounded border-gray-200" placeholder="*********" />
+                        <InputError message={errors.new_passwoqrd} className="mt-2" />
 
-                            <input onChange={(e) => setData('image', e.target.value)}
-                             type="hidden" defaultValue={image}  name="image" />
-                            <button type="submit"
-                                 className="w-full text-center bg-blue-600 rounded
-                                  shadow-md p-2 text-white font-bold transition-all delay-5 hover:bg-blue-700">
-                                    Update Profile
-                                </button>
-                        </form>
+                        <input onChange={(e) => setData('image', e.target.value)}
+                            type="hidden" defaultValue={image}  name="image" />
+                        <button type="submit"
+                                className="w-full text-center bg-blue-600 rounded
+                                shadow-md p-2 text-white font-bold transition-all delay-5 hover:bg-blue-700">
+                                Update Profile
+                            </button>
+                    </form>
                     </div>
                 </div>
             </div>

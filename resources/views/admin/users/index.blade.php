@@ -44,7 +44,7 @@
                             <select id="statusChange_{{ $user->id }}" class="p-1 rounded-full border" name="status">
                                 <option value="Active" {{ $user->status == 'Active' ? 'selected' : '' }}>Active</option>
                                 <option value="Pending" {{ $user->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="Cancel" {{ $user->status == 'Cancel' ? 'selected' : '' }}>Cancel</option>
+                                {{-- <option value="Cancel" {{ $user->status == 'Cancel' ? 'selected' : '' }}>Cancel</option> --}}
                             </select>
                         </td>
                         <td class="p-3">

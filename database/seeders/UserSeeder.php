@@ -25,18 +25,20 @@ class UserSeeder extends Seeder
                 "image" => "https://w7.pngwing.com/pngs/910/606/png-transparent-head-the-dummy-avatar-man-tie-jacket-user.png",
                 "country" => "England",
                 "phone" => "+9883234",
-                "city" => "London"
+                "city" => "London",
+                "is_admin" => 1
             ],
             [
                 "created_at" => Carbon::now(),
-                "first_name" => "Mohona",
-                "last_name" => "Chan",
-                "email" => "mohona@gmail.com",
+                "first_name" => "Marco",
+                "last_name" => "Santullo",
+                "email" => "marco@gmail.com",
                 "password" => Hash::make("admin123123"),
                 "image" => "https://w7.pngwing.com/pngs/910/606/png-transparent-head-the-dummy-avatar-man-tie-jacket-user.png",
                 "country" => "Bangladesh",
                 "phone" => "+988233234",
-                "city" => "Dhaka"
+                "city" => "Dhaka",
+                "is_admin" => 1
             ],
             [
                 "created_at" => Carbon::now(),

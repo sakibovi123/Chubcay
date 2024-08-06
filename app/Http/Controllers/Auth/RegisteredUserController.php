@@ -73,4 +73,9 @@ class RegisteredUserController extends Controller
 
         return redirect(route('home.home', absolute: false));
     }
+
+    public function confirmUser()
+    {
+        return Inertia::render('Confirm');
+    }
 }

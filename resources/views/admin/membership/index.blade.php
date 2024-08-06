@@ -22,6 +22,7 @@
                     <th class="p-3">PACKAGE NAME</th>
                     {{-- <th class="p-3">CUSTOMER</th> --}}
                     <th class="p-3">PLAN NAME</th>
+                    <th class="p-3">PRICE</th>
                     <th class="p-3">STATUS</th>
                     <th class="p-2">ACTIONS</th>
                 </thead>
@@ -33,6 +34,7 @@
                         <td class="p-3">{{ $plan->title }}</td>
                         {{-- <td class="p-3">DAATA</td> --}}
                         <td class="p-3">{{ $plan->duration_title }}</td>
+                        <td class="p-3">${{ $plan->price }}</td>
                         <td class="p-3">
                             @if ($plan->status == 'Active')
                                 <p class="bg-green-400 p-1 rounded-xl">{{ $plan->status }}</p>

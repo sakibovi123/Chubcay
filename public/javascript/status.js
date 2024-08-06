@@ -59,3 +59,29 @@ function deleteUser(id) {
 
     }
 }
+
+
+$(document).ready(function() {
+    // Function to update the background color based on the status
+    function updateSelectColor(selectElement) {
+        const status = selectElement.val();
+        if (status === 'Active') {
+            selectElement.css('background-color', '#6ee464');
+        } else if (status === 'Pending') {
+            selectElement.css('background-color', '#ed5e5e');
+        } else {
+            selectElement.css('background-color', '');
+        }
+    }
+
+    // Initialize the color on page load
+    $('select[name="status"]').each(function() {
+        updateSelectColor($(this));
+    });
+
+    // Update the color on change
+    $('select[name="status"]').change(function() {
+        updateSelectColor($(this));
+    });
+});
+

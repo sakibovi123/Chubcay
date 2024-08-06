@@ -41,8 +41,8 @@
                         </td>
                         <td>
                             <input id="user_id_{{ $user->id }}" type="hidden" value="{{ $user->id }}" name="user_id">
-                            <select id="statusChange_{{ $user->id }}" class="p-1 rounded-full border" name="status">
-                                <option value="Active" {{ $user->status == 'Active' ? 'selected' : '' }}>Active</option>
+                            <select data-status="{{ $user->status }}" id="statusChange_{{ $user->id }}" class="p-1 rounded-full border" name="status">
+                                <option className="bg-green-500" value="Active" {{ $user->status == 'Active' ? 'selected' : '' }}>Active</option>
                                 <option value="Pending" {{ $user->status == 'Pending' ? 'selected' : '' }}>Pending</option>
                                 {{-- <option value="Cancel" {{ $user->status == 'Cancel' ? 'selected' : '' }}>Cancel</option> --}}
                             </select>
@@ -52,7 +52,7 @@
                             @if ($user->is_admin == 1)
                                 <p class="bg-green-400 p-1 rounded-full">Admin</p>
                             @else
-                                <p class="bg-red-400 p-1 rounded-full">Member</p>
+                                <p class="text-white bg-blue-500 p-1 rounded-full">Member</p>
                             @endif
                             
                         </td>

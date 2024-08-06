@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Checkout\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Invoice\InvoiceController;
@@ -11,10 +12,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-// test route
-Route::get('/test', function () {
-    phpinfo();
-});
+// // test route
+// Route::get('/test', function () {
+//     phpinfo();
+// });
 
 // root directory => landing
 Route::get("/", [ HomeController::class, "home" ])
@@ -27,6 +28,10 @@ Route::get("/packages", [ PackageController::class, "index" ])
 // get single package
 Route::get("/package/{slug}", [ PackageController::class, 'getSinglePackageDetails' ])
     ->name('package.single');
+
+Route::get('/confirm', [
+    RegisteredUserController::class, 'confirmUser'
+])->name('auth.confirm');
 
 
 
@@ -66,6 +71,8 @@ Route::middleware('auth')->group(function () {
     // get qr on mail
     Route::get('/get-qr', [ QrController::class, 'sendQrToMail' ])
         ->name('qr.generate');
+
+    //
 
     
 });

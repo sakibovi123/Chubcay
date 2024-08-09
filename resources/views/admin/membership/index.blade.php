@@ -11,15 +11,11 @@
         </a>
     </div>
     
-    <div class="w-full bg-white rounded-xl shadow-md p-1 md:p-3 my-5">
-        <div class="w-full flex items-center justify-between gap-3">
-            <h1 class="p-2 text-lg font-semibold">Plans</h1>
-        </div>
-        
+    <div class="w-full p-1 md:p-3 my-5">
         @if ($plans)
-        <div class="w-full relative overflow-x-auto ">
-            <table class="w-full table-fixed">
-                <thead class="bg-gray-100 border-b-2">
+        <div class="bg-white rounded max-w-80 md:max-w-full relative overflow-x-auto ">
+            <table class="w-full">
+                <thead class="bg-white border-b-2">
                     {{-- <tr> --}}
                         <th class="text-sm p-2 sm:p-3">CREATED AT</th>
                         <th class="text-sm p-2 sm:p-3">PACKAGE NAME</th>

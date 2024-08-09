@@ -22,9 +22,9 @@ export default function Banner() {
                 </p>
                 {/* button sectio */}
 
-                <button onClick={scrollToFeatures} className="cursor-pointer rounded w-[300px] my-3 md:my-6 text-center bg-purple-600 p-3 text-white transition-all hover:bg-purple-500 delay-5">
+                {/* <button onClick={scrollToFeatures} className="cursor-pointer rounded w-[300px] my-3 md:my-6 text-center bg-purple-600 p-3 text-white transition-all hover:bg-purple-500 delay-5">
                     Explore Features
-                </button>
+                </button> */}
             </div>
 
 

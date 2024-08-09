@@ -19,7 +19,7 @@ export default function Home({packages}) {
     <div className="h-full container md:mx-auto lg:w-[80%] md:w-[60%] w-full">
      <Banner />  
       {/* <Brands /> */}
-      <Feature />
+      {/* <Feature /> */}
       {/* <Testimonial /> */}
       <Pricing packages={packages} />
       <Contact />

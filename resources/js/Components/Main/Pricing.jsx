@@ -15,7 +15,7 @@ const duration = (pkg_dur) => {
     }
 }
   return (
-    <div id="pricing" className="my-[7rem] h-full w-full flex
+    <div id="pricing" className="my-[0rem] h-full w-full flex
         flex-col items-center text-center justify-center gap-5 p-3"
      >
 

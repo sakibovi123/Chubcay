@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="w-full my-5 p-3 container md:mx-auto">
-        <div class="flex items-center justify-between gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div class="bg-white p-5 border border-orange-100 w-full rounded-xl">
                 <p class="text-sm text-gray-400">Revenue</p>
                 <h1 class="font-bold text-3xl">${{ $totalRevenue }}</h1>

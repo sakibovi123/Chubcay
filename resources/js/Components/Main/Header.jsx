@@ -54,13 +54,13 @@ export default function Header() {
                 <Link href="/"><img src={Logo} className='h-[110px] w-[150px] p-3' alt="" /></Link>
             </div>
 
-            <div className="text-white menu-area flex items-center gap-5 text-lg font-bold md:flex hidden">
+            {/* <div className="text-white menu-area flex items-center gap-5 text-lg font-bold md:flex hidden">
                 <a href="/" className="transition-all hover:text-blue-700">Home</a>
                 <a href="#feature" className="transition-all hover:text-blue-700">Features</a>
                 <a href="#testimonial" className="transition-all hover:text-blue-700">Testimonial</a>
                 <a href="#pricing" className="transition-all hover:text-blue-700">Pricing</a>
                 <a href="#contact" className="transition-all hover:text-blue-700">Contact us</a>
-            </div>
+            </div> */}
 
             <div className="auth-area flex gap-5 font-bold text-lg md:flex hidden">
                 {

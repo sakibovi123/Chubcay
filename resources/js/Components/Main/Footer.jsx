@@ -18,7 +18,7 @@ function Footer() {
                     © 2024 Chubcay, All Rights Reserved
                 </p>
             </div>
-            <div className="w-full text-left">
+            {/* <div className="w-full text-left">
                 <h1 className="text-white text-3xl font-bold h-[60px]">Quick Links</h1>
                 <div className="flex flex-wrap items-center justify-start gap-4">
                     <a href="/" className="font-bold text-white text-lg">Home</a>
@@ -27,7 +27,7 @@ function Footer() {
                     <a href="#pricing" className="font-bold text-white text-lg">Pricing</a>
                     <a href="#contact" className="font-bold text-white text-lg">Contact</a>
                 </div>
-            </div>
+            </div> */}
             <div className="w-full text-left md:text-right">
                 <h1 className="text-white text-3xl font-bold h-[60px]">
                     Follow us

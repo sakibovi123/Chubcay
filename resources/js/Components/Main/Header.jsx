@@ -102,15 +102,38 @@ export default function Header() {
                 <CiMenuBurger className="text-xl cursor-pointer" />
             </div>
 
-            <div ref={navRef} className={`md:hidden flex flex-col w-[200px] gap-5 items-start p-3 fixed left-0
+            <div ref={navRef} className={`md:hidden flex flex-col w-[200px] gap-1 items-start p-3 fixed left-0
                  bg-white shadow-lg rounded top-[60px] sm:left-[200px] left-[230px] ${nav ? 'flex' : 'hidden'}`}>
-                <Link href="#header" className="transition-all hover:text-blue-700">Home</Link>
-                <Link className="transition-all hover:text-blue-700">Sign up</Link>
-                <Link href="#testimonial" className="transition-all hover:text-blue-700">Sign in</Link>
-                <Link className="transition-all hover:text-blue-700">Service</Link>
+                <Link href={route('home.home')} className="transition-all hover:text-blue-700">Home</Link>
+                {
+                    auth.user ? (
+                        <div>
+                            {
+                                    auth.user.is_admin == true && (
+                                        <div>
+                                            <a href={route('admin.index')} className="text-md font-normal transition-all delay-5 hover:border-b-2">
+                                                Dashboard
+                                            </a> <br />
+                                        </div>
+                                        
+                                    )
+                                }
+                            <Link href={route('profile.edit')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Profile</Link><br />
+                            <Link href={route('logout')} className="text-md font-normal transition-all delay-5 hover:border-b-2">Logout</Link>
+                        </div>
+                        
+                    ):(
+                        <div clasName="">
+                            <Link href={route('register')} className="transition-all hover:text-blue-700">Sign up</Link> <br />
+                            <Link href={route('login')} className="transition-all hover:text-blue-700">Sign in</Link>
+                        </div>
+                    )
+                }
+                
+                {/* <Link className="transition-all hover:text-blue-700">Service</Link>
                 <Link className="transition-all hover:text-blue-700">Pricing</Link>
                 <Link className="transition-all hover:text-blue-700">About us</Link>
-                <Link className="transition-all hover:text-blue-700">Contact us</Link>
+                <Link className="transition-all hover:text-blue-700">Contact us</Link> */}
             </div>
         </div>
     )

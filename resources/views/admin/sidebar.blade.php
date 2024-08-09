@@ -29,13 +29,13 @@
                 <p class="block">Manage Orders</p>
             </li>
 
-            <li id="manage-orders" class="flex items-center justify-start gap-5 bg-gray-100 p-3 rounded w-full cursor-pointer transition-all delay-5 hover:bg-orange-100">
+            {{-- <li id="manage-orders" class="flex items-center justify-start gap-5 bg-gray-100 p-3 rounded w-full cursor-pointer transition-all delay-5 hover:bg-orange-100">
                 <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9h13a5 5 0 0 1 0 10H7M3 9l4-4M3 9l4 4"/>
                   </svg>
                   
                 <p class="block">Manage Refunds</p>
-            </li>
+            </li> --}}
 
             <li id="logout" class="flex items-center justify-start gap-5 bg-gray-100 p-3 rounded w-full cursor-pointer transition-all delay-5 hover:bg-rose-100">
                 <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

@@ -3,9 +3,9 @@
 @section('title', 'Home Page')
 
 @section('content')
-    <div class="w-full my-5 p-3 container md:mx-auto">
+    <div class="w-full my-5 md:p-3 container md:mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div class="bg-white p-5 border border-orange-100 w-full rounded-xl">
+            <div class="bg-white p-2 md:p-5 border border-orange-100 w-full rounded-xl">
                 <p class="text-sm text-gray-400">Revenue</p>
                 <h1 class="font-bold text-3xl">${{ $totalRevenue }}</h1>
                 <p class="text-green-500 flex items-center gap-3">
@@ -17,7 +17,7 @@
                 </p>
             </div>
 
-            <div class="bg-white p-5 border border-orange-100 w-full rounded-xl">
+            <div class="bg-white p-2 md:p-5 border border-orange-100 w-full rounded-xl">
                 <p class="text-sm text-gray-400">New customers</p>
                 <h1 class="font-bold text-3xl">{{ $totalCustomers }}</h1>
                 <p class="text-green-500 flex items-center gap-3">
@@ -29,7 +29,7 @@
                 </p>
             </div>
 
-            <div class="bg-white p-5 border border-orange-100 w-full rounded-xl">
+            <div class="bg-white p-2 md:p-5 border border-orange-100 w-full rounded-xl">
                 <p class="text-sm text-gray-400">New orders</p>
                 <h1 class="font-bold text-3xl">{{ $totalOrders }}</h1>
                 <p class="text-red-500 flex items-center gap-3">
@@ -51,7 +51,7 @@
             
             @if ($orders)
             <div class="overflow-x-auto">
-                <table class="w-full my-4">
+                <table class="table-auto w-full my-4">
                     <thead class="w-full bg-gray-100 border-b-2">
                         <th class="p-3">CREATED AT</th>
                         <th class="p-3">ORDER ID</th>

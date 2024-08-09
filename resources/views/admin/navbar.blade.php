@@ -1,4 +1,4 @@
-<nav class="bg-slate-800 border-b border-gray-200 p-5">
+<nav class="bg-slate-800 border-b border-gray-200 p-5 w-full">
     <div class="container mx-auto px-4 flex justify-between items-center">
         <a class="text-lg font-bold text-white" href="#">CHUBCAY ADMIN</a>
         {{-- <button class="block lg:hidden text-gray-800 focus:outline-none" type="button" onclick="document.getElementById('navbarNav').classList.toggle('hidden')">

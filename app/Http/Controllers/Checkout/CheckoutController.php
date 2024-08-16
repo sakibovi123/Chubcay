@@ -17,6 +17,7 @@ use Shift4\Request\CheckoutRequest;
 use Shift4\Request\CheckoutRequestCharge;
 use Inertia\Inertia;
 use Shift4\Exception\Shift4Exception;
+use Illuminate\Support\Facades\Http;
 
 
 
@@ -77,7 +78,19 @@ class CheckoutController extends Controller
                 $checkout->save();
 
                 $gateway = new Shift4Gateway(env('SHIFT4_SECRET'));
+
+                // creating customer
                 
+                $customerRequest = [
+                    'email' => $data['email'],
+                    // 'card' => $request->get('card_number')
+                ];
+                
+                $response = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+                    ->asForm()
+                    ->post('https://api.shift4.com/customers', $customerRequest);
+
+
                 $sh_request = [
                     'amount' => $checkout->grand_total * 100,
                     'currency' => 'USD',
@@ -86,7 +99,13 @@ class CheckoutController extends Controller
                         'number' => $request->get('card_number'),
                         'expMonth' => $mm,
                         'expYear' => $yy
+                    ],
+                    'customerId' => $response['id'],
+                    'metadata' =>  [
+                        'plan' => $checkout->package->title,
+                        'duration' => $checkout->package->duration . 'days'
                     ]
+                     
                 ];
                 // dd($sh_request['amount']);
 

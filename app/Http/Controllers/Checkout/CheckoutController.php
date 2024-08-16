@@ -77,9 +77,9 @@ class CheckoutController extends Controller
                 $checkout->save();
 
                 $gateway = new Shift4Gateway(env('SHIFT4_SECRET'));
-
+                
                 $sh_request = [
-                    'amount' => $checkout->grand_total,
+                    'amount' => $checkout->grand_total * 100,
                     'currency' => 'USD',
                     // 'customerId' => $checkout->user_id,
                     'card' => [
@@ -88,7 +88,8 @@ class CheckoutController extends Controller
                         'expYear' => $yy
                     ]
                 ];
-                // dd("asdasd");
+                // dd($sh_request['amount']);
+
                 try{
                     $charge = $gateway->createCharge($sh_request);
                     

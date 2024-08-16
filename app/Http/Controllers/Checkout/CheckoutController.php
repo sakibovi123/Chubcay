@@ -80,7 +80,7 @@ class CheckoutController extends Controller
                 $gateway = new Shift4Gateway(env('SHIFT4_SECRET'));
 
                 // creating customer
-                
+
                 $customerRequest = [
                     'email' => $data['email'],
                     // 'card' => $request->get('card_number')
@@ -143,7 +143,32 @@ class CheckoutController extends Controller
 
                             $existed_package->save();
                         }
+
+                        // creating plans and subs
+
+                        $planRequest = [
+                            'amount' => $checkout->grand_total * 100,
+                            'currency' => 'USD',
+                            'interval' => 'day',
+                            'intervalCount' => 183,
+                            'name' => $checkout->package->duration_title,
+                        ];
+
+                        $responsePlan = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+                            ->asForm()
+                            ->post('https://api.shift4.com/plans', $planRequest);
                         
+                        // processing subscription
+                        // dd($responsePlan['id']);
+                        $subRequest = [
+                            'planId' => $responsePlan['id'],
+                            'customerId' => $response['id'],
+                        ];
+
+                        $responseSub = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+                            ->asForm()
+                            ->post('https://api.shift4.com/subscriptions', );
+
                         return redirect(route('checkout.success'));
                     }
                 } catch( Shift4Exception $se ) {

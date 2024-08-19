@@ -146,11 +146,13 @@ class CheckoutController extends Controller
 
                         // creating plans and subs
 
+                        
+
                         $planRequest = [
                             'amount' => $checkout->grand_total * 100,
                             'currency' => 'USD',
                             'interval' => 'day',
-                            'intervalCount' => 183,
+                            'intervalCount' => $checkout->package->duration,
                             'name' => $checkout->package->duration_title,
                         ];
 
@@ -167,7 +169,7 @@ class CheckoutController extends Controller
 
                         $responseSub = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
                             ->asForm()
-                            ->post('https://api.shift4.com/subscriptions', );
+                            ->post('https://api.shift4.com/subscriptions', $subRequest);
 
                         return redirect(route('checkout.success'));
                     }

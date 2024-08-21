@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMailAfterAcceptingRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserManagementController extends Controller
 {
@@ -24,11 +27,19 @@ class UserManagementController extends Controller
     {
         if ($request->ajax()) {
             $user = User::find($request->input('user_id'));
-    
+            // dd($user->email);
             if ($user) {
                 $user->status = $request->input('status');
                 $user->save();
-    
+
+                // send mail if only accepted
+                $message = "Your request has been accepted";
+
+                if($user->status == 'Active'){
+                    Mail::to($user->email)
+                        ->send(new SendMailAfterAcceptingRequest($message));
+                } 
+
                 return response()->json(['message' => 'User updated successfully!']);
             }
     
@@ -49,11 +60,15 @@ class UserManagementController extends Controller
         $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|email|unique',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
+            'city' => 'required|string'
         ]);
 
+        
+
         $data = $request->all();
+        $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);
 
@@ -61,19 +76,32 @@ class UserManagementController extends Controller
         
     }
 
-    public function edit($userId)
+    public function edit( $userId )
     {
         $user = User::find($userId);
-        return view('admin.users.update');
+        return view('admin.users.update', ['user' => $user]);
     }
 
     public function update( Request $request, $userId )
     {
         $user = User::find($userId);
-
+        // dd($user);
         if( $user )
         {
+            $user->first_name = $request->input('first_name');
+            $user->last_name = $request->input('last_name');
+            $user->email = $request->input('email');
+            // $user->password = Hash::make($request->input('password'));
+            $user->country = $request->input('country');
+            $user->city = $request->input('city');
+            $user->phone = $request->input('phone');
 
+            $user->save();
+
+            return back()->with('message', 'User updated');
+        }
+        else {
+            return back()->with('message', 'Something went wrong');
         }
     }
 

@@ -74,6 +74,16 @@ Route::middleware('admin')->group(function(){
         Route::get('/', [ CheckoutManagementController::class, 'index' ])
             ->name('checkout.index');
 
+        // create order
+        Route::get('/create-order', [
+            CheckoutManagementController::class, 'create'
+        ])->name('checkout.create');
+        
+        // saving order
+        Route::post('/store-order', [
+            CheckoutManagementController::class, 'store'
+        ])->name('checkout.store');
+
         Route::get('/order/{orderId}', [ CheckoutManagementController::class, 'details' ])
             ->name('checkout.details');
         

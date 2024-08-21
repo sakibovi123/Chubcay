@@ -7,11 +7,13 @@
         <div class="flex items-center justify-between w-full">
             <h1 class="text-xl font-bold">Manage Order</h1>
             <div class="flex items-center gap-5">
+                <a class="text-white bg-sky-500 p-2 rounded" href="{{ route('checkout.create') }}">
+                    CREATE ORDER
+                </a>
                 <a href="{{ route('checkout.invoice') }}">
                     <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M16.444 18H19a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h2.556M17 11V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v6h10ZM7 15h10v4a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4Z"/>
-                      </svg>
-                      
+                      </svg>  
                 </a>
                 {{-- <a href="{{ route('membership.create') }}" class="p-2 bg-sky-600 rounded-xl text-white transition-all delay-5 hover:bg-sky-700">
                     Create Plan

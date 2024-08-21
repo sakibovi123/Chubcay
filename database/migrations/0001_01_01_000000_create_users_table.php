@@ -35,6 +35,11 @@ return new class extends Migration
             $table->enum('status', [
                 'Active', 'Pending', 'Cancel'
             ])->default('Pending');
+
+            // user's personal wallet
+            $table->decimal('balance', 10, 2)
+                ->default('0.00')
+                ->nullable();
         });
 
 

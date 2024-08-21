@@ -62,16 +62,15 @@ class UserManagementController extends Controller
             'last_name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
-            'city' => 'required|string'
+            'city' => 'required|string',
+            // 'balance' => 'numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
-
-        
 
         $data = $request->all();
         $data['password'] = Hash::make($data['password']);
-
+        
         $user = User::create($data);
-
+        // dd($user);
         return redirect()->back()->with('message', 'User added successfully');
         
     }
@@ -95,6 +94,7 @@ class UserManagementController extends Controller
             $user->country = $request->input('country');
             $user->city = $request->input('city');
             $user->phone = $request->input('phone');
+            $user->balance = $request->input('balance');
 
             $user->save();
 

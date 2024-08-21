@@ -54,6 +54,11 @@
                 <input value="{{ $user->city }}" required name="city" id="city" type="text" placeholder="Enter city name" class="p-2 rounded w-full border">
             </div>
 
+            <div class="w-full">
+                <label class="text-gray-600 font-bold text-md" for="">Balance</label>
+                <input value="{{ $user->balance }}" required name="balance" id="balance" type="text" placeholder="0.00" class="p-2 rounded w-full border">
+            </div>
+
         </div>
 
         <div class="my-5 w-full flex items-center justify-between gap-3">
@@ -63,4 +68,41 @@
         
     </form>
 </div>
+<script>
+    document.getElementById('balance').addEventListener('input', function() {
+        let value = this.value;
+    
+        // Remove non-numeric characters except the decimal point
+        value = value.replace(/[^0-9.]/g, '');
+    
+        // Split the value at the decimal point
+        let parts = value.split('.');
+    
+        // Ensure that there are no more than 2 decimal places
+        if (parts.length > 1) {
+            parts[1] = parts[1].slice(0, 2);
+        }
+    
+        // Reconstruct the value
+        value = parts.join('.');
+    
+        // If there's no decimal point or it's at the end, append .00
+        if (value.indexOf('.') === -1) {
+            value += '.00';
+        } else if (value.indexOf('.') === value.length - 1) {
+            value += '00';
+        } else if (value.indexOf('.') === value.length - 2) {
+            value += '0';
+        }
+    
+        // Save cursor position
+        let cursorPos = this.selectionStart;
+        
+        // Update the input value
+        this.value = value;
+    
+        // Restore cursor position
+        this.setSelectionRange(cursorPos, cursorPos);
+    });
+</script>
 @endsection

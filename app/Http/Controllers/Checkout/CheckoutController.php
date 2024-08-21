@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Rules\MonthYear;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Shift4\Shift4Gateway;
 use Shift4\Request\CheckoutRequest;
@@ -33,7 +34,7 @@ class CheckoutController extends Controller
     public function handleCheckout( Request $request ) 
     {   
         try {
-            $auth = auth()->user();
+            $auth = Auth::user();
             $currency = 'USD';
             $package = Package::where("id", $request->get('package_id'))->first();
             // $package = Package::where("id", 2)->first();
@@ -53,7 +54,7 @@ class CheckoutController extends Controller
                 "last_name" => $request->get('last_name'),
                 "email" => $request->get('email'),
                 "package_id" => $package->id,
-                "user_id" => auth()->user()->id,
+                "user_id" => $auth->id,
                 "invoice" => mt_rand(1, 9999)
             ];
 
@@ -83,7 +84,6 @@ class CheckoutController extends Controller
 
                 $customerRequest = [
                     'email' => $data['email'],
-                    // 'card' => $request->get('card_number')
                 ];
                 
                 $response = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
@@ -130,7 +130,7 @@ class CheckoutController extends Controller
                             // dd($checkout->package->duration);
                             $pkg_exp = PackageExpiration::create([
                                 "package_id" => $checkout->package->id,
-                                "user_id" => auth()->user()->id,
+                                "user_id" => $auth->id,
                                 "duration" => $checkout->package->duration
                             ]);
 

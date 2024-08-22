@@ -60,6 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::get("/failed", [ CheckoutController::class, "handleFailed" ])
     ->name('checkout.failed');
 
+    Route::get('/success-fee', function () {
+        return Inertia::render('SuccessFee');
+    })->name('success.fee');
+
     // generate invoice
     Route::get('/generate-invoice', [ InvoiceController::class, 'generateInvoice' ])
         ->name('invoice.generate');

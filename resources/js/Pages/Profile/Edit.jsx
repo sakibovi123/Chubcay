@@ -12,9 +12,10 @@ import { ReactNotifications, Store } from 'react-notifications-component'
 import Webcam from 'react-webcam';
 import { useState, useRef } from 'react';
 import dummyImg from '../../Assets/Images/dummy.png';
+import RechargeModal from '@/Components/RechargeModal';
 
 
-export default function Edit({user, existing_package, profile_image}) {
+export default function Edit({user, existing_package, profile_image, records}) {
     
     // const { existed_package } = usePage().props;
     const [ hasImage, setHasImage ] = useState(false)
@@ -22,6 +23,10 @@ export default function Edit({user, existing_package, profile_image}) {
     const [ image, setImage ] = useState('');
     const [ captured, setCaptured ] = useState(false);
     const [ cam, showCam ] = useState(false);
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString(); // Adjust locale or options if needed
+    };
 
     const {data, setData, post, processing, errors, reset} = useForm({
         first_name: user.first_name || '',
@@ -124,6 +129,24 @@ export default function Edit({user, existing_package, profile_image}) {
         // console.log(numericValue);
     }
 
+    // Recharge modal
+
+    const [showModal, setShowModal] = useState(false);
+
+    const handleRechargeClick = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const [activeTab, setActiveTab] = useState('profile'); // default tab
+
+    const handleTabClick = (tabName) => {
+        setActiveTab(tabName);
+    };
+
     return (
         <div className="w-full">
             <Header />
@@ -134,6 +157,7 @@ export default function Edit({user, existing_package, profile_image}) {
 
             <div className="w-full md:my-[1rem] p-3">
                 <div className="md:flex items-start justify-between gap-5">
+                    
                     {
                         user.status === 'Pending' ? (
                             <div className="text-2xl font-bold p-2">
@@ -141,10 +165,24 @@ export default function Edit({user, existing_package, profile_image}) {
                             </div>
                         ) : (
                             <div className="md:w-[30%] w-full">
+                                <div className="border w-full flex gap-3 p-5">
+                                    <h2 className="p-2 font-extrabold">
+                                        Balance: <span>${user?.balance}</span>
+                                    </h2>
+                                    <p onClick={handleRechargeClick}
+                                        className="flex items-center cursor-pointer text-white p-1 rounded bg-blue-500">
+                                        Recharge
+                                    </p>
+                                    <RechargeModal
+                                        show={showModal} onClose={handleCloseModal}
+                                    />
+                                </div>
+                                
+                                
                                 {
                         existing_package ? 
                         (
-                            <div className="bg-white md:w-full my-3 md:my-0 border rounded p-2">
+                            <div className="bg-white md:w-full my-3 md:my-0 border p-2">
                                 <h2 className="p-2 font-extrabold">Active package: <span>{existing_package?.package.title}</span></h2>
                                 <div className="p-2 text-start text-black font-extrabold">
                                     Expired in {existing_package?.duration} days
@@ -206,70 +244,84 @@ export default function Edit({user, existing_package, profile_image}) {
                     
 
                     <div className="p-2 md:w-[70%] bg-white border rounded">
-                        <h1 className="text-2xl font-bold p-2">Profile</h1>
-                    <div>
-                        {cam ? (
-                            <div className="w-[20%] border">
-                                {
-                                    image ? (
-                                        <img src={image} />
-                                        
-                                    ):(
-                                        <div>
-                                            {
-                                                user.status == 'Active' && (
-                                                    <div>
-                                                        <Webcam
-                                                        className="w-full"
-                                                        audio={false}
-                                                        ref={webcamRef}
-                                                        screenshotFormat="image/jpeg"
-                                                        width={320}
-                                                        height={240}
-                                                    />
-                                                    <button type="button" onClick={capture} className="cursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
-                                                        Capture
-                                                    </button>
-                                                    <button type="button" onClick={closeCam} className="cursor-pointer p-2 bg-red-600 text-white m-2 rounded font-bold">
-                                                        Close
-                                                    </button>
-                                                    </div>
-                                                    
-                                                )
-                                            }
+                        <button
+                                className={`p-2 font-bold ${activeTab === 'profile' ? 'border-b-2 border-blue-500 text-blue-500' : ''}`}
+                                onClick={() => handleTabClick('profile')}
+                            >
+                                Profile
+                        </button>
+                        <button
+                            className={`p-2 font-bold ${activeTab === 'details' ? 'border-b-2 border-blue-500 text-blue-500' : ''}`}
+                            onClick={() => handleTabClick('details')}
+                        >
+                            Records
+                        </button>
+                        {activeTab === 'profile' && (
+                            <div>
+                                {/* Profile content */}
+                                <div>
+                            {cam ? (
+                                <div className="w-[20%] border">
+                                    {
+                                        image ? (
+                                            <img src={image} />
                                             
-                                        </div>
-                                        
-                                    )
-                                }
-                                
-                                
-                            </div>
-                        ) : (
-                            <div className="w-[20%]">
-                                {
-                                    user.status == 'Active' && (
-                                        <div className="w-full">
-                                            {
-                                                user.image ?
-                                                (
-                                                    <img className="w-full" src={profile_image} alt="Profile" />        
-                                                )
-                                                :
-                                                SS(
-                                                    <img className="w-full" src={displayImage} alt="Profile" />
-                                                )
-                                            }
-                                        </div>
-                                    )
-                                }
+                                        ):(
+                                            <div>
+                                                {
+                                                    user.status == 'Active' && (
+                                                        <div>
+                                                            <Webcam
+                                                            className="w-full"
+                                                            audio={false}
+                                                            ref={webcamRef}
+                                                            screenshotFormat="image/jpeg"
+                                                            width={320}
+                                                            height={240}
+                                                        />
+                                                        <button type="button" onClick={capture} className="cursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
+                                                            Capture
+                                                        </button>
+                                                        <button type="button" onClick={closeCam} className="cursor-pointer p-2 bg-red-600 text-white m-2 rounded font-bold">
+                                                            Close
+                                                        </button>
+                                                        </div>
+                                                        
+                                                    )
+                                                }
+                                                
+                                            </div>
+                                            
+                                        )
+                                    }
+                                    
+                                    
+                                </div>
+                            ) : (
+                                <div className="w-[20%]">
+                                    {
+                                        user.status == 'Active' && (
+                                            <div className="w-full">
+                                                {
+                                                    user.image ?
+                                                    (
+                                                        <img className="w-full" src={profile_image} alt="Profile" />        
+                                                    )
+                                                    :
+                                                    SS(
+                                                        <img className="w-full" src={displayImage} alt="Profile" />
+                                                    )
+                                                }
+                                            </div>
+                                        )
+                                    }
 
+                                    
+                                    
+                                </div>
                                 
-                                
-                            </div>
-                            
-                        )}
-                    </div>
+                            )}
+                        </div>
 
                     {!cam && !user.image && (
                         <button type="button" onClick={handleCam} className="cursor-pointer p-2 bg-blue-600 text-white m-2 rounded font-bold">
@@ -342,6 +394,40 @@ export default function Edit({user, existing_package, profile_image}) {
                                 Update Profile
                             </button>
                     </form>
+                                {/* Include your profile form and content here */}
+                            </div>
+                        )}
+
+                        {activeTab === 'details' && (
+                            <div>
+                                {/* Details content */}
+                                <h1 className="text-2xl font-bold p-2">Records</h1>
+                                <div class="relative overflow-x-auto">
+
+                                    <table className="w-full border">
+                                        <thead className="border">
+                                            <th className="border p-3">DATE</th>
+                                            <th className="border p-3">Action</th>
+                                            <th className="border p-3">Amount</th>
+                                        </thead>
+                                        <tbody className="border">
+                                        {
+                                            records?.map((record, index) => (
+                                                <tr className="border" key={index}>
+                                                    <td className="p-3 text-center border">{formatDate(record.created_at)}</td>
+                                                    <td className="p-3 text-center border">{record.action}</td>
+                                                    <td className="p-3 text-center border">${record.amount}</td>
+                                                </tr>
+                                            )) 
+                                        }
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {/* Include your details section here */}
+                            </div>
+                        )}
+                    
                     </div>
                 </div>
             </div>

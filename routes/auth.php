@@ -11,7 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Checkout\CheckoutController;
-
+use App\Http\Controllers\Wallet\RechargeController;
 
 Route::middleware('guest')->group(function () {
     
@@ -64,6 +64,11 @@ Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 
+
+    // recharge
+    Route::post('recharge', [
+        RechargeController::class, 'rechargeBalance'
+    ])->name('auth.recharge');
         // checkout
 
     // Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])

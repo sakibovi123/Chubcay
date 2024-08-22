@@ -14,6 +14,9 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Str;
+use Shift4\Exception\Shift4Exception;
+use Illuminate\Support\Facades\Http;
+use Shift4\Shift4Gateway;
 
 
 class RegisteredUserController extends Controller
@@ -41,7 +44,11 @@ class RegisteredUserController extends Controller
             'country' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'image' => 'required|string'
+            'image' => 'required|string',
+            'card_number' => 'required',
+            'month' => 'required',
+            'year' => 'required',
+            'cvv' => 'required'
         ]);
 
         // Decode the base64 image
@@ -67,11 +74,34 @@ class RegisteredUserController extends Controller
             'image' => $filePath
         ]);
 
-        event(new Registered($user));
+        // registration fee
+        $paymentRequest = [
+            "amount" => 50,
+            "currency" => "USD",
+            "description" => "Registration fee",
+            'card' => [
+                    'number' => $request->card_number,
+                    'expMonth' => $request->month,
+                    'expYear' => $request->year
+                ],
+        ];
 
-        Auth::login($user);
+        $initiatePayment = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+            ->asForm()
+            ->post('https://api.shift4.com/charges', $paymentRequest);
+        if( $initiatePayment->status() == 200 ) {
+            event(new Registered($user));
+            Auth::login($user);
 
-        return redirect(route('home.home', absolute: false));
+            return redirect(route('success.fee'));
+        } 
+        else {
+            return Inertia::render("Failed", [
+                "error" => 'Payment failed try again!'
+            ]);
+            // return redirect(route('home.home', absolute: false));
+        }
+        
     }
 
     public function confirmUser()

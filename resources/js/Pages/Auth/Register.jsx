@@ -18,7 +18,11 @@ export default function Register() {
         city: '',
         password: '',
         password_confirmation: '',
-        image: ''
+        image: '',
+        card_number: '',
+        month: '',
+        year: '',
+        cvv: '',
     });
 
     // function capturing selfie
@@ -45,6 +49,20 @@ export default function Register() {
     const confirmImage = () => {
         // capture()?
     }
+
+    const handleCardNumberChange = (e) => {
+        let value = e.target.value.replace(/\s+/g, ''); // Remove any existing spaces
+        value = value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+
+        if (value.length > 16) {
+            value = value.slice(0, 16); // Limit the input to 16 digits
+        }
+
+        // Add a space after every 4 digits
+        const formattedValue = value.match(/.{1,4}/g)?.join(' ') || '';
+
+        setData({ ...data, card_number: formattedValue });
+    };
 
     useEffect(() => {
         return () => {
@@ -263,6 +281,74 @@ export default function Register() {
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
 
+                {/* payment infos */}
+                <div className="mt-4">
+                    <InputLabel htmlFor="cardNumber" value="Card Number" />
+
+                    <TextInput
+                        id="card_number"
+                        type="text"
+                        name="card_number"
+                        value={data.card_number}
+                        className="mt-1 block w-full"
+                        autoComplete="card_number"
+                        // onChange={(e) => setData('card_number', e.target.value)}
+                        onChange={handleCardNumberChange}
+                        maxLength="20"
+                        required
+                    />
+
+                    <InputError message={errors.card_number} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="month" value="Month" />
+                    <TextInput
+                        id="month"
+                        type="text"
+                        name="month"
+                        value={data.month}
+                        className="mt-1 block w-full"
+                        autoComplete="month"
+                        onChange={(e) => setData('month', e.target.value)}
+                        required
+                        maxLength="2"
+                    />
+                    <InputError message={errors.month} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="year" value="Year" />
+                    <TextInput
+                        id="year"
+                        type="text"
+                        name="year"
+                        value={data.year}
+                        className="mt-1 block w-full"
+                        autoComplete="year"
+                        onChange={(e) => setData('year', e.target.value)}
+                        required
+                        maxLength="2"
+                    />
+                    <InputError message={errors.month} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="cvv" value="Cvv" />
+                    <TextInput
+                        id="cvv"
+                        type="text"
+                        name="cvv"
+                        value={data.cvv}
+                        className="mt-1 block w-full"
+                        autoComplete="cvv"
+                        onChange={(e) => setData('cvv', e.target.value)}
+                        required
+                        maxLength="3"
+                    />
+                    <InputError message={errors.month} className="mt-2" />
+                </div>
+
                 <div className="flex items-center justify-end mt-4">
                     <Link
                         href={route('login')}
@@ -272,7 +358,7 @@ export default function Register() {
                     </Link>
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
+                        Register & Pay $50.00
                     </PrimaryButton>
                 </div>
             </form>

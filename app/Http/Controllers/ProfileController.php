@@ -15,6 +15,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
+use App\Models\Record;
 
 class ProfileController extends Controller
 {
@@ -46,6 +47,11 @@ class ProfileController extends Controller
         $profile_image = Storage::url(auth()->user()->image);
         // echo "<img src='storage_path('app/public/' . $qr)'>";
 
+        // showing records
+        $records = Record::where('user_id', auth()->user()->id)->get();
+
+        // dd($records);
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
@@ -53,6 +59,7 @@ class ProfileController extends Controller
             'profile_image' => $profile_image,
             'existing_package' => $existing_package,
             'package_token' => $package_token,
+            'records' => $records
             // 'qr' => storage_path('app/public/'.$qr)
             
         ]);

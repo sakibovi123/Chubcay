@@ -79,4 +79,28 @@
             
         </div>
     </div>
+    {{-- modal --}}
+    <div class="fixed inset-0 flex items-center justify-center z-50 hidden" id="feeModal">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
+          <div class="flex justify-between items-center border-b p-4">
+            <h5 class="text-lg font-medium" id="feeModalLabel">Set Registration Fee</h5>
+            <button type="button" class="text-gray-500 hover:text-gray-700" data-close="modal">
+              <span class="text-xl">&times;</span>
+            </button>
+          </div>
+          <div class="p-4">
+            <form id="feeForm">
+              <div class="mb-4">
+                <label for="fee" class="block text-gray-700">Fee</label>
+                <input type="number" class="form-input mt-1 block w-full p-2 border rounded" id="fee" name="fee" required>
+              </div>
+              <input type="hidden" id="modalUserId">
+              <div class="flex justify-end">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
 @endsection

@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Checkout\CheckoutController;
+use App\Http\Controllers\Fee\FeeCheckoutController;
 use App\Http\Controllers\Wallet\RechargeController;
 
 Route::middleware('guest')->group(function () {
@@ -69,6 +70,15 @@ Route::middleware('auth')->group(function () {
     Route::post('recharge', [
         RechargeController::class, 'rechargeBalance'
     ])->name('auth.recharge');
+    
+    // fee checkout route
+    Route::get('/pay-registration-fee', [
+        FeeCheckoutController::class, 'feeTemplate'
+    ])->name('user.takeFee');
+
+    Route::post('/pay-fee', [
+        FeeCheckoutController::class, 'feeCheckoout'
+    ])->name('user.feeCheckout');
         // checkout
 
     // Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])

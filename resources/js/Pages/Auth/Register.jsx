@@ -283,7 +283,7 @@ export default function Register({fee}) {
                 </div>
 
                 {/* payment infos */}
-                <div className="mt-4">
+                {/* <div className="mt-4">
                     <InputLabel htmlFor="cardNumber" value="Card Number" />
 
                     <TextInput
@@ -348,7 +348,7 @@ export default function Register({fee}) {
                         maxLength="3"
                     />
                     <InputError message={errors.month} className="mt-2" />
-                </div>
+                </div> */}
 
                 <div className="flex items-center justify-end mt-4">
                     <Link
@@ -359,7 +359,7 @@ export default function Register({fee}) {
                     </Link>
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Register & Pay ${fee}
+                        Register
                     </PrimaryButton>
                 </div>
             </form>

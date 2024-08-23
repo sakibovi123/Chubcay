@@ -27,10 +27,10 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        $fee = Settings::first()->registration_fee;
+        // $fee = Settings::first()->registration_fee;
         
         return Inertia::render('Auth/Register', [
-            'fee' => $fee
+            // 'fee' => $fee
         ]);
     }
 
@@ -50,10 +50,10 @@ class RegisteredUserController extends Controller
             'phone' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'image' => 'required|string',
-            'card_number' => 'required',
-            'month' => 'required',
-            'year' => 'required',
-            'cvv' => 'required'
+            // 'card_number' => 'required',
+            // 'month' => 'required',
+            // 'year' => 'required',
+            // 'cvv' => 'required'
         ]);
 
         // Decode the base64 image
@@ -81,33 +81,35 @@ class RegisteredUserController extends Controller
 
         $settings = Settings::first();
         // registration fee
-        $paymentRequest = [
-            "amount" => $settings->registration_fee,
-            "currency" => "USD",
-            "description" => "Registration fee",
-            'card' => [
-                    'number' => $request->card_number,
-                    'expMonth' => $request->month,
-                    'expYear' => $request->year
-                ],
-        ];
+        // $paymentRequest = [
+        //     "amount" => $settings->registration_fee,
+        //     "currency" => "USD",
+        //     "description" => "Registration fee",
+        //     'card' => [
+        //             'number' => $request->card_number,
+        //             'expMonth' => $request->month,
+        //             'expYear' => $request->year
+        //         ],
+        // ];
 
-        $initiatePayment = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
-            ->asForm()
-            ->post('https://api.shift4.com/charges', $paymentRequest);
-        if( $initiatePayment->status() == 200 ) {
-            event(new Registered($user));
-            Auth::login($user);
+        // $initiatePayment = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+        //     ->asForm()
+        //     ->post('https://api.shift4.com/charges', $paymentRequest);
+        // if( $initiatePayment->status() == 200 ) {
+        //     event(new Registered($user));
+        //     Auth::login($user);
 
-            return redirect(route('success.fee'));
-        } 
-        else {
-            return Inertia::render("Failed", [
-                "error" => 'Payment failed try again!'
-            ]);
-            // return redirect(route('home.home', absolute: false));
-        }
-        
+        //     return redirect(route('success.fee'));
+        // } 
+        // else {
+        //     return Inertia::render("Failed", [
+        //         "error" => 'Payment failed try again!'
+        //     ]);
+        //     // return redirect(route('home.home', absolute: false));
+        // }
+        event(new Registered($user));
+        Auth::login($user);
+        return redirect(route('home.home'));
     }
 
     public function confirmUser()

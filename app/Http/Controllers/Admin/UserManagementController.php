@@ -25,19 +25,29 @@ class UserManagementController extends Controller
 
     public function activateUser( Request $request )
     {
+        
+
         if ($request->ajax()) {
             $user = User::find($request->input('user_id'));
             // dd($user->email);
             if ($user) {
                 $user->status = $request->input('status');
+
                 $user->save();
 
                 // send mail if only accepted
                 $message = "Your request has been accepted";
 
                 if($user->status == 'Active'){
+
+                    $link = route('user.takeFee');
+
+                    $user->fee = $request->fee;
+                    $user->save();
+
                     Mail::to($user->email)
-                        ->send(new SendMailAfterAcceptingRequest($message));
+                        ->send(new SendMailAfterAcceptingRequest(
+                            $message, $request->input('fee'), $link, $user));
                 } 
 
                 return response()->json(['message' => 'User updated successfully!']);

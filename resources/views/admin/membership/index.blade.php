@@ -39,6 +39,7 @@
                             @else
                                 <p class="bg-red-400 p-1 rounded-xl">{{ $plan->status }}</p>
                             @endif
+                            
                         </td>
                         <td class="p-2 sm:p-3 flex items-center justify-center gap-4">
                             <a href="{{ route('membership.edit', $plan->slug) }}">
@@ -66,5 +67,8 @@
             <p class="text-2xl text-center font-bold">No Data Found!</p>
         @endif
     </div>
+    
 </div>
-@endsection
+
+
+  @endsection

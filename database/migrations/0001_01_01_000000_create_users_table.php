@@ -40,6 +40,9 @@ return new class extends Migration
             $table->decimal('balance', 10, 2)
                 ->default('0.00')
                 ->nullable();
+
+            // user's fee
+            $table->decimal('fee', 10, 2)->nullable();
         });
 
 

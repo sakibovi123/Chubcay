@@ -18,6 +18,8 @@ Route::post('/admin-login', [
 ])->name('admin.login');
 
 
+
+
 // main urls of admin
 Route::middleware('admin')->group(function(){
     Route::get('/admin', [ AdminController::class, 'adminIndex' ])

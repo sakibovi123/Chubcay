@@ -14,20 +14,31 @@ class SendMailAfterAcceptingRequest extends Mailable
     use Queueable, SerializesModels;
 
     public $message;
+    public $fee;
+    public $link;
+    public $user;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($message)
+    public function __construct($message, $fee, $link, $user)
     {
         $this->message = $message;
+        $this->fee = $fee;
+        $this->link = $link;
+        $this->user = $user;
     }
 
     public function build()
     {
         return $this->subject('QR Information')
             ->view('mail.accept')
-            ->with('message', $this->message);
+            ->with([
+                'message', $this->message,
+                'fee', $this->fee,
+                'link', $this->link,
+                'user', $this->user,
+            ]);
      }
 
     /**

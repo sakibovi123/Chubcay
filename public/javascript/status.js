@@ -7,31 +7,97 @@ $(document).ready(function() {
     });
 
     // Use a delegated event listener for all select elements with ID starting with 'statusChange'
-    $(document).on('change', '[id^="statusChange_"]', function() {
-        var userId = $(this).prev('input').val();
-        var status = $(this).val();
+//     $(document).on('change', '[id^="statusChange_"]', function() {
+//         var userId = $(this).prev('input').val();
+//         var status = $(this).val();
+//         console.log(status)
+//         if(status === 'Active') {
+//             $('#fee').removeAttr('hidden');
+//         }
 
-        $.ajax({
-            url: "/admin/users/update-status",
-            type: 'POST',
-            data: {
-                user_id: userId,
-                status: status
-            },
-            success: function(response) {
-                // Display an info toast with no title
-                toastr.success('User updated', {timeOut: 3000})
-                toastr.options.preventDuplicates = true;
-                toastr.options.progressBar = true;
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-                toastr.error(error, {timeOut: 3000});
-                toastr.options.preventDuplicates = true;
-                toastr.options.progressBar = true;
-            }
-        });
+//         $.ajax({
+//             url: "/admin/users/update-status",
+//             type: 'POST',
+//             data: {
+//                 user_id: userId,
+//                 status: status
+//             },
+//             success: function(response) {
+//                 // Display an info toast with no title
+//                 toastr.success('User updated', {timeOut: 3000})
+//                 toastr.options.preventDuplicates = true;
+//                 toastr.options.progressBar = true;
+//             },
+//             error: function(xhr, status, error) {
+//                 console.error(error);
+//                 toastr.error(error, {timeOut: 3000});
+//                 toastr.options.preventDuplicates = true;
+//                 toastr.options.progressBar = true;
+//             }
+//         });
+//     });
+// });
+
+$(document).on('change', '[id^="statusChange_"]', function() {
+    var userId = $(this).prev('input').val();
+    var status = $(this).val();
+
+    if (status === 'Active') {
+        $('#modalUserId').val(userId);
+        $('#feeModal').removeClass('hidden'); // Show the modal
+    } else {
+        updateStatus(userId, status);
+    }
+});
+
+// Close modal
+$('[data-close="modal"]').on('click', function() {
+    $('#feeModal').addClass('hidden'); // Hide the modal
+});
+
+// Submit form inside modal
+$('#feeForm').on('submit', function(e) {
+    e.preventDefault();
+
+    var userId = $('#modalUserId').val();
+    var status = 'Active';
+    var fee = $('#fee').val();
+
+    $.ajax({
+        url: "/admin/users/update-status",
+        type: 'POST',
+        data: {
+            user_id: userId,
+            status: status,
+            fee: fee
+        },
+        success: function(response) {
+            $('#feeModal').addClass('hidden'); // Hide the modal
+            toastr.success('User updated', {timeOut: 3000});
+        },
+        error: function(xhr, status, error) {
+            toastr.error(error, {timeOut: 3000});
+        }
     });
+});
+
+// Function to update status without opening modal
+function updateStatus(userId, status) {
+    $.ajax({
+        url: "/admin/users/update-status",
+        type: 'POST',
+        data: {
+            user_id: userId,
+            status: status
+        },
+        success: function(response) {
+            toastr.success('User updated', {timeOut: 3000});
+        },
+        error: function(xhr, status, error) {
+            toastr.error(error, {timeOut: 3000});
+        }
+    });
+}
 });
 
 function deleteUser(id) {

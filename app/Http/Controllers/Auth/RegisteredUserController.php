@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +27,11 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        $fee = Settings::first()->registration_fee;
+        
+        return Inertia::render('Auth/Register', [
+            'fee' => $fee
+        ]);
     }
 
     /**
@@ -74,9 +79,10 @@ class RegisteredUserController extends Controller
             'image' => $filePath
         ]);
 
+        $settings = Settings::first();
         // registration fee
         $paymentRequest = [
-            "amount" => 50,
+            "amount" => $settings->registration_fee,
             "currency" => "USD",
             "description" => "Registration fee",
             'card' => [

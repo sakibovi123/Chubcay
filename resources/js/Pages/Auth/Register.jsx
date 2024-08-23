@@ -8,7 +8,8 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import WebCam from 'react-webcam';
 import Webcam from 'react-webcam';
 
-export default function Register() {
+
+export default function Register({fee}) {
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
@@ -358,7 +359,7 @@ export default function Register() {
                     </Link>
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Register & Pay $50.00
+                        Register & Pay ${fee}
                     </PrimaryButton>
                 </div>
             </form>

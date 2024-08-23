@@ -67,6 +67,8 @@
 
         const logout = document.getElementById('logout');
 
+        const settings = document.getElementById('settings');
+
         if (dashboard) {
             dashboard.addEventListener('click', function() {
                 window.location.href = "{{ route('admin.index') }}";
@@ -93,6 +95,12 @@
         if(logout) {
             logout.addEventListener('click', function(){
                 window.location.href = "{{ route('logout') }}"
+            })
+        }
+
+        if(settings) {
+            settings.addEventListener('click', function() {
+                window.location.href = "{{ route('settings.edit') }}"
             })
         }
 

@@ -59,22 +59,22 @@
             <div class="w-full flex gap-2 payment-section" style="display: none">
                 <div class="w-full">
                     <label class="text-gray-600 font-bold text-md" for="">Card Number</label><br>
-                    <input id="card_number" maxlength="16" required name="card_number" type="text" placeholder="4242 4242 4242 4242" class="p-2 rounded w-full border">
+                    <input id="card-number" maxlength="19" required name="card_number" type="text" placeholder="4242 4242 4242 4242" class="p-2 rounded w-full border">
                 </div>
     
                 <div class="w-full">
                     <label class="text-gray-600 font-bold text-md" for="">Month</label><br>
-                    <input id="month" required name="month" type="text" placeholder="mm" class="p-2 rounded w-full border">
+                    <input maxlength="2" id="month" required name="month" type="text" placeholder="mm" class="no p-2 rounded w-full border">
                 </div>
     
                 <div class="w-full">
                     <label class="text-gray-600 font-bold text-md" for="">Year</label><br>
-                    <input id="yy" required name="yy" type="text" placeholder="YY" class="p-2 rounded w-full border">
+                    <input maxlength="2" id="yy" required name="yy" type="text" placeholder="YY" class="no p-2 rounded w-full border">
                 </div>
     
                 <div class="w-full">
-                    <label class="text-gray-600 font-bold text-md" for="">CVV</label><br>
-                    <input id="cvv" required name="cvv" type="text" placeholder="cvv" class="p-2 rounded w-full border">
+                    <label class="text-gray-600 font-bold text-md" for="">CVC</label><br>
+                    <input maxlength="3" id="cvv" required name="cvv" type="text" placeholder="xxx" class="p-2 rounded w-full border">
                 </div>
             </div>
            
@@ -90,17 +90,38 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#payment_method').change(function() {
-            if ($(this).val() === 'pay_now') {
-                $('.payment-section').show();
-                $('#card_number, #month, #yy, #cvv').attr('required', true);
-            } else {
-                $('.payment-section').hide();
-                $('#card_number, #month, #yy, #cvv').removeAttr('required');
-            }
-        });
-    });
+    <script>
+        $(document).ready(function() {
+            $('#payment_method').change(function() {
+                if ($(this).val() === 'pay_now') {
+                    $('.payment-section').show();
+                    $('#card_number, #month, #yy, #cvv').attr('required', true);
+                } else {
+                    $('.payment-section').hide();
+                    $('#card_number, #month, #yy, #cvv').removeAttr('required');
+                }
+            });    
+        }); 
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#card-number').on('keypress change', function () {
+                $(this).val(function (index, value) {
+                    // Remove all non-alphanumeric characters and format with spaces
+                    let formattedValue = value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ');
+                    
+                    // Trim the trailing space if the length is 19 characters (16 digits + 3 spaces)
+                    return formattedValue.trimEnd();
+                });
+            });
+            
+        });
+
+        $(document).ready(function() {
+            $('.no').on('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, ''); // Allow only numeric input
+            });
+        });
+    </script>
+
 @endsection

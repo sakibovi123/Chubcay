@@ -1,0 +1,41 @@
+@extends('admin.base')
+
+@section('title', 'Create Plan')
+
+@section('content')
+
+<div class="w-full my-5 p-3 container md:mx-auto">
+    @if (session('message'))
+        <div class="my-3 w-full bg-orange-200 rounded shadow-xl p-2">
+            {{ session('message') }}
+        </div>
+    @endif
+    
+    <div class="w-full flex items-center justify-between gap-3">
+        <h1 class="text-xl font-bold text-gray-700">SETTINGS</h1>
+        <a href="{{ route('membership.index') }}" class="gont-bold text-white bg-blue-600 transition-all delay-5 hover:bg-sky-600 p-2 rounded-xl">GO BACK</a>
+    </div>
+    @if( $settings )
+    <form class="w-full my-7" action="{{ route('settings.update') }}" method="post">
+        @csrf
+        @method('put')
+        <div class="w-full flex gap-5 justify-start">
+            <label class="w-full text-gray-600 font-bold text-md" for="">Set Fee</label><br>
+            <input value="{{ $settings->registration_fee }}" required name="registration_fee" type="text" placeholder="$ 50.00" class="p-2 rounded w-full border">
+        </div>
+        <br>
+        <div class="w-full flex gap-5 justify-start">
+            <label class="w-full text-gray-600 font-bold text-md" for="">Enable Maintenance mode</label><br>
+            <input disabled value="1" name="registration_fee" type="checkbox" placeholder="" class="p-2 rounded w-full border">
+        </div>
+        
+        <div class="my-5 w-full flex items-center justify-between gap-3">
+            <button class="text-white w-full rounded p-2 bg-green-500">Save</button>
+            <button class="text-white w-full rounded p-2 bg-red-500">Back</button>
+        </div>
+        
+    </form>
+    @else
+    @endif
+</div>
+@endsection

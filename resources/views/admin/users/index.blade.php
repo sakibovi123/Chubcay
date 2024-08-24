@@ -6,9 +6,18 @@
     <div class="w-full my-5 p-1 md:p-3 container md:mx-auto">
         <div class="flex items-center justify-between w-full">
             <h1 class="text-xl font-bold">Manage Members</h1>
-            <a href="{{ route('users.create') }}" class="p-2 bg-sky-600 rounded-xl text-white transition-all delay-5 hover:bg-sky-700">
-                Add user
-            </a>
+            <div class="flex gap-3 items-center">
+                <a href="{{ route('users.create') }}" class="p-2 bg-sky-600 rounded-xl text-white transition-all delay-5 hover:bg-sky-700">
+                    Add user
+                </a>
+                <a class="flex items-center gap-3 justify-center text-white p-2 bg-blue-500 rounded-xl" href="{{ route('users.export') }}">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
+                      </svg>
+                      Download Emails
+                </a>
+            </div>
+            
         </div>
         <div class="w-full bg-white rounded-xl shadow-md md:p-3 my-5">
             @if ($users)

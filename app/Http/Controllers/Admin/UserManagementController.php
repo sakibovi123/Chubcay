@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\EmailExport;
 use App\Http\Controllers\Controller;
 use App\Mail\SendMailAfterAcceptingRequest;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserManagementController extends Controller
 {
@@ -133,5 +135,10 @@ class UserManagementController extends Controller
                 'message' => 'something went wrong'
             ]);
         }
+    }
+
+    public function exportEmails()
+    {
+        return Excel::download(new EmailExport, 'emails.xlsx');
     }
 }

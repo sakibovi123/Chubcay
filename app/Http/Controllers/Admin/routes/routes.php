@@ -70,6 +70,11 @@ Route::middleware('admin')->group(function(){
         
         Route::delete('/delete/{userId}', [ UserManagementController::class, 'destroy' ])
             ->name('users.delete');
+
+        // export email
+        Route::get('/export-email', [
+            UserManagementController::class, 'exportEmails'
+        ])->name('users.export');
     });
 
     Route::prefix('/admin/orders')->group(function(){

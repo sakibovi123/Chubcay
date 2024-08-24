@@ -49,14 +49,12 @@ class FeeCheckoutController extends Controller
                 ->asForm()
                 ->post('https://api.shift4.com/charges', $feeRequest);
 
-            // dd($initiatePayment->status());
-            // $response = $initiatePayment->json();
-            // dd($response-[]status);
             if( $initiatePayment->status() == 200 ) {
                 $user->status = 'Active';
                 $updatedUser = User::where('id', $user->id)->first();
                 $updatedUser->save();
-                return redirect(route('home.home'));
+                return redirect(route('home.home'))
+                    ->with('message', 'Payment successfully!');
             }
             else {
                 return redirect()->back()->with('message', 'Payment failed please try again!');

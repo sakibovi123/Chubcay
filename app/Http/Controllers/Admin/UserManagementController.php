@@ -8,6 +8,7 @@ use App\Mail\SendMailAfterAcceptingRequest;
 use App\Models\FeeCheckout;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -147,6 +148,7 @@ class UserManagementController extends Controller
 
     public function exportEmails()
     {
-        return Excel::download(new EmailExport, 'emails.xlsx');
+        $dateTime = Carbon::now();
+        return Excel::download(new EmailExport, $dateTime.'.csv', \Maatwebsite\Excel\Excel::CSV);
     }
 }

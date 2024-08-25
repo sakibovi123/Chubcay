@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\PendingPaymentExport;
 use App\Http\Controllers\Controller;
 use App\Models\FeeCheckout;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 class AdminFeeController extends Controller
 {
@@ -32,9 +34,16 @@ class AdminFeeController extends Controller
 
     public function downloadFees()
     {
-        return Excel::download(
-            new PendingPaymentExport, 'dues.xlsx'
-        );
+        // Fetch the data you want to include in the PDF
+        $pendingPayments = FeeCheckout::where('payment_status', 'due')->get();
+
+        // Pass the data to the view
+        // $pdf = PDF::loadView('pdf.pending_payments', compact('pendingPayments'));
+        $pdf = Pdf::loadView('pdf.pending', [
+            'pendingPayments' => $pendingPayments
+        ]);
+        // Download the PDF
+        return $pdf->download('dues.pdf');
     }
 
     public function details($feeId)

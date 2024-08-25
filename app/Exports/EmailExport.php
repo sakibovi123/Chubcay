@@ -14,4 +14,9 @@ class EmailExport implements FromCollection
     {
         return User::select('email')->get();
     }
+
+    public function headings(): array
+    {
+        return ['Emails'];
+    }
 }

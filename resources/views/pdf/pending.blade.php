@@ -11,7 +11,7 @@
     <table border="1" cellspacing="0" cellpadding="5">
         <thead>
             <tr>
-                <th>Username</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Country</th>
                 <th>City</th>

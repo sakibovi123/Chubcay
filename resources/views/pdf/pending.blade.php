@@ -13,6 +13,8 @@
             <tr>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Country</th>
+                <th>City</th>
                 <th>Amount</th>
                 <th>Status</th>
             </tr>
@@ -22,6 +24,8 @@
             <tr>
                 <td>{{ $payment->user->first_name }}</td>
                 <td>{{ $payment->user->email }}</td>
+                <td>{{ $payment->user->country }}</td>
+                <td>{{ $payment->user->city }}</td>
                 <td>{{ $payment->total_charge }}</td>
                 <td>{{ $payment->payment_status }}</td>
             </tr>

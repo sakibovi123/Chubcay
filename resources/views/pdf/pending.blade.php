@@ -15,6 +15,7 @@
                 <th>Email</th>
                 <th>Country</th>
                 <th>City</th>
+                <th>Phone</th>
                 <th>Amount</th>
                 <th>Status</th>
             </tr>
@@ -26,6 +27,7 @@
                 <td>{{ $payment->user->email }}</td>
                 <td>{{ $payment->user->country }}</td>
                 <td>{{ $payment->user->city }}</td>
+                <td>{{ $payment->user->phone }}</td>
                 <td>{{ $payment->total_charge }}</td>
                 <td>{{ $payment->payment_status }}</td>
             </tr>

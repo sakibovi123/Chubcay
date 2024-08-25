@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\EmailExport;
 use App\Http\Controllers\Controller;
 use App\Mail\SendMailAfterAcceptingRequest;
+use App\Models\FeeCheckout;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +28,6 @@ class UserManagementController extends Controller
 
     public function activateUser( Request $request )
     {
-        
-
         if ($request->ajax()) {
             $user = User::find($request->input('user_id'));
             // dd($user->email);
@@ -42,8 +41,17 @@ class UserManagementController extends Controller
 
                 if($user->status == 'Active'){
 
-                    $link = route('user.takeFee');
+                    // creating feeCheckout
+                    $feeObj = FeeCheckout::create([
+                        'user_id' => $user->id,
+                        'total_charge' => $request->fee,
+                        'payment_status' => 'due'
+                    ]);
 
+                    $link = route('user.takeFee', [
+                        'feeId' => $feeObj->id
+                    ]);
+                    // dd($link);
                     $user->fee = $request->fee;
                     $user->save();
 

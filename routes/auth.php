@@ -72,11 +72,11 @@ Route::middleware('auth')->group(function () {
     ])->name('auth.recharge');
     
     // fee checkout route
-    Route::get('/pay-registration-fee', [
+    Route::get('/pay-registration-fee/{feeId}', [
         FeeCheckoutController::class, 'feeTemplate'
     ])->name('user.takeFee');
 
-    Route::post('/pay-fee', [
+    Route::post('/pay-fee/{feeId}', [
         FeeCheckoutController::class, 'feeCheckoout'
     ])->name('user.feeCheckout');
         // checkout

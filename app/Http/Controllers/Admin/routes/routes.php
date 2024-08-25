@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminFeeController;
 use App\Http\Controllers\Admin\CheckoutManagementController;
 use App\Http\Controllers\Admin\MembershipController;
 use App\Http\Controllers\Admin\SettingsController;
@@ -113,6 +114,24 @@ Route::middleware('admin')->group(function(){
             SettingsController::class, 'updateSettings'
         ])->name('settings.update');
 
+    });
+
+    Route::prefix('/admin/payments')->group(function (){
+        Route::get('/', [
+            AdminFeeController::class, 'index'
+        ])->name('payment.index');
+
+        Route::get('/export-dues', [
+            AdminFeeController::class, 'downloadFees'
+        ])->name('payment.download');
+
+        Route::get('/payment/details/{feeId}', [
+            AdminFeeController::class, 'details'
+        ])->name('payment.edit');
+
+        Route::put('/payment/update/{feeId}', [
+            AdminFeeController::class, 'update'
+        ])->name('payment.update');
     });
 });
 

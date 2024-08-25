@@ -69,6 +69,8 @@
 
         const settings = document.getElementById('settings');
 
+        const payment = document.getElementById('manage-payments');
+
         if (dashboard) {
             dashboard.addEventListener('click', function() {
                 window.location.href = "{{ route('admin.index') }}";
@@ -101,6 +103,12 @@
         if(settings) {
             settings.addEventListener('click', function() {
                 window.location.href = "{{ route('settings.edit') }}"
+            })
+        }
+
+        if( payment ) {
+            payment.addEventListener('click', function () {
+                window.location.href = "{{ route('payment.index') }}"
             })
         }
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(User::class);
-            $table->string('method');
+            $table->string('method')->nullable();
 
             $table->string('check_number')->nullable();
 
@@ -24,8 +24,12 @@ return new class extends Migration
 
             $table->decimal('total_charge', 10, 2);
 
-            $table->enum('payment_status', [
+            $table->enum('status', [
                 'success', 'failed'
+            ])->nullable();
+
+            $table->enum('payment_status', [
+                'paid', 'due'
             ])->nullable();
         });
     }

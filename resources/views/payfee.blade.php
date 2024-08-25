@@ -5,7 +5,8 @@
     </div>
 @endif
 <form method="post"
-     class="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow-md" action="{{ route('user.feeCheckout') }}">
+    {{-- {{ $feeLink->id }} --}}
+     class="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow-md" action="{{ route('user.feeCheckout', $feeLink) }}">
     @csrf
     @method('post')
     <h2 class="text-2xl font-bold mb-4">Make a Payment</h2>

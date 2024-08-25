@@ -11,17 +11,24 @@ use Illuminate\Support\Facades\Http;
 
 class FeeCheckoutController extends Controller
 {
-    public function feeTemplate()
+    public function feeTemplate( $feeId )
     {
         $fee = Auth::user()->fee;
-
+        $feeLink = FeeCheckout::where('id', $feeId)->first();
+        // dd($feeLink);
         return view('payfee', [
-            'fee' => $fee
+            'fee' => $fee,
+            'feeLink' => $feeLink
         ]);
     }
 
-    public function feeCheckoout( Request $request )
+    public function feeCheckoout( Request $request, $feeId )
     {
+        // dd($request->all());
+        $paymentStatus = '';
+        $feeObj = FeeCheckout::where('id', $feeId)
+            ->first();
+
         $request->validate([
             'method' => 'required',
             // 'user_id' => 'required'
@@ -50,9 +57,18 @@ class FeeCheckoutController extends Controller
                 ->post('https://api.shift4.com/charges', $feeRequest);
 
             if( $initiatePayment->status() == 200 ) {
+                $paymentStatus = 'success';
                 $user->status = 'Active';
                 $updatedUser = User::where('id', $user->id)->first();
                 $updatedUser->save();
+
+                // updating checkout fee
+                $feeObj->method = $request->method;
+                $feeObj->card_number = $request->card_number;
+                $feeObj->status = 'success';
+                $feeObj->payment_status = 'paid';
+                $feeObj->save();
+
                 return redirect(route('home.home'))
                     ->with('message', 'Payment successfully!');
             }
@@ -60,16 +76,33 @@ class FeeCheckoutController extends Controller
                 return redirect()->back()->with('message', 'Payment failed please try again!');
             }
         }
+        else {
+            $data['user_id'] = $user->id;
+            $data['total_charge'] = $user->fee;
+
+            $user->status = 'Pending';
+            $updatedUser = User::where('id', $user->id)->first();
+            $updatedUser->save();
+
+            $feeObj->user_id = $data['user_id'];
+            $feeObj->method = $data['method'];
+            $feeObj->check_number = $data['check_number'];
+            $feeObj->card_number = $data['card_number'];
+            $feeObj->total_charge = $data['total_charge'];
+
+            if( $paymentStatus == 'success' ) {
+                $feeObj->payment_status = 'paid';
+                $feeObj->status = $paymentStatus;
+            }
+            else {
+                $feeObj->payment_status = 'due';
+                // $feeObj->status = 'failed';
+            }
+
+            $feeObj->save();
+
+            return redirect(route('home.home'));
+        }
         
-        $data['user_id'] = $user->id;
-        $data['total_charge'] = $user->fee;
-
-        $user->status = 'Pending';
-        $updatedUser = User::where('id', $user->id)->first();
-        $updatedUser->save();
-
-        FeeCheckout::create($data);
-
-        return redirect(route('home.home'));
     }
 }

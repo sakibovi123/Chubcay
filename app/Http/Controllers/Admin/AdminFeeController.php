@@ -6,6 +6,7 @@ use App\Exports\PendingPaymentExport;
 use App\Http\Controllers\Controller;
 use App\Models\FeeCheckout;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -43,7 +44,8 @@ class AdminFeeController extends Controller
             'pendingPayments' => $pendingPayments
         ]);
         // Download the PDF
-        return $pdf->download('dues.pdf');
+        $dateTime = Carbon::now();
+        return $pdf->download($dateTime.'.pdf');
     }
 
     public function details($feeId)

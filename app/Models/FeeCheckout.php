@@ -10,7 +10,8 @@ class FeeCheckout extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'method', 'check_number', 'card_number', 'total_charge', 'payment_status', 
+        'user_id', 'method', 'check_number', 'card_number', 'total_charge', 'payment_status',
+        'term', 'paid', 'due' 
     ];
 
     public function user()

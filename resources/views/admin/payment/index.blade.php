@@ -31,8 +31,10 @@
                         <th class="p-3">CUSTOMER</th>
                         {{-- <th class="p-3">CUSTOMER</th> --}}
                         <th class="p-3">METHOD</th>
-                        
+                        <th class="p-3">TERM</th>
                         <th class="p-3">TOTAL</th>
+                        <th class="p-3">PAID</th>
+                        <th class="p-3">DUE</th>  
                         <th class="p-3">PAYMENT STATUS</th>
                         <th class="p-2">ACTIONS</th>
                     </thead>
@@ -44,9 +46,27 @@
                                 
                                 
                                 <td class="p-3">{{ $fee->user->first_name }}</td>
-                                <td class="p-3">{{ $fee->method }}</td>
-                                
+                                <td class="p-3 uppercase">{{ $fee->method }}</td>
+                                <td class="p-3 uppercase">{{ $fee->term }}</td>
                                 <td class="p-3">${{ $fee->total_charge }}</td>
+
+                                <td class="p-3">
+                                    @if ($fee->paid == 0)
+                                        $0.00
+                                    @else
+                                        ${{ $fee->paid }}
+                                    @endif
+                                    
+                                </td>
+
+                                <td class="p-3">
+                                    @if ($fee->due == 0)
+                                        $0.00
+                                    @else
+                                        ${{ $fee->due }}
+                                    @endif
+                                    
+                                </td>
                                 
                                 <td class="p-3">
                                     @if ($fee->payment_status == 'paid')

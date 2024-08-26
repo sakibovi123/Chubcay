@@ -24,6 +24,9 @@ return new class extends Migration
 
             $table->decimal('total_charge', 10, 2);
 
+            $table->decimal('paid', 10, 2)->nullable();
+            $table->decimal('due', 10, 2)->nullable();
+
             $table->enum('status', [
                 'success', 'failed'
             ])->nullable();
@@ -31,6 +34,10 @@ return new class extends Migration
             $table->enum('payment_status', [
                 'paid', 'due'
             ])->nullable();
+
+            $table->enum('term', [
+                'full', 'partial'
+            ])->nullable()->default('full');
         });
     }
 

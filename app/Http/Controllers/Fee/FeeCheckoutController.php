@@ -25,13 +25,17 @@ class FeeCheckoutController extends Controller
     public function feeCheckoout( Request $request, $feeId )
     {
         // dd($request->all());
+        $charge = 0.00;
+        $paid = 0.00;
+        $due = 0.00;
         $paymentStatus = '';
         $feeObj = FeeCheckout::where('id', $feeId)
             ->first();
 
         $request->validate([
             'method' => 'required',
-            // 'user_id' => 'required'
+            'term' => 'required|in:full,partial',
+            // 'amount' => 'decimal|min:2|max:10'
         ]);
 
         $user = Auth::user();
@@ -39,10 +43,17 @@ class FeeCheckoutController extends Controller
         $data = $request->all();
         // dd($data);
         if ( $data['method'] == 'credit_card' ){
-            // dd('card');
-            
+            if( $request->term == 'full' ) {
+                $charge = $user->fee;
+            }
+            else {
+                $charge = $request->amount;
+                $paid = $request->amount;
+                $due = $user->fee - $paid;
+            }
+
             $feeRequest = [
-                "amount" => $user->fee * 100,
+                "amount" => $charge,
                 "currency" => "USD",
                 "description" => "Registration fee",
                 'card' => [
@@ -51,10 +62,13 @@ class FeeCheckoutController extends Controller
                         'expYear' => $request->yy
                 ],
             ];
+            // dd($feeRequest['amount'] * 100);
 
             $initiatePayment = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
                 ->asForm()
                 ->post('https://api.shift4.com/charges', $feeRequest);
+
+            // dd($initiatePayment->json());
 
             if( $initiatePayment->status() == 200 ) {
                 $paymentStatus = 'success';
@@ -67,6 +81,9 @@ class FeeCheckoutController extends Controller
                 $feeObj->card_number = $request->card_number;
                 $feeObj->status = 'success';
                 $feeObj->payment_status = 'paid';
+                $feeObj->term = $request->term;
+                $feeObj->paid = $paid;
+                $feeObj->due = $due;
                 $feeObj->save();
 
                 return redirect(route('home.home'))
@@ -77,6 +94,15 @@ class FeeCheckoutController extends Controller
             }
         }
         else {
+
+            // checking term
+
+            if( $request->term == 'partial' )
+            {
+                $paid = $request->amount;
+                $due = $user->fee - $paid;
+            }
+
             $data['user_id'] = $user->id;
             $data['total_charge'] = $user->fee;
 
@@ -89,6 +115,9 @@ class FeeCheckoutController extends Controller
             $feeObj->check_number = $data['check_number'];
             $feeObj->card_number = $data['card_number'];
             $feeObj->total_charge = $data['total_charge'];
+
+            $feeObj->paid = $paid;
+            $feeObj->due = $due;
 
             if( $paymentStatus == 'success' ) {
                 $feeObj->payment_status = 'paid';

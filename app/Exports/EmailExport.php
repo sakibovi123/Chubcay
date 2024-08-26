@@ -12,11 +12,11 @@ class EmailExport implements FromCollection
     */
     public function collection()
     {
-        return User::select('email')->get();
+        return User::select('first_name', 'last_name', 'email', 'country', 'city', 'phone')->get();
     }
 
     public function headings(): array
     {
-        return ['Emails'];
+        return ['First Name', 'Last Name', 'Email', 'Country', 'City', 'Phone'];
     }
 }

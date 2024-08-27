@@ -44,7 +44,7 @@ class PackageSeeder extends Seeder
                     "Swimming access" => "No",
                     "Free Buffet" => "No"
                 ]),
-                "duration_title" => "Quaterly",
+                "duration_title" => "Quatarly",
     
                 "duration" => 183
             ],

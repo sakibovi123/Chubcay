@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Checkout;
 use App\Models\Package;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -23,11 +24,17 @@ return new class extends Migration
 
             $table->foreignIdFor(User::class);
 
+            $table->foreignIdFor(Checkout::class);
+
             $table->boolean("is_expired")->default(0);
 
             $table->integer('duration')->nullable();
 
             $table->string('token')->default(Str::uuid())->nullable();
+
+            $table->boolean('is_active')
+                ->default(0)
+                ->nullable();
         });
     }
 

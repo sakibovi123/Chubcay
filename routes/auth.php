@@ -79,6 +79,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/pay-fee/{feeId}', [
         FeeCheckoutController::class, 'feeCheckoout'
     ])->name('user.feeCheckout');
+    
         // checkout
 
     // Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])

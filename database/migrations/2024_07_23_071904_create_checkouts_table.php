@@ -44,6 +44,17 @@ return new class extends Migration
             // invoice
             $table->integer('invoice')
                 ->nullable();
+            
+            // payment options
+            $table->enum('payment_option', [
+                'full', 'partial'
+            ])->default('full')->nullable();
+
+            $table->decimal('paid', 10, 2)
+                ->nullable();
+
+            $table->decimal('due', 10, 2)
+                ->nullable();
 
         });
     }

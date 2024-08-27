@@ -60,9 +60,8 @@ class AdminController extends Controller
             
         }
 
-        return redirect()->back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        return redirect()->back()
+            ->with('message', "Provided credentials doesn't match");
         
     }
 

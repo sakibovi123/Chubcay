@@ -5,29 +5,29 @@
     </div>
 @endif
 
-@if (Auth::user()->id == $feeLink->user->id)
+@if (Auth::user()->id == $checkout->user->id)
 <form method="post"
 {{-- {{ $feeLink->id }} --}}
- class="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow-md" action="{{ route('user.feeCheckout', $feeLink) }}">
+ class="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow-md" action="{{ route('checkout.update', $checkout->id) }}">
 @csrf
-@method('post')
+@method('put')
 <h2 class="text-2xl font-bold mb-4">Make a Payment</h2>
-<p class="mb-5">Total: ${{ $fee }}</p>
+<p class="mb-5">Total: ${{ $checkout->grand_total }}</p>
 <p class="mb-5">
     Paid: 
-    @if ($feeLink->paid == 0.00)
+    @if ($checkout->paid == 0.00)
         $0.00
     @else
-        ${{ $feeLink->paid }}
+        ${{ $checkout->paid }}
     @endif
     
 </p>
 <p class="mb-5">
     Due: 
-    @if ($feeLink->due == 0.00)
-        ${{ $fee }}
+    @if ($checkout->due == 0.00)
+        ${{ $checkout->grand_total }}
     @else
-        ${{ $feeLink->due }}
+        ${{ $checkout->due }}
     @endif
     
 </p>
@@ -37,7 +37,7 @@
     <label for="payment_method" class="block text-gray-700 mb-2">Payment Method</label>
     <select name="method" id="payment_method" class="block w-full p-2 border rounded">
         <option value="" disabled selected>Select a payment method</option>
-        <option value="check">Pay with Check</option>
+        {{-- <option value="check">Pay with Check</option> --}}
         <option value="credit_card">Pay with Credit Card</option>
     </select>
 </div>
@@ -46,7 +46,7 @@
 
 <div id="payment-term-section" class="mb-4 hidden">
     <label for="payment_terms" class="block text-gray-700 mb-2">Payment Term</label>
-    <select name="term" id="payment_term" class="block w-full p-2 border rounded">
+    <select name="payment_option" id="payment_term" class="block w-full p-2 border rounded">
         <option value="" disabled selected>Select a payment term</option>
         <option value="full">Full</option>
         <option value="partial">Partial</option>
@@ -61,13 +61,13 @@
 </div>
 
 <!-- Check Payment Section -->
-<div id="check_section" class="hidden">
+{{-- <div id="check_section" class="hidden">
     <div class="mb-4">
         <label for="check_number" class="block text-gray-700 mb-2">Check Number</label>
         <input name="check_number" type="text" id="check_number" class="block w-full p-2 border rounded" placeholder="Enter check number">
     </div>
-    <button type="submit" id="submit_check" class="w-full bg-blue-500 text-white p-2 rounded">Pay ${{ $fee }}</button>
-</div>
+    <button type="submit" id="submit_check" class="w-full bg-blue-500 text-white p-2 rounded">Pay</button>
+</div> --}}
 
 <!-- Credit Card Payment Section -->
 <div id="credit_card_section" class="hidden">
@@ -125,8 +125,7 @@
     // checking payment
     $('#payment_term').change(function(){
         let selectedTerm = $(this).val();
-        // let fee = '{{ $fee }}'; 
-        // console.log(selectedTerm);
+        
 
         if(selectedTerm == 'partial') {
             $('#payment-amount').show();
@@ -155,7 +154,7 @@
         amount = ''; // Reset amount if it's not a number
     } else {
         // Assuming $fee is set to 400 in your script
-        const fee = {{ $fee }};
+        const fee = {{ $checkout->grand_total }};
 
         // If the amount is greater than the fee, set it back to the fee
         if (amount > fee) {

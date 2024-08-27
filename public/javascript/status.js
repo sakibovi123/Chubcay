@@ -63,6 +63,10 @@ $('#feeForm').on('submit', function(e) {
     var status = 'Active';
     var fee = $('#fee').val();
 
+    // Show loading indicator
+    $('#loadingIndicator').removeClass('hidden');
+
+
     $.ajax({
         url: "/admin/users/update-status",
         type: 'POST',

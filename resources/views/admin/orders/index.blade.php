@@ -33,7 +33,10 @@
                         <th class="p-3">PLAN</th>
                         <th class="p-3">CUSTOMER</th>
                         <th class="p-3">GRAND TOTAL</th>
+                        <th class="p-3">PAID</th>
+                        <th class="p-3">DUE</th>
                         <th class="p-3">PAYMENT STATUS</th>
+                        <th class="p-3">PAYMENT TERM</th>
                         <th class="p-2">ACTIONS</th>
                     </thead>
                     
@@ -46,6 +49,24 @@
                                 <td class="p-3">{{ $order->package->duration_title }}</td>
                                 <td class="p-3">{{ $order->user->first_name }} {{ $order->user->last_name }}</td>
                                 <td class="p-3">${{ $order->grand_total }}</td>
+                                <td class="p-3">
+                                    @if ($order->paid == 0.00)
+                                        $0.00
+                                    @else
+                                        ${{ $order->paid }}    
+                                    @endif
+                                    
+                                </td>
+                                <td class="p-3">
+                                    @if ($order->due == 0.00)
+                                        $0.00
+                                    @else
+                                        ${{ $order->due }}    
+                                    @endif
+                                    
+                                </td>
+
+                                <td class="p-3 uppercase">{{ $order->payment_option }}</td>
                                 
                                 <td class="p-3">
                                     @if ($order->status == 'Success')

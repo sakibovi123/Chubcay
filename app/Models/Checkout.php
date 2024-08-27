@@ -21,7 +21,10 @@ class Checkout extends Model
         "package_id",
         "user_id",
         "payment_status",
-        "invoice"
+        "invoice",
+        "payment_option",
+        "paid",
+        "due"
     ];
 
 
@@ -33,5 +36,10 @@ class Checkout extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function packageexpiration()
+    {
+        return $this->hasMany(PackageExpiration::class);
     }
 }

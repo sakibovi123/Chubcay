@@ -20,13 +20,14 @@ class UserSeeder extends Seeder
                 "created_at" => Carbon::now(),
                 "first_name" => "sakib",
                 "last_name" => "ovi",
-                "email" => "sakibovi123@gmail.com",
+                "email" => "ellahellbound@gmail.com",
                 "password" => Hash::make("admin123123"),
                 "image" => "https://w7.pngwing.com/pngs/910/606/png-transparent-head-the-dummy-avatar-man-tie-jacket-user.png",
                 "country" => "England",
                 "phone" => "+9883234",
                 "city" => "London",
-                "is_admin" => 1
+                "is_admin" => 1,
+                "status" => "Active"
             ],
             [
                 "created_at" => Carbon::now(),
@@ -38,7 +39,8 @@ class UserSeeder extends Seeder
                 "country" => "Bangladesh",
                 "phone" => "+988233234",
                 "city" => "Dhaka",
-                "is_admin" => 1
+                "is_admin" => 1,
+                "status" => "Active"
             ],
             [
                 "created_at" => Carbon::now(),
@@ -50,7 +52,8 @@ class UserSeeder extends Seeder
                 "country" => "Bangladesh",
                 "phone" => "+988233234",
                 "city" => "Dhaka",
-                "is_admin" => 0
+                "is_admin" => 0,
+                "status" => "Pending"
             ]
         ]);
     }

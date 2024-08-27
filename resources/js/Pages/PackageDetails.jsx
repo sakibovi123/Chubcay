@@ -12,7 +12,7 @@ function PackageDetails({package_details}) {
     const formRef = useRef(null);
 
     const { data, setData, post, processing, errors } = useForm({
-        // amount: 809
+        amount: '',
         first_name: '',
         last_name: '',
         email: user.email || '',
@@ -22,7 +22,8 @@ function PackageDetails({package_details}) {
         // expiry: '',
         mm: '',
         year: '',
-        cvc: ''
+        cvc: '',
+        payment_option: '',
     });
 
     const handleCheckout = (e) => {
@@ -123,6 +124,41 @@ function PackageDetails({package_details}) {
 
                         {errors.phone && <div>{errors.phone}</div>}
                     
+                    <label htmlFor="Payment Option">Payment Option</label>
+                    <select 
+                        name="payment_option"
+                        id=""
+                        className="w-full rounded border-gray-300"
+                        value={data.payment_option}
+                        onChange={(e) => setData('payment_option', e.target.value)}
+                    >
+                        <option value="full">Full</option>
+                        <option value="partial">Partial</option>
+                    </select>
+
+                    {errors.payment_option && <div>{errors.payment_option}</div>}
+                    
+                    {
+                        data.payment_option === 'partial' && (
+                            <>
+                            <label htmlFor="Amount">Amount</label>
+                                <input
+                                    required
+                                    type="text"
+                                    value={data.amount}
+                                    onChange={(e) => setData('amount', e.target.value.replace(/[^0-9+()\s-]/g, ''))}
+                                    className="w-full rounded border-gray-300"
+                                    placeholder="Enter amount"
+                                    />
+
+                                    {errors.amount && <div>{errors.amount}</div>}
+            
+                            </>
+                            
+                        )
+                    }
+
+                                       
                     <label htmlFor="card number">Card Number</label>
                     <input
                         required

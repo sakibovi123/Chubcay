@@ -40,9 +40,9 @@ Route::get('/confirm', [
 Route::middleware('auth')->group(function () {
 
     // main dashboard
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    });
+    // Route::get('/dashboard', function () {
+    //     return Inertia::render('Home');
+    // });
 
     // get single package
     Route::get("/package/{slug}", [ PackageController::class, 'getSinglePackageDetails' ])
@@ -52,6 +52,14 @@ Route::middleware('auth')->group(function () {
 
     Route::post("/checkout", [ CheckoutController::class, 'handleCheckout' ])
         ->name('checkout.handle');
+    // update chckout payment if partial
+    Route::get('/checkout/{checkoutId}', [
+        CheckoutController::class, 'edit'
+    ])->name("checkout.edit");
+
+    Route::put('/update-checkout/{checkoutId}', [
+        CheckoutController::class, 'update'
+    ])->name('checkout.update');
 
     // shift 4 checkout success & failure
     Route::get("/success", [ CheckoutController::class, "handleSuccess" ])

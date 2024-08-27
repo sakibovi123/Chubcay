@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Checkout;
+use App\Models\FeeCheckout;
 use App\Models\PackageExpiration;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -29,10 +31,13 @@ class ProfileController extends Controller
             ->first();
         $package_token = null;
 
+        // dd($existing_package->checkout->grand_total);
+
         if( $existing_package ) 
         {
             $package_name = $existing_package->package->title;
             $package_user = $existing_package->user->email;
+            $package_checkout_total = $existing_package->checkout->grand_total;
 
             // $package_token = QrCode::format('png')->generate($existing_package->token);
         }
@@ -50,7 +55,17 @@ class ProfileController extends Controller
         // showing records
         $records = Record::where('user_id', auth()->user()->id)->get();
 
-        // dd($records);
+        // user membership purchase records
+        $memberShipRecords = Checkout::where('user_id', auth()->user()->id)
+            ->get();
+
+        // dd($memberShipRecords);
+
+        // fee purchasing records
+        $feeRecords = FeeCheckout::where('user_id', auth()->user()->id)
+            ->first();
+        
+        
 
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
@@ -59,7 +74,10 @@ class ProfileController extends Controller
             'profile_image' => $profile_image,
             'existing_package' => $existing_package,
             'package_token' => $package_token,
-            'records' => $records
+            'records' => $records,
+            'memberShipRecords' => $memberShipRecords,
+            'feeRecords' => $feeRecords,
+            // 'allPurchased' => PackageExpiration::where('user_id')
             // 'qr' => storage_path('app/public/'.$qr)
             
         ]);

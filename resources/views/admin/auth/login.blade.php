@@ -10,6 +10,11 @@
 <body>
     <div class="w-full h-screen flex items-center justify-center">
         <div class="container mx-auto w-full max-w-md">
+            @if (session('message'))
+                <div class="my-3 w-full bg-red-200 rounded shadow-xl p-2">
+                    {{ session('message') }}
+                </div>
+            @endif
             <h1 class="p-2 text-xl font-bold uppercase">Admin login</h1>
             <form action="{{ route('admin.login') }}" method="POST" class="bg-white shadow-md w-full p-6 rounded-md">
                 @csrf

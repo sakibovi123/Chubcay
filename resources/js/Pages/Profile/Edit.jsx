@@ -15,7 +15,7 @@ import dummyImg from '../../Assets/Images/dummy.png';
 import RechargeModal from '@/Components/RechargeModal';
 
 
-export default function Edit({user, existing_package, profile_image, records}) {
+export default function Edit({user, existing_package, profile_image, records, memberShipRecords, feeRecords}) {
     
     // const { existed_package } = usePage().props;
     const [ hasImage, setHasImage ] = useState(false)
@@ -425,6 +425,91 @@ export default function Edit({user, existing_package, profile_image, records}) {
                                     </table>
                                 </div>
                                 {/* Include your details section here */}
+
+                                {/* member ship checkouts */}
+                                <h1 className="text-2xl font-bold p-2">Active Membership Record</h1>
+                                <div class="relative overflow-x-auto">
+
+                                    <table className="w-full border">
+                                        <thead className="border">
+                                            <th className="border p-3">DATE</th>
+                                            <th className="border p-3">PACKAGE</th>
+                                            <th className="border p-3">TOTAL</th>
+                                            <th className="border p-3">PAID</th>
+                                            <th className="border p-3">DUE</th>
+                                            <th className="border p-3">PAYMENT OPTION</th>
+                                            <th className="border p-3">ACTIONS</th>
+                                        </thead>
+                                        <tbody className="border">
+                                       
+                                            <tr className="border bg-green-100">
+                                                <td className="p-3 text-center border">{formatDate(existing_package.created_at)}</td>
+                                                <td className="p-3 text-center border">{existing_package.package.title}</td>
+                                                <td className="p-3 text-center border">${existing_package.checkout.grand_total}</td>
+                                                <td className="p-3 text-center border">
+                                                    {
+                                                        existing_package.checkout.paid === null ? (
+                                                            <>$0.00</>
+                                                        ):(<>${existing_package.checkout.paid}</>)
+                                                    }
+                                                    
+                                                </td>
+                                                <td className="p-3 text-center border">
+                                                {
+                                                        existing_package.checkout.due < 0 ? (
+                                                            <>$0.00</>
+                                                        ):(<>${existing_package.checkout.due}</>)
+                                                    }
+                                                </td>
+                                                <td className="p-3 text-center border uppercase">{existing_package.checkout.payment_option}</td>
+                                                <td className="p-3 text-center border">
+                                                    <a href={route('checkout.edit', existing_package.checkout.id)} className="cursor-pointer transition-all font-bold delay-5 bg-green-400 p-1 rounded">PAY</a>
+                                                </td>
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Registration fee section */}
+                                <h1 className="text-2xl font-bold p-2">Fee Record</h1>
+                                <div class="relative overflow-x-auto">
+
+                                    <table className="w-full border">
+                                        <thead className="border">
+                                            <th className="border p-3">DATE</th>
+                                            <th className="border p-3">TOTAL</th>
+                                            <th className="border p-3">PAID</th>
+                                            <th className="border p-3">DUE</th>
+                                            <th className="border p-3">ACTIONS</th>
+                                        </thead>
+                                        <tbody className="border">
+
+                                            <tr className="border bg-green-100">
+                                                <td className="p-3 text-center border">{formatDate(feeRecords.created_at)}</td>
+                                                <td className="p-3 text-center border">${feeRecords.total_charge}</td>
+                                                <td className="p-3 text-center border">${feeRecords.paid}</td>
+                                                <td className="p-3 text-center border">
+                                                    {
+                                                        feeRecords.due < 0 ? 
+                                                        (<>
+                                                            $0.00
+                                                        </>):(<> ${feeRecords.due}
+                                                        </>) 
+                                                    }
+                                                    
+                                                </td>
+                                                <td className="p-3 text-center border">
+                                                    <a href={route('user.takeFee', feeRecords.id)} className="cursor-pointer text-gray-900 font-bold bg-green-400 p-1 rounded transition-all hover:bg-green-300">
+                                                        PAY
+                                                    </a>
+                                                </td>
+                                                
+                                            </tr>
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         )}
                     

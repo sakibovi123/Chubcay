@@ -26,8 +26,8 @@ class FeeCheckoutController extends Controller
     {
         // dd($request->all());
         $charge = 0.00;
-        $paid = 0.00;
-        $due = 0.00;
+        // $paid = 0.00;
+        // $due = 0.00;
         $paymentStatus = '';
         $feeObj = FeeCheckout::where('id', $feeId)
             ->first();
@@ -82,11 +82,11 @@ class FeeCheckoutController extends Controller
                 $feeObj->status = 'success';
                 $feeObj->payment_status = 'paid';
                 $feeObj->term = $request->term;
-                $feeObj->paid = $paid;
-                $feeObj->due = $due;
+                $feeObj->paid += $paid;
+                $feeObj->due = $user->fee - $feeObj->paid;
                 $feeObj->save();
 
-                return redirect(route('home.home'))
+                return redirect()->route('home.home')
                     ->with('message', 'Payment successfully!');
             }
             else {
@@ -116,8 +116,8 @@ class FeeCheckoutController extends Controller
             $feeObj->card_number = $data['card_number'];
             $feeObj->total_charge = $data['total_charge'];
 
-            $feeObj->paid = $paid;
-            $feeObj->due = $due;
+            $feeObj->paid += $paid;
+            $feeObj->due = $user->fee - $feeObj->paid;
 
             if( $paymentStatus == 'success' ) {
                 $feeObj->payment_status = 'paid';

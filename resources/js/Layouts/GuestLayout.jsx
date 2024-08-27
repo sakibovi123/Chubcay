@@ -7,7 +7,7 @@ export default function Guest({ children }) {
      
         <div className="w-full">
             <Header />
-            <div className="container md:mx-auto min-h-screen flex flex-col bg-gray-100">
+            <div className="container md:mx-auto min-h-screen flex flex-col">
             
                 <div className="flex-grow flex flex-col items-center justify-center w-full">
                     <div className="container md:mx-auto lg:w-[80%] md:w-[60%] w-full">

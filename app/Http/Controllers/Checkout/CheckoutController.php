@@ -104,6 +104,10 @@ public function handleCheckout( Request $request )
                     $checkout->paid = $charge;
                     $checkout->due = $checkout->grand_total - $charge;
 
+                    // savhing payment option
+
+                    $checkout->payment_option = 'partial';
+
                     $checkout->save();
                     // dd($request->amount);
                 }
@@ -113,6 +117,10 @@ public function handleCheckout( Request $request )
                     $checkout->paid = $checkout->grand_total;
 
                     $checkout->due = 0.00;
+
+                    // savhing payment option
+
+                    $checkout->payment_option = 'full';
 
                     $checkout->save();
                 }
@@ -300,11 +308,14 @@ public function handleCheckout( Request $request )
                 $checkout->paid = $checkout->grand_total;
                 $checkout->due = 0.00;
 
+                // saving payment option
+                $checkout->payment_option = 'full';
+
                 $checkout->save();
             }
 
             // dd($charge, $checkout->paid, $checkout->due);
-            dd($charge);
+            // dd($charge);
             $sh_request = [
                 'amount' => $charge * 100,
                 'currency' => $currency,

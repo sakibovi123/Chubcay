@@ -66,7 +66,7 @@
         <label for="check_number" class="block text-gray-700 mb-2">Check Number</label>
         <input name="check_number" type="text" id="check_number" class="block w-full p-2 border rounded" placeholder="Enter check number">
     </div>
-    <button type="submit" id="submit_check" class="w-full bg-blue-500 text-white p-2 rounded">Pay ${{ $fee }}</button>
+    <button type="submit" id="submit_check" class="w-full bg-blue-500 text-white p-2 rounded">Pay</button>
 </div>
 
 <!-- Credit Card Payment Section -->

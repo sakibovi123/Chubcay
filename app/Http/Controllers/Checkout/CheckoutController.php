@@ -109,6 +109,12 @@ public function handleCheckout( Request $request )
                 }
                 else {
                     $charge = $checkout->grand_total;
+
+                    $checkout->paid = $checkout->grand_total;
+
+                    $checkout->due = 0.00;
+
+                    $checkout->save();
                 }
 
                 $sh_request = [
@@ -289,12 +295,16 @@ public function handleCheckout( Request $request )
                 $checkout->due = $checkout->grand_total - $checkout->paid;
                 $checkout->save();
             } else {
-                $charge = $checkout->grand_total;
+                $charge = $checkout->due;
+
+                $checkout->paid = $checkout->grand_total;
+                $checkout->due = 0.00;
+
                 $checkout->save();
             }
 
             // dd($charge, $checkout->paid, $checkout->due);
-
+            dd($charge);
             $sh_request = [
                 'amount' => $charge * 100,
                 'currency' => $currency,

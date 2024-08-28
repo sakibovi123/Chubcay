@@ -46,7 +46,8 @@ class UserManagementController extends Controller
                     $feeObj = FeeCheckout::create([
                         'user_id' => $user->id,
                         'total_charge' => $request->fee,
-                        'payment_status' => 'due'
+                        'payment_status' => 'due',
+                        'due' => $request->fee
                     ]);
 
                     $link = route('user.takeFee', [

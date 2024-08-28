@@ -467,8 +467,11 @@ export default function Edit({user, existing_package, profile_image, records, me
                                                         <td className="p-3 text-center border uppercase">{existing_package?.checkout.payment_option}</td>
                                                         <td className="p-3 text-center border">
                                                             {
-                                                                existing_package?.checkout && (
+                                                                existing_package?.checkout <= 0 ? (
                                                                     <a href={route('checkout.edit', existing_package?.checkout.id)} className="cursor-pointer transition-all font-bold delay-5 bg-green-400 p-1 rounded">PAY</a>
+                                                                )
+                                                                : (
+                                                                    <p className="bg-green-400 font-bold p-1 rounded-full">PAID</p>
                                                                 )
                                                             }
                                                             
@@ -515,9 +518,20 @@ export default function Edit({user, existing_package, profile_image, records, me
                                                             
                                                         </td>
                                                         <td className="p-3 text-center border">
-                                                            <a href={route('user.takeFee', feeRecords.id)} className="cursor-pointer text-gray-900 font-bold bg-green-400 p-1 rounded transition-all hover:bg-green-300">
-                                                                PAY
-                                                            </a>
+                                                            {
+                                                                feeRecords.due == 0.00 ? (
+                                                                    <p className="bg-green-400 p-1 rounded-full font-bold">
+                                                                        PAID
+                                                                    </p>
+                                                                )
+                                                                :(
+                                                                    <a href={route('user.takeFee', feeRecords.id)}
+                                                                        className="cursor-pointer text-gray-900 font-bold bg-green-400 p-1 rounded transition-all hover:bg-green-300">
+                                                                        PAY
+                                                                    </a>
+                                                                )
+                                                            }
+                                                            
                                                         </td>
                                                         
                                                     </tr>

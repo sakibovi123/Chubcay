@@ -24,11 +24,11 @@ class FeeCheckoutController extends Controller
 
     public function feeCheckoout( Request $request, $feeId )
     {
-        // dd($request->all());
         $charge = 0.00;
-        // $paid = 0.00;
-        // $due = 0.00;
+    
         $paymentStatus = '';
+        $paid = 0.00;
+
         $feeObj = FeeCheckout::where('id', $feeId)
             ->first();
 
@@ -44,16 +44,29 @@ class FeeCheckoutController extends Controller
         // dd($data);
         if ( $data['method'] == 'credit_card' ){
             if( $request->term == 'full' ) {
-                $charge = $user->fee;
+                // always have to pay the due
+                $charge = $feeObj->due;
+                $feeObj->paid += $charge;
+                $feeObj->due = 0.00;
+
+                $feeObj->save();
+                // dd($charge);
             }
             else {
                 $charge = $request->amount;
                 $paid = $request->amount;
                 $due = $user->fee - $paid;
+
+                $feeObj->paid += $paid;
+                $feeObj->due = $due;
+
+                $feeObj->save();
             }
 
+            // dd($charge);
+
             $feeRequest = [
-                "amount" => $charge,
+                "amount" => $charge * 100,
                 "currency" => "USD",
                 "description" => "Registration fee",
                 'card' => [
@@ -62,7 +75,9 @@ class FeeCheckoutController extends Controller
                         'expYear' => $request->yy
                 ],
             ];
-            // dd($feeRequest['amount'] * 100);
+            // dd($feeRequest['amount']);
+
+            // dd($feeObj->due);
 
             $initiatePayment = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
                 ->asForm()
@@ -82,8 +97,8 @@ class FeeCheckoutController extends Controller
                 $feeObj->status = 'success';
                 $feeObj->payment_status = 'paid';
                 $feeObj->term = $request->term;
-                $feeObj->paid += $paid;
-                $feeObj->due = $user->fee - $feeObj->paid;
+                // $feeObj->paid += $paid;
+                // $feeObj->due = $user->fee - $feeObj->paid;
                 $feeObj->save();
 
                 return redirect()->route('home.home')
@@ -95,14 +110,6 @@ class FeeCheckoutController extends Controller
         }
         else {
 
-            // checking term
-
-            if( $request->term == 'partial' )
-            {
-                $paid = $request->amount;
-                $due = $user->fee - $paid;
-            }
-
             $data['user_id'] = $user->id;
             $data['total_charge'] = $user->fee;
 
@@ -110,14 +117,33 @@ class FeeCheckoutController extends Controller
             $updatedUser = User::where('id', $user->id)->first();
             $updatedUser->save();
 
+            if( $request->term == 'partial' )
+            {
+                $feeObj->paid += $request->amount;
+                
+                $feeObj->due = $user->fee - $feeObj->paid;
+                // dd($user->fee);
+                $feeObj->save();
+            }
+            else {
+                $feeObj->paid += $feeObj->due;
+                $feeObj->due = 0.00;
+
+                $feeObj->save();
+            }
+            
+
             $feeObj->user_id = $data['user_id'];
             $feeObj->method = $data['method'];
             $feeObj->check_number = $data['check_number'];
-            $feeObj->card_number = $data['card_number'];
+            
             $feeObj->total_charge = $data['total_charge'];
 
-            $feeObj->paid += $paid;
-            $feeObj->due = $user->fee - $feeObj->paid;
+            // $feeObj->paid = $feeObj->due;
+
+            // dd($feeObj->paid);
+
+            // $feeObj->due = $user->fee - $feeObj->paid;
 
             if( $paymentStatus == 'success' ) {
                 $feeObj->payment_status = 'paid';

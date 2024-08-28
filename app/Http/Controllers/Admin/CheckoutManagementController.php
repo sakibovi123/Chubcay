@@ -20,11 +20,13 @@ class CheckoutManagementController extends Controller
 {
     public function index()
     {
-        $orders = Checkout::all();
+        $orders = Checkout::orderBy('created_at', 'desc')->paginate(20);
         return view('admin.orders.index', [
             'orders' => $orders
         ]);
     }
+
+    // public function c
 
     public function create()
     {
@@ -50,22 +52,44 @@ class CheckoutManagementController extends Controller
     {
         $user = User::where('id', $request->input('user_id'))->first();
 
+
+        $validated = $request->validate([
+            'custom_fields' => 'array',
+            'custom_fields.*.key' => 'nullable|string|max:255',
+            'custom_fields.*.value' => 'nullable|string|max:255',
+        ]);
+
+        // dd($validated);
+
         $checkout = Checkout::create([
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
             'user_id' => $user->id,
-            'package_id' => $request->input('package_id')
+            'package_id' => $request->input('package_id'),
+            'payment_method' => $request->input('payment_method'),
+            'payment_status' => $request->payment_status
         ]);
+        
+        // saving extra fields
+        
+        $jsonCustomFields = json_encode($validated['custom_fields']);
+
+        $checkout->custom_fields = $jsonCustomFields;
+        $checkout->save();
 
         $checkout->grand_total = $checkout->package->price;
 
-        $payment_option = $request->input('payment_method');
+        $payment_option = $request->input('payment_option');
+        // dd($payment_option);
         // dd($payment_option);
         if ( $payment_option == 'send_link' ){
             // sending payment link to user
             try {
+                // $checkout->grand_total = $checkout->package->price;
+                // $checkout->save();
+                // dd($checkout->grand_total);
                 $link = route('package.single', [
                     'slug' => $checkout->package->slug
                 ]);
@@ -78,6 +102,16 @@ class CheckoutManagementController extends Controller
             }
         }
         else {
+
+            if( $request->payment_method == 'cash' )
+            {
+                $checkout->payment_method = 'cash';
+                $checkout->paid = $checkout->grand_total;
+                // check for full or partial
+
+                $checkout->save();
+                return back()->with('message', 'Plan bought successfully');
+            }
             // initiate payment using shift4
             $cardNumber = $request->input('card_number');
             $month = $request->input('month');
@@ -120,6 +154,8 @@ class CheckoutManagementController extends Controller
                     if( $charge->getStatus() == "successful" ) {
                         $checkout->status = "Success";
                         $checkout->payment_status = "Paid";
+                        $checkout->paid = $checkout->grand_total;
+                        $checkout->due = 0.00;
                         $checkout->save();
                         
                         // saving package expiration model
@@ -131,6 +167,7 @@ class CheckoutManagementController extends Controller
                         if( !$existed_package )
                         {
                             $pkg_exp = PackageExpiration::create([
+                                "checkout_id" => $checkout->id,
                                 "package_id" => $checkout->package->id,
                                 "user_id" => $checkout->user->id,
                                 "duration" => $checkout->package->duration
@@ -176,20 +213,59 @@ class CheckoutManagementController extends Controller
             
         }
 
+        // PackageExpiration::create();
+
         return back();
     }
 
-    public function edit( $oderId )
-    {}
+    public function edit( $orderId )
+    {
+        $order = Checkout::find($orderId);
+       
+        return view('admin.orders.edit', [
+            'order' => $order
+        ]);
+    }
 
-    public function update( Request $request )
-    {}
+    public function update( Request $request, $orderId )
+    {
+        $order = Checkout::findOrFail($orderId);
+
+        // select existing user or create one
+        // $user = User::where('id', $request->input('user_id'))->first();
+
+        $validated = $request->validate([
+            'custom_fields' => 'required|array',
+            'custom_fields.*.key' => 'required|string|max:255',
+            'custom_fields.*.value' => 'required|string|max:255',
+        ]);
+
+        $jsonCustomFields = json_encode($validated['custom_fields']);
+
+        $order->custom_fields = $jsonCustomFields;
+        $order->save();
+
+        return back()->with('message', 'Updated Successfully');
+
+    }
 
     public function details($orderId)
     {
         $order = Checkout::find($orderId);
+
         return view('admin.orders.details', [
             'order' => $order 
         ]);
+    }
+
+    public function destroy( $orderId )
+    {
+        $order = Checkout::where('id', $orderId)
+            ->first();
+
+        $order->delete();
+
+        return back()->with('message', 'Order removed');
+        
     }
 }

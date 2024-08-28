@@ -76,6 +76,11 @@ Route::middleware('admin')->group(function(){
         Route::get('/export-email', [
             UserManagementController::class, 'exportEmails'
         ])->name('users.export');
+
+        // send password reset link
+        Route::get('/send-password-reset-link/{userId}', [
+            UserManagementController::class, 'sendPasswordResetLink'
+        ])->name('users.reset');
     });
 
     Route::prefix('/admin/orders')->group(function(){
@@ -95,6 +100,18 @@ Route::middleware('admin')->group(function(){
 
         Route::get('/order/{orderId}', [ CheckoutManagementController::class, 'details' ])
             ->name('checkout.details');
+
+        // update order
+
+        Route::put('/order/update/{orderId}', [
+            CheckoutManagementController::class, 'update'
+        ])->name('checkout.update');
+
+        // delete order
+
+        Route::delete('/delete/{orderId}', [
+            CheckoutManagementController::class, 'destroy'
+        ])->name('checkout.delete');
         
         // generate invoice
         Route::get('/generate-invoice/{orderId}', [ InvoiceController::class, 'generateSingleInvoice' ])
@@ -104,6 +121,7 @@ Route::middleware('admin')->group(function(){
         Route::get('/generate-admin-statment', [
             InvoiceController::class, 'statementGeneratorAll'
         ])->name('checkout.invoice');
+            
 
         // settings update
         Route::get('/settings', [

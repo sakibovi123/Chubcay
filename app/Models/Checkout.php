@@ -24,7 +24,8 @@ class Checkout extends Model
         "invoice",
         "payment_option",
         "paid",
-        "due"
+        "due",
+        "custom_fields"
     ];
 
 

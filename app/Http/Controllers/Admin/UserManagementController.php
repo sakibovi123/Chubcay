@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\EmailExport;
 use App\Http\Controllers\Controller;
+use App\Mail\PasswordResetMail;
 use App\Mail\SendMailAfterAcceptingRequest;
 use App\Models\FeeCheckout;
 use Illuminate\Http\Request;
@@ -151,5 +152,18 @@ class UserManagementController extends Controller
     {
         $dateTime = Carbon::now();
         return Excel::download(new EmailExport, $dateTime.'.csv', \Maatwebsite\Excel\Excel::CSV);
+    }
+
+    // sending password reset link
+    public function sendPasswordResetLink($userId)
+    {
+        $user = User::findOrFail($userId);
+
+        $link = route('password.request');
+
+        Mail::to($user->email)
+            ->send(new PasswordResetMail($link));
+
+        return back()->with('message', 'Password reset link sent');
     }
 }

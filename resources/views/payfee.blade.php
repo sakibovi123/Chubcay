@@ -37,8 +37,8 @@
     <label for="payment_method" class="block text-gray-700 mb-2">Payment Method</label>
     <select name="method" id="payment_method" class="block w-full p-2 border rounded">
         <option value="" disabled selected>Select a payment method</option>
-        <option value="check">Pay with Check</option>
-        <option value="credit_card">Pay with Credit Card</option>
+        {{-- <option value="check">Pay with Check</option> --}}
+        <option selected value="credit_card">Pay with Credit Card</option>
     </select>
 </div>
 

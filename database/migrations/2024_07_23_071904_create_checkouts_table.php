@@ -50,10 +50,16 @@ return new class extends Migration
                 'full', 'partial'
             ])->default('full')->nullable();
 
+            $table->string('payment_method')
+                ->nullable();
+
             $table->decimal('paid', 10, 2)
                 ->nullable();
 
             $table->decimal('due', 10, 2)
+                ->nullable();
+            
+            $table->json('custom_fields')
                 ->nullable();
 
         });

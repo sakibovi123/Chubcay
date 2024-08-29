@@ -8,7 +8,7 @@ const duration = (pkg_dur) => {
         return 'monthly'
     }
     else if( pkg_dur === 183 ) {
-        return 'quaterly'
+        return 'quarterly'
     }
     else if ( pkg_dur === 365 ){
         return 'yearly'

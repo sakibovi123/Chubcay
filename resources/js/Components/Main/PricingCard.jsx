@@ -12,16 +12,13 @@ function PricingCard({price, desc, slug, duration, features}) {
             {desc}
         </div>
 
-        {/*<div className="font-bold flex gap-4">*/}
+
             {features && Object.entries(features).map(([key, value]) => (
                 <div className="font-bold flex gap-4" key={key}>
                     {key}: {value}
                 </div>
             ))}
-        {/*</div>*/}
-        {/*<div className="font-bold flex gap-4">1 Spa access</div>*/}
-        {/*<div className="font-bold flex gap-4">1 Match Golf Access</div>*/}
-        {/*<div className="font-bold flex gap-4">1 Buffet Lunch</div>*/}
+
 
         <Link href={route('package.single', slug)} className="bg-blue-500 p-3 w-[300px] text-white font-bold">
             Purchase now

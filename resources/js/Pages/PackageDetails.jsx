@@ -227,7 +227,7 @@ function PackageDetails({package_details}) {
 
                             disabled={processing}
                         >
-                            Pay ${package_details.price}
+                            Pay
                     </button>
                 </form>
 

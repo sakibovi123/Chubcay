@@ -61,7 +61,8 @@ public function handleCheckout( Request $request )
                 "package_id" => $package->id,
                 "user_id" => $auth->id,
                 "invoice" => mt_rand(1, 9999),
-                "payment_option" => $request->payment_option
+                "payment_option" => $request->payment_option,
+                "payment_method" => 'card'
             ];
 
             // dd($data);

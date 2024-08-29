@@ -30,8 +30,13 @@ return new class extends Migration
 
             $table->decimal("grand_total", 10, 2)->nullable();
 
-            $table->foreignIdFor(Package::class);
-            $table->foreignIdFor(User::class);
+            $table->foreignId('package_id')
+                ->constrained()
+                ->onDelete('cascade');
+
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onDelete('cascade');
 
             $table->enum("status", [
                 "Cancelled", "Success", "Returned", "Pending"

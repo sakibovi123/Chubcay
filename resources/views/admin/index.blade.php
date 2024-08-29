@@ -9,7 +9,7 @@
                 <p class="text-sm text-gray-400">Revenue</p>
                 <h1 class="font-bold text-3xl">${{ $totalRevenue }}</h1>
                 <p class="text-green-500 flex items-center gap-3">
-                    68% increase
+                    {{ $increamentRev }}% increase
                     <svg class="w-5 h-5 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207"/>
                       </svg>
@@ -65,7 +65,14 @@
                             <tr class="border-b-2 border-gray-100 cursor-pointer transition-all delay-5 hover:bg-gray-50">
                                 <td class="p-3">{{ $order->created_at }}</td>
                                 <td class="p-3">{{ $order->trx_id }}</td>
-                                <td class="p-3">${{ $order->grand_total }}</td>
+                                <td class="p-3">
+                                    @if($order->grand_total == 0.00)
+                                        $0.00
+                                    @else
+                                        ${{ $order->grand_total }}
+                                    @endif
+
+                                </td>
                                 
                                 <td class="p-3">
                                     @if ($order->status == 'Success')
@@ -81,8 +88,10 @@
                                 
                             </tr>
                         @endforeach
-                        
-                        
+
+                        <div class="bg-gray-100">
+                            {{ $orders->links() }}
+                        </div>
                     </tbody>
                 </table>
             </div>

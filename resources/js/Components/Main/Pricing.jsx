@@ -33,9 +33,10 @@ const duration = (pkg_dur) => {
             {
                 packages.map((pkg) => (
                     <PricingCard key={pkg.id} price={pkg.price}
-                        desc={pkg.title}
+                        desc={pkg.desc}
                         slug={pkg.slug}
                         duration={duration(pkg.duration)}
+                        features={pkg.features}
                     />
                 ))
             }

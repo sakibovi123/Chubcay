@@ -41,7 +41,7 @@ class InvoiceController extends Controller
                 ->latest()
                 ->first();
             $item = (new InvoiceItem())->title($order->package->title)
-                ->pricePerUnit($order->grand_total)
+                ->pricePerUnit((float) $order->grand_total)
                 ->units($order->package->duration)
                 ->description(json_encode($order->package->features));
                 // dd($item);
@@ -157,9 +157,9 @@ class InvoiceController extends Controller
             return (new InvoiceItem())
                 ->title($order->package->title)
                 ->description(json_encode($order->package->features))
-                ->pricePerUnit($order->grand_total)
+                ->pricePerUnit((float)$order->grand_total)
                 ->units($order->package->duration)
-                ->subTotalPrice($order->total);
+                ->subTotalPrice((float)$order->total);
         });
 
         
@@ -199,9 +199,9 @@ class InvoiceController extends Controller
             return (new InvoiceItem())
                 ->title($order->package->title)
                 ->description(json_encode($order->package->features))
-                ->pricePerUnit($order->grand_total)
+                ->pricePerUnit((float) $order->grand_total)
                 ->units($order->package->duration)
-                ->subTotalPrice($order->total);
+                ->subTotalPrice((float)$order->grand_total);
         });
 
         

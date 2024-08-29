@@ -16,6 +16,7 @@ use Shift4\Shift4Gateway;
 use Shift4\Exception\Shift4Exception;
 use Illuminate\Support\Facades\Http;
 
+
 class CheckoutManagementController extends Controller
 {
     public function index()
@@ -87,9 +88,6 @@ class CheckoutManagementController extends Controller
         if ( $payment_option == 'send_link' ){
             // sending payment link to user
             try {
-                // $checkout->grand_total = $checkout->package->price;
-                // $checkout->save();
-                // dd($checkout->grand_total);
                 $link = route('package.single', [
                     'slug' => $checkout->package->slug
                 ]);
@@ -106,8 +104,19 @@ class CheckoutManagementController extends Controller
             if( $request->payment_method == 'cash' )
             {
                 $checkout->payment_method = 'cash';
-                $checkout->paid = $checkout->grand_total;
                 // check for full or partial
+                if( $request->payment_term == 'partial' )
+                {
+                    $checkout->paid += $request->amount;
+
+                    $checkout->due = $checkout->grand_total - $checkout->paid;
+                }
+                else
+                {
+                    $checkout->paid = $checkout->grand_total;
+                    $checkout->due = 0.00;
+                }
+                
 
                 $checkout->save();
                 return back()->with('message', 'Plan bought successfully');
@@ -128,6 +137,19 @@ class CheckoutManagementController extends Controller
                 $response = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
                     ->asForm()
                     ->post('https://api.shift4.com/customers', $customerRequest);
+                
+                // checking term
+                $charge = 0.00;
+                if( $request->payment_term == 'partial' ) {
+                    $charge = $request->amount;
+
+                    $checkout->paid += $request->amount;
+                    $checkout->due = $checkout->grand_total - $checkout->paid;
+
+
+                }
+
+                $checkout->save();
 
                 $sh_request = [
                     'amount' => $checkout->grand_total * 100,
@@ -154,8 +176,12 @@ class CheckoutManagementController extends Controller
                     if( $charge->getStatus() == "successful" ) {
                         $checkout->status = "Success";
                         $checkout->payment_status = "Paid";
-                        $checkout->paid = $checkout->grand_total;
-                        $checkout->due = 0.00;
+                        if( $request->payment_temr == 'full' )
+                        {
+                            $checkout->paid = $checkout->grand_total;
+                            $checkout->due = 0.00;
+                        }
+                        
                         $checkout->save();
                         
                         // saving package expiration model

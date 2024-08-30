@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    public function adminIndex()
+    public function adminIndex(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
     {
         $totalRevenue = Checkout::sum('grand_total');
         $totalCustomers = count(User::all());
@@ -64,13 +64,13 @@ class AdminController extends Controller
     }
 
     // admin login
-    public function adminLoginView()
+    public function adminLoginView(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
     {
         return view('admin.auth.login');
     }
 
     // admin login request
-    public function adminLogin( Request $request )
+    public function adminLogin( Request $request ): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'email' => 'required|email',

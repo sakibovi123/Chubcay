@@ -17,6 +17,8 @@
                 <th>City</th>
                 <th>Phone</th>
                 <th>Amount</th>
+                <th>Paid Amount</th>
+                <th>Due Amount</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -29,6 +31,22 @@
                 <td>{{ $payment->user->city }}</td>
                 <td>{{ $payment->user->phone }}</td>
                 <td>{{ $payment->total_charge }}</td>
+                <td>
+                    @if( $payment->paid == 0.00 )
+                        $0.00
+                    @else
+                        {{ $payment->paid }}
+                    @endif
+
+                </td>
+                <td>
+                    @if( $payment->due == 0.00 )
+                        $0.00
+                    @else
+                        {{ $payment->due }}
+                    @endif
+
+                </td>
                 <td>{{ $payment->payment_status }}</td>
             </tr>
             @endforeach

@@ -79,6 +79,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/pay-fee/{feeId}', [
         FeeCheckoutController::class, 'feeCheckoout'
     ])->name('user.feeCheckout');
+
+    // download full statement for user
+    Route::get('/download-statement', [
+        \App\Http\Controllers\ProfileController::class, 'downloadFeeStatement'
+    ])->name('user.download.statement');
     
         // checkout
 

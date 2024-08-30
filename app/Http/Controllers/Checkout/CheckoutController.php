@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Checkout;
 use App\Models\Package;
 use App\Models\PackageExpiration;
+use App\Models\Record;
 use App\Services\Shift4Service;
 use Exception;
 use Illuminate\Http\Request;
@@ -102,14 +103,22 @@ public function handleCheckout( Request $request )
                 
                 if( $request->payment_option == 'partial' ) {
                     $charge = $request->amount;
-                    $checkout->paid = $charge;
-                    $checkout->due = $checkout->grand_total - $charge;
+                    $checkout->paid += $charge;
+                    $checkout->due = $checkout->grand_total - $checkout->paid;
 
                     // savhing payment option
 
                     $checkout->payment_option = 'partial';
 
                     $checkout->save();
+
+                    Record::create([
+                        'user_id' => $checkout->user->id,
+                        'action' => 'membership fee',
+                        'total_amount' => $checkout->grand_total,
+                        'paid_amount' => $checkout->paid,
+                        'due_amount' => $checkout->due
+                    ]);
                     // dd($request->amount);
                 }
                 else {
@@ -124,6 +133,14 @@ public function handleCheckout( Request $request )
                     $checkout->payment_option = 'full';
 
                     $checkout->save();
+
+                    Record::create([
+                        'user_id' => $checkout->user->id,
+                        'action' => 'membership fee',
+                        'total_amount' => $checkout->grand_total,
+                        'paid_amount' => $checkout->paid,
+                        'due_amount' => $checkout->due
+                    ]);
                 }
 
                 $sh_request = [
@@ -184,7 +201,6 @@ public function handleCheckout( Request $request )
 
                         // creating plans and subs
 
-                        
 
                         $planRequest = [
                             'amount' => $checkout->grand_total * 100,
@@ -283,7 +299,6 @@ public function handleCheckout( Request $request )
 
             $checkout->grand_total = $checkout->package->price;
 
-            
 
             $checkout->save();
 
@@ -303,6 +318,15 @@ public function handleCheckout( Request $request )
                 $checkout->paid += $charge;
                 $checkout->due = $checkout->grand_total - $checkout->paid;
                 $checkout->save();
+
+                // saving records
+                Record::create([
+                    'user_id' => $checkout->user->id,
+                    'action' => 'membership fee',
+                    'total_amount' => $checkout->grand_total,
+                    'paid_amount' => $checkout->paid,
+                    'due_amount' => $checkout->due
+                ]);
             } else {
                 $charge = $checkout->due;
 
@@ -313,6 +337,13 @@ public function handleCheckout( Request $request )
                 $checkout->payment_option = 'full';
 
                 $checkout->save();
+                Record::create([
+                    'user_id' => $checkout->user->id,
+                    'action' => 'membership fee',
+                    'total_amount' => $checkout->grand_total,
+                    'paid_amount' => $checkout->paid,
+                    'due_amount' => $checkout->due
+                ]);
             }
 
             // dd($charge, $checkout->paid, $checkout->due);

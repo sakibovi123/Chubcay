@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Fee;
 
 use App\Http\Controllers\Controller;
 use App\Models\FeeCheckout;
+use App\Models\Record;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,12 +55,13 @@ class FeeCheckoutController extends Controller
             }
             else {
                 $charge = $request->amount;
+
                 $paid = $request->amount;
-                $due = $user->fee - $paid;
+//                $due = $user->fee - $paid;
 
                 $feeObj->paid += $paid;
-                $feeObj->due = $due;
-
+                $feeObj->due -= $paid;
+//                dd($feeObj->due, $paid, $user->fee);
                 $feeObj->save();
             }
 
@@ -92,14 +94,23 @@ class FeeCheckoutController extends Controller
                 $updatedUser->save();
 
                 // updating checkout fee
-                $feeObj->method = $request->method;
+                $feeObj->method = $request->input('method');
                 $feeObj->card_number = $request->card_number;
                 $feeObj->status = 'success';
                 $feeObj->payment_status = 'paid';
                 $feeObj->term = $request->term;
-                // $feeObj->paid += $paid;
-                // $feeObj->due = $user->fee - $feeObj->paid;
+
                 $feeObj->save();
+
+                // save record
+
+                Record::create([
+                    'user_id' => $feeObj->user->id,
+                    'action' => 'registration fee',
+                    'total_amount' => $feeObj->total_charge,
+                    'paid_amount' => $feeObj->paid,
+                    'due_amount' => $feeObj->due
+                ]);
 
                 return redirect()->route('home.home')
                     ->with('message', 'Payment successfully!');
@@ -108,56 +119,61 @@ class FeeCheckoutController extends Controller
                 return redirect()->back()->with('message', 'Payment failed please try again!');
             }
         }
-        else {
-
-            $data['user_id'] = $user->id;
-            $data['total_charge'] = $user->fee;
-
-            $user->status = 'Pending';
-            $updatedUser = User::where('id', $user->id)->first();
-            $updatedUser->save();
-
-            if( $request->term == 'partial' )
-            {
-                $feeObj->paid += $request->amount;
-                
-                $feeObj->due = $user->fee - $feeObj->paid;
-                // dd($user->fee);
-                $feeObj->save();
-            }
-            else {
-                $feeObj->paid += $feeObj->due;
-                $feeObj->due = 0.00;
-
-                $feeObj->save();
-            }
-            
-
-            $feeObj->user_id = $data['user_id'];
-            $feeObj->method = $data['method'];
-            $feeObj->check_number = $data['check_number'];
-            
-            $feeObj->total_charge = $data['total_charge'];
-
-            // $feeObj->paid = $feeObj->due;
-
-            // dd($feeObj->paid);
-
-            // $feeObj->due = $user->fee - $feeObj->paid;
-
-            if( $paymentStatus == 'success' ) {
-                $feeObj->payment_status = 'paid';
-                $feeObj->status = $paymentStatus;
-            }
-            else {
-                $feeObj->payment_status = 'due';
-                // $feeObj->status = 'failed';
-            }
-
-            $feeObj->save();
-
-            return redirect(route('home.home'));
-        }
+//        else {
+//            $data['user_id'] = $user->id;
+//            $data['total_charge'] = $user->fee;
+//
+//            $user->status = 'Pending';
+//            $updatedUser = User::where('id', $user->id)->first();
+//            $updatedUser->save();
+//
+//            if( $request->term == 'partial' )
+//            {
+//                $charge = $request->amount;
+//                $feeObj->paid += $request->amount;
+//
+//                $feeObj->due = $user->fee - $feeObj->paid;
+//                // dd($user->fee);
+//                $feeObj->save();
+//            }
+//            else {
+//                $charge = $feeObj->due;
+//                $feeObj->paid += $feeObj->due;
+//                $feeObj->due = 0.00;
+//
+//                $feeObj->save();
+//            }
+//
+//
+//            $feeObj->user_id = $data['user_id'];
+//            $feeObj->method = $data['method'];
+//            $feeObj->check_number = $data['check_number'];
+//
+//            $feeObj->total_charge = $data['total_charge'];
+//
+//
+//            if( $paymentStatus == 'success' ) {
+//                $feeObj->payment_status = 'paid';
+//                $feeObj->status = $paymentStatus;
+//            }
+//            else {
+//                $feeObj->payment_status = 'due';
+//                // $feeObj->status = 'failed';
+//            }
+//
+//            $feeObj->save();
+//
+//            //saving records
+//
+//            Record::create([
+//                'user_id' => $feeObj->user->id,
+//                'fee_checkout_id' => $feeObj->id,
+//                'action' => 'fee',
+//                'amount' => $charge
+//            ]);
+//
+//            return redirect(route('home.home'));
+//        }
         
     }
 }

@@ -401,14 +401,23 @@ export default function Edit({user, existing_package, profile_image, records, me
                         {activeTab === 'details' && (
                             <div>
                                 {/* Details content */}
-                                <h1 className="text-2xl font-bold p-2">Records</h1>
-                                <div class="relative overflow-x-auto">
+                                <div className="flex items-center justify-between">
+                                    <h1 className="text-2xl font-bold p-2">Records</h1>
+                                    <a href={route('user.download.statement')}
+                                        className="bg-blue-500 text-white p-1 rounded transition-all delay-5 hover:bg-blue-600">
+                                        Download Statement
+                                    </a>
+                                </div>
+
+                                <div class="my-5 relative overflow-x-auto">
 
                                     <table className="w-full border">
                                         <thead className="border">
-                                            <th className="border p-3">DATE</th>
-                                            <th className="border p-3">Action</th>
-                                            <th className="border p-3">Amount</th>
+                                        <th className="border p-3">DATE</th>
+                                        <th className="border p-3">Action</th>
+                                        <th className="border p-3">Amount</th>
+                                        <th className="border p-3">Paid</th>
+                                        <th className="border p-3">Due</th>
                                         </thead>
                                         <tbody className="border">
                                         {
@@ -416,11 +425,18 @@ export default function Edit({user, existing_package, profile_image, records, me
                                                 <tr className="border" key={index}>
                                                     <td className="p-3 text-center border">{formatDate(record.created_at)}</td>
                                                     <td className="p-3 text-center border">{record.action}</td>
-                                                    <td className="p-3 text-center border">${record.amount}</td>
+                                                    <td className="p-3 text-center border">${record.total_amount}</td>
+                                                    <td className="p-3 text-center border">
+
+                                                        {record.paid_amount !== 0.00 ? `$${record.paid_amount}` : `$0.00`}
+                                                    </td>
+                                                    <td className="p-3 text-center border">
+                                                        ${record.due_amount}
+                                                    </td>
                                                 </tr>
-                                            )) 
+                                            ))
                                         }
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -489,9 +505,15 @@ export default function Edit({user, existing_package, profile_image, records, me
                                 {/* Registration fee section */}
                                 {
                                     feeRecords && (
-                                        <div>
-                                        <h1 className="text-2xl font-bold p-2">Fee Record</h1>
-                                        <div class="relative overflow-x-auto">
+                                        <div className="my-5">
+                                            <div className="flex items-center justify-between">
+                                                <h1 className="text-2xl font-bold p-2">Fee Record</h1>
+                                                {/*<a href="" className="bg-blue-500 text-white p-1 rounded transition-all delay-5 hover:bg-blue-600">*/}
+                                                {/*    Download Statement*/}
+                                                {/*</a>*/}
+                                            </div>
+
+                                            <div class="relative overflow-x-auto">
 
                                             <table className="w-full border">
                                                 <thead className="border">

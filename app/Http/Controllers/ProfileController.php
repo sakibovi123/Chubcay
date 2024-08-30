@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Checkout;
 use App\Models\FeeCheckout;
 use App\Models\PackageExpiration;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,8 +34,7 @@ class ProfileController extends Controller
 
         // dd($existing_package->checkout->grand_total);
 
-        if( $existing_package ) 
-        {
+        if ($existing_package) {
             $package_name = $existing_package->package->title;
             $package_user = $existing_package->user->email;
             $package_checkout_total = $existing_package->checkout->grand_total;
@@ -48,12 +48,14 @@ class ProfileController extends Controller
         //     $existing_package->package->price,
         //     $existing_package->price
         // );
-        
+
         $profile_image = Storage::url(auth()->user()->image);
         // echo "<img src='storage_path('app/public/' . $qr)'>";
 
         // showing records
-        $records = Record::where('user_id', auth()->user()->id)->get();
+        $records = Record::where('user_id', auth()->user()->id)
+//            ->with('feecheckout')
+            ->get();
 
         // user membership purchase records
         $memberShipRecords = Checkout::where('user_id', auth()->user()->id)
@@ -64,8 +66,7 @@ class ProfileController extends Controller
         // fee purchasing records
         $feeRecords = FeeCheckout::where('user_id', auth()->user()->id)
             ->first();
-        
-        
+
 
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
@@ -79,7 +80,7 @@ class ProfileController extends Controller
             'feeRecords' => $feeRecords,
             // 'allPurchased' => PackageExpiration::where('user_id')
             // 'qr' => storage_path('app/public/'.$qr)
-            
+
         ]);
     }
 
@@ -91,13 +92,13 @@ class ProfileController extends Controller
         // dd($request->user()->email);
         $request->user()->fill($request->validated());
 
-        if( $request->get('first_name')
-             | $request->get('last_name')
-             | $request->get('last_name')
-             | $request->get('country')
-             | $request->get('phone')
-             | $request->get('city')
-             | $request->get('image')
+        if ($request->get('first_name')
+            | $request->get('last_name')
+            | $request->get('last_name')
+            | $request->get('country')
+            | $request->get('phone')
+            | $request->get('city')
+            | $request->get('image')
         ) {
             $request->user()->first_name = $request->get('first_name');
 
@@ -108,7 +109,7 @@ class ProfileController extends Controller
             $request->user()->phone = $request->get('phone');
 
             $request->user()->city = $request->get('city');
-            
+
             // $image = $request->user()->image = $request->get('image');
             $image = $request->get('image');
             // dd($image);
@@ -120,10 +121,10 @@ class ProfileController extends Controller
                 $image_base64 = base64_decode($image_parts[1]);
                 $fileName = Str::random(10) . '.' . ($image_type === 'jpeg' ? 'jpg' : 'png');
                 $filePath = 'selfies/' . $fileName;
-        
+
                 // Save the image to the storage
                 Storage::disk('public')->put($filePath, $image_base64);
-        
+
                 // Update user's image path
                 $request->user()->image = $filePath;
                 $request->user()->save();
@@ -136,26 +137,23 @@ class ProfileController extends Controller
                 $request->user()->save();
             }
 
-        if( $request->get('current_password') && $request->get('new_password') ) {
-            if( Hash::check( $request->get('current_password'), $request->user()->password ) )
-            {
-                $request->user()->password  = bcrypt($request->get('new_password'));
-                $request->user()->save();
+            if ($request->get('current_password') && $request->get('new_password')) {
+                if (Hash::check($request->get('current_password'), $request->user()->password)) {
+                    $request->user()->password = bcrypt($request->get('new_password'));
+                    $request->user()->save();
+                } else {
+                    return back()->with([
+                        "message" => "Password doesn't match!"
+                    ]);
+                }
             }
-            else
-            {
-                return back()->with([
-                    "message" => "Password doesn't match!"
-                ]);
-            }
+
+
+            $request->user()->save();
+
+            return Redirect::route('profile.edit');
         }
-
-        
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
     }
-}
 
     public function generateQrCode($packageName, $price, $packageDuration, $size = 300)
     {
@@ -184,5 +182,22 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    // function downloading fee statement
+    public function downloadFeeStatement()
+    {
+        try {
+            $records = Record::where('user_id', Auth::user()->id)
+                ->get();
+            $pdf = Pdf::loadView('pdf.records', [
+                'records' => $records
+            ]);
+
+            return $pdf->download();
+
+        } catch( \Throwable $th ) {
+            throw $th;
+        }
     }
 }

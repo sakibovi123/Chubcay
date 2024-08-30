@@ -17,11 +17,23 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreignIdFor(User::class);
+
+
+
             $table->enum('action', [
-                'recharge', 'refund', 'spend'
+                'recharge', 'refund', 'spend', 'registration fee', 'membership fee'
             ]);
 
-            $table->decimal('amount', 10, 2);
+            $table->decimal('total_amount', 10, 2)
+                ->default('0.00');
+
+            $table->decimal('paid_amount', 10, 2)
+                ->default('0.00')
+                ->nullable();
+
+            $table->decimal('due_amount', 10, 2)
+                ->default('0.00')
+                ->nullable();
 
         });
     }

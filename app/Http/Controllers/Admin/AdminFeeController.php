@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\PendingPaymentExport;
 use App\Http\Controllers\Controller;
 use App\Models\FeeCheckout;
+use App\Models\Record;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,8 +18,11 @@ class AdminFeeController extends Controller
     public function index()
     {
         $fees = FeeCheckout::all();
+        $records = Record::orderBy('created_at', 'desc')->get();
+
         return view('admin.payment.index', [
-            'fees' => $fees
+            'fees' => $fees,
+            'records' => $records
         ]);
     }
 

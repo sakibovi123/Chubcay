@@ -10,6 +10,12 @@ class Record extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'action', 'amount'
+        'user_id', 'action', 'total_amount', 'paid_amount', 'due_amount'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

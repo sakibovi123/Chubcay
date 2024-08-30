@@ -7,6 +7,7 @@ use App\Mail\PaymentMail;
 use App\Models\Checkout;
 use App\Models\Package;
 use App\Models\PackageExpiration;
+use App\Models\Record;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -116,9 +117,18 @@ class CheckoutManagementController extends Controller
                     $checkout->paid = $checkout->grand_total;
                     $checkout->due = 0.00;
                 }
-                
 
                 $checkout->save();
+
+                // saving records
+                Record::create([
+                    'user_id' => $checkout->user->id,
+                    'action' => 'membership fee',
+                    'total_amount' => $checkout->grand_total,
+                    'paid_amount' => $checkout->paid,
+                    'due_amount' => $checkout->due
+                ]);
+
                 return back()->with('message', 'Plan bought successfully');
             }
             // initiate payment using shift4
@@ -145,7 +155,6 @@ class CheckoutManagementController extends Controller
 
                     $checkout->paid += $request->amount;
                     $checkout->due = $checkout->grand_total - $checkout->paid;
-
 
                 }
 
@@ -227,6 +236,16 @@ class CheckoutManagementController extends Controller
                         $responseSub = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
                             ->asForm()
                             ->post('https://api.shift4.com/subscriptions', $subRequest);
+
+                        // saving records
+
+                        Record::create([
+                            'user_id' => $checkout->user->id,
+                            'action' => 'membership fee',
+                            'total_amount' => $checkout->grand_total,
+                            'paid_amount' => $checkout->paid,
+                            'due_amount' => $checkout->due
+                        ]);
 
                         return redirect()->back()->with('message', 'Plan bought successfully!');
                     }

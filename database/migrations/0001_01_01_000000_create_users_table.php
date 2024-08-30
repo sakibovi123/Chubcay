@@ -43,6 +43,11 @@ return new class extends Migration
 
             // user's fee
             $table->decimal('fee', 10, 2)->nullable();
+
+            // membership type
+            $table->enum('membership_type', [
+                'Social', 'Legacy'
+            ])->nullable();
         });
 
 

@@ -27,7 +27,8 @@ class User extends Authenticatable
         'phone',
         'city',
         'is_admin',
-        'balance'
+        'balance',
+        'membership_type'
     ];
 
     /**

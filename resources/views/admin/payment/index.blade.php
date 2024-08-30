@@ -101,7 +101,14 @@
                 <p class="text-2xl text-center font-bold">No Data Found!</p>
             @endif
             @if( $records )
-                <h1 class="text-2xl font-bold my-5">Records</h1>
+                <div class="flex items-center justify-between">
+                    <h1 class="text-2xl font-bold my-5">Records</h1>
+
+                    <a class="bg-blue-500 text-white p-1" href="">
+                        Download Statement
+                    </a>
+                </div>
+
                     <div class="my-5 md:max-w-full max-w-80 overflow-x-auto">
                         <table class="w-full bg-white rounded">
                             <thead class="border-b-2">

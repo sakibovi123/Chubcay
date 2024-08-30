@@ -31,6 +31,7 @@
                         <th class="p-2">EMAIL</th>
                         <th class="p-2">STATUS</th>
                         <th class="p-2">ROLE</th>
+                        <th class="p-2">Membership Type</th>
                         <th class="p-2">ACTIONS</th>
                     </thead>
                     
@@ -60,6 +61,14 @@
                                     <p class="text-white bg-blue-500 p-1 rounded-full">Member</p>
                                 @endif
                                 
+                            </td>
+                            <td class="p-3">
+                                @if($user->membership_type)
+                                    {{ $user->membership_type }}
+                                @else
+                                    <p>N/A</p>
+                                @endif
+
                             </td>
                             <td class="p-3 flex items-center h-full justify-center gap-4">
                                     <a href="{{ route('users.edit', $user->id) }}">

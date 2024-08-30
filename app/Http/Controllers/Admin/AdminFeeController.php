@@ -78,4 +78,15 @@ class AdminFeeController extends Controller
         return redirect()->back()->with('message', 'Updated successfully');
 
     }
+
+    // download all records
+    public function downloadAllRecords()
+    {
+        $records = Record::all();
+        $pdf = Pdf::loadView('pdf.records', [
+            'records' => $records
+        ]);
+
+        return $pdf->download();
+    }
 }

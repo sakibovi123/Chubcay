@@ -50,6 +50,7 @@ class RegisteredUserController extends Controller
             'phone' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'image' => 'required|string',
+            'membership_type' => 'required|string|in:Social,Legacy'
             // 'card_number' => 'required',
             // 'month' => 'required',
             // 'year' => 'required',
@@ -76,7 +77,8 @@ class RegisteredUserController extends Controller
             'country' => $request->country,
             'phone' => $request->phone,
             'city' => $request->city,
-            'image' => $filePath
+            'image' => $filePath,
+            'membership_type' => $request->membership_type
         ]);
 
         $settings = Settings::first();

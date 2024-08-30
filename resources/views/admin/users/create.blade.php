@@ -12,7 +12,7 @@
     @endif
 
     <div class="w-full flex items-center justify-between gap-3">
-        <h1 class="text-xl font-bold text-gray-700">CREATE PLAN</h1>
+        <h1 class="text-xl font-bold text-gray-700">CREATE MEMBER</h1>
         <a href="{{ route('users.index') }}" class="gont-bold text-white bg-blue-600 transition-all delay-5 hover:bg-sky-600 p-2 rounded-xl">GO BACK</a>
     </div>
     <form class="w-full my-7" action="{{ route('users.store') }}" method="post">
@@ -52,6 +52,15 @@
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md" for="">City</label>
                 <input required name="city" id="city" type="text" placeholder="Enter city name" class="p-2 rounded w-full border">
+            </div>
+
+            <div class="w-full">
+                <label class="text-gray-600 font-bold text-md" for="">Membership Type</label>
+                <select required name="membership_type" class="p-2 rounded w-full border">
+                    <option selected disabled value="">Select Membership Type</option>
+                    <option value="Social">Social</option>
+                    <option value="Legacy">Legacy</option>
+                </select>
             </div>
 
             <div class="w-full">

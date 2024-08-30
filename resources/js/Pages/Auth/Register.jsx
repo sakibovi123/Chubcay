@@ -24,6 +24,7 @@ export default function Register({fee}) {
         month: '',
         year: '',
         cvv: '',
+        membership_type: ''
     });
 
     // function capturing selfie
@@ -107,43 +108,41 @@ export default function Register({fee}) {
                                     height={240}
                                 />
 
-                                <button type="button" onClick={capture} className="cursor-pointer bg-blue-700 p-1 font-bold rounded text-white mt-2">
+                                <button type="button" onClick={capture}
+                                        className="cursor-pointer bg-blue-700 p-1 font-bold rounded text-white mt-2">
                                     Capture Selfie
                                 </button>
                             </div>
-                            
-                        ):(
+
+                        ) : (
                             <div>
                                 {image && (
                                     <div>
                                         <h2>Preview:</h2>
-                                        <img src={image} alt="Selfie Preview" className="mt-2" />
+                                        <img src={image} alt="Selfie Preview" className="mt-2"/>
                                         <input type="hidden"
-                                            name="image"
-                                            value={image}
-                                            onChange={(e) => setData('image', e.target.value)}
+                                               name="image"
+                                               value={image}
+                                               onChange={(e) => setData('image', e.target.value)}
                                         />
-                                        <InputError message={errors.image} className="mt-2" />
+                                        <InputError message={errors.image} className="mt-2"/>
                                     </div>
                                 )}
                                 {/* <button onClick={confirmImage}
                                  className="cursor-pointer p-2 bg-green-500 rounded">Upload</button> */}
                                 <button type="button" onClick={recapture}
-                                    className="cursor-pointer mx-3 p-2 rounded bg-orange-300 m-2">
-                                        Recapture
+                                        className="cursor-pointer mx-3 p-2 rounded bg-orange-300 m-2">
+                                    Recapture
                                 </button>
                                 {/* <img src={image} alt="" /> */}
                             </div>
 
                         )
                     }
-                    
 
-                    
- 
-                    
+
                     {/* <input type="text" defaultValue={imageSrc} /> */}
-                    <InputLabel htmlFor="name" value="First Name" />
+                    <InputLabel htmlFor="name" value="First Name"/>
 
                     <TextInput
                         id="first_name"
@@ -157,11 +156,11 @@ export default function Register({fee}) {
                         maxLength={10}
                     />
 
-                    <InputError message={errors.first_name} className="mt-2" />
+                    <InputError message={errors.first_name} className="mt-2"/>
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="name" value="Last Name" />
+                    <InputLabel htmlFor="name" value="Last Name"/>
 
                     <TextInput
                         id="last_name"
@@ -174,11 +173,11 @@ export default function Register({fee}) {
                         required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.name} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="Email"/>
 
                     <TextInput
                         id="email"
@@ -192,11 +191,11 @@ export default function Register({fee}) {
                         // maxLength={12}
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.email} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="phone" value="Phone" />
+                    <InputLabel htmlFor="phone" value="Phone"/>
 
                     <TextInput
                         id="phone"
@@ -211,11 +210,11 @@ export default function Register({fee}) {
                         // maxLength={12}
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.email} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="country" value="Country" />
+                    <InputLabel htmlFor="country" value="Country"/>
 
                     <TextInput
                         id="country"
@@ -228,11 +227,11 @@ export default function Register({fee}) {
                         required
                     />
 
-                    <InputError message={errors.company} className="mt-2" />
+                    <InputError message={errors.company} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="city" value="City" />
+                    <InputLabel htmlFor="city" value="City"/>
 
                     <TextInput
                         id="city"
@@ -245,11 +244,11 @@ export default function Register({fee}) {
                         required
                     />
 
-                    <InputError message={errors.company} className="mt-2" />
+                    <InputError message={errors.company} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Password"/>
 
                     <TextInput
                         id="password"
@@ -262,11 +261,11 @@ export default function Register({fee}) {
                         required
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.password} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
+                    <InputLabel htmlFor="password_confirmation" value="Confirm Password"/>
 
                     <TextInput
                         id="password_confirmation"
@@ -279,7 +278,40 @@ export default function Register({fee}) {
                         required
                     />
 
-                    <InputError message={errors.password_confirmation} className="mt-2" />
+                    <InputError message={errors.password_confirmation} className="mt-2"/>
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="Membership Type" value="Membership Type"/>
+
+                    {/*<TextInput*/}
+                    {/*    id="mebership_type"*/}
+                    {/*    type="password"*/}
+                    {/*    name="password_confirmation"*/}
+                    {/*    value={data.password_confirmation}*/}
+                    {/*    className=""*/}
+                    {/*    autoComplete="new-password"*/}
+                    {/*    onChange={(e) => setData('password_confirmation', e.target.value)}*/}
+                    {/*    required*/}
+                    {/*/>*/}
+
+                    <select
+                        name="membership_type" id="membership_type"
+                        value={data.membership_type}
+                        className={"mt-1 block w-full border-gray-200 rounded-md"}
+                        onChange={
+                            (e) => setData('membership_type', e.target.value)
+                        }
+                        required
+                    >
+
+                        <option selected disabled value="">Select Membership Type</option>
+                        <option value="Social">Social</option>
+                        <option value="Legacy">Legacy</option>
+
+                    </select>
+
+                    <InputError message={errors.password_confirmation} className="mt-2"/>
                 </div>
 
                 {/* payment infos */}

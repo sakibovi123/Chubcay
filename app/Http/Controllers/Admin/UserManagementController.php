@@ -86,6 +86,7 @@ class UserManagementController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
             'city' => 'required|string',
+            'membership_type' => 'required|in:Social,Legacy'
             // 'balance' => 'numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
 
@@ -118,6 +119,8 @@ class UserManagementController extends Controller
             $user->city = $request->input('city');
             $user->phone = $request->input('phone');
             $user->balance = $request->input('balance');
+
+            $user->membership_type = $request->input('membership_type');
 
             $user->save();
 

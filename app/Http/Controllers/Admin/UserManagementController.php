@@ -197,12 +197,17 @@ class UserManagementController extends Controller
         $validatedData = $request->validate([
            'user_id' => 'required',
            'payment_status' => 'required|in:due,paid',
-            'payment_method' => 'required|in:card,cash'
+            'payment_method' => 'required|in:card,cash',
+            'fee' => 'required'
         ]);
 
 
         $user = User::where('id', $validatedData['user_id'])
             ->first();
+
+        $user->fee = $validatedData['fee'];
+
+        $user->save();
 
 //        dd($user->fee);
 

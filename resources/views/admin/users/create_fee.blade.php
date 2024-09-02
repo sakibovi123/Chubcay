@@ -28,6 +28,11 @@
                 </select>
             </div>
 
+            <div class="w-full">
+                <label class="text-gray-600 font-bold text-md">Set Fee</label><br>
+                <input name="fee" type="number" class="p-2 rounded w-full border" placeholder="$">
+            </div>
+
 
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md">Select Payment Status</label><br>

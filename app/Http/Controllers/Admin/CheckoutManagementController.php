@@ -71,7 +71,8 @@ class CheckoutManagementController extends Controller
             'user_id' => $user->id,
             'package_id' => $request->input('package_id'),
             'payment_method' => $request->input('payment_method'),
-            'payment_status' => $request->payment_status
+            'payment_status' => $request->payment_status,
+            'payment_option' => $request->payment_term,
         ]);
         
         // saving extra fields

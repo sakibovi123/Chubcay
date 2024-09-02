@@ -40,8 +40,8 @@
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md">Select Payment Status</label><br>
                 <select required name="payment_status" class="p-2 rounded w-full border">
-                    <option value="1">Paid</option>
-                    <option selected value="0">Due</option>
+                    <option value="Paid">Paid</option>
+                    <option selected value="Due">Due</option>
                 </select>
             </div>
 

@@ -31,7 +31,8 @@
                         <th class="p-2">EMAIL</th>
                         <th class="p-2">STATUS</th>
                         <th class="p-2">ROLE</th>
-                        <th class="p-2">Membership Type</th>
+                        <th class="p-2">Fee</th>
+
                         <th class="p-2">ACTIONS</th>
                     </thead>
                     
@@ -46,14 +47,25 @@
                                 {{ $user->email }}
                             </td>
                             <td class="p-3">
-                                <input id="user_id_{{ $user->id }}" type="hidden" value="{{ $user->id }}" name="user_id">
-                                <select data-status="{{ $user->status }}" id="statusChange_{{ $user->id }}" class="p-1 rounded-full border" name="status">
-                                    <option className="bg-green-500" value="Active" {{ $user->status == 'Active' ? 'selected' : '' }}>Active</option>
-                                    <option value="Pending" {{ $user->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                   
-                                </select>
+                                @if($user->status == 'Pending')
+                                    <p class="bg-orange-300 p-1 rounded-full">
+                                        {{ $user->status }}
+                                    </p>
+                                @else
+                                    <p class="bg-green-500 p-1 rounded-full text-white">
+                                        {{ $user->status }}
+                                    </p>
+                                @endif
+
+{{--                                <input id="user_id_{{ $user->id }}" type="hidden" value="{{ $user->id }}" name="user_id">--}}
+{{--                                <select data-status="{{ $user->status }}" id="statusChange_{{ $user->id }}" class="p-1 rounded-full border" name="status">--}}
+
+{{--                                    <option className="bg-green-500" value="Active" {{ $user->status == 'Active' ? 'selected' : '' }}>Active</option>--}}
+{{--                                    <option value="Pending" {{ $user->status == 'Pending' ? 'selected' : '' }}>Pending</option>--}}
+{{--                                   --}}
+{{--                                </select>--}}
                             </td>
-                            <td class=" p-3">
+                            <td class="p-3">
                                 
                                 @if ($user->is_admin == 1)
                                     <p class="bg-green-400 p-1 rounded-full">Admin</p>
@@ -62,14 +74,16 @@
                                 @endif
                                 
                             </td>
+
                             <td class="p-3">
-                                @if($user->membership_type)
-                                    {{ $user->membership_type }}
+                                @if($user->fee)
+                                    ${{ $user->fee }}
                                 @else
-                                    <p>N/A</p>
+                                    $0.00
                                 @endif
 
                             </td>
+
                             <td class="p-3 flex items-center h-full justify-center gap-4">
                                     <a href="{{ route('users.edit', $user->id) }}">
                                         <svg class="w-6 h-6 text-gray-800 transition-all delay-10 hover:text-yellow-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -82,12 +96,17 @@
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                                         </svg>
                                     </a>
-                                    
+                                <a class="bg-blue-500 text-white rounded p-1" href="{{ route('users.reset', $user->id) }}">Send Password Reset Link</a>
+{{--                                <input id="user_id_input" type="hidden" value="{{ $user->id }}" name="user_id">--}}
+{{--                                <button id="modalActivator" class="p-1 bg-blue-500 rounded text-white">Set Fee</button>--}}
+                                <input type="hidden" class="user_id_input" value="{{ $user->id }}" name="user_id">
+                                <button class="modalActivator p-1 bg-blue-500 rounded text-white" data-user-id="{{ $user->id }}">Set Fee</button>
+
                             </td>
 
-                            <td>
-                                <a class="bg-blue-500 text-white rounded p-1" href="{{ route('users.reset', $user->id) }}">Send Password Reset Link</a>
-                            </td>
+{{--                            <td>--}}
+{{--                                <a class="bg-blue-500 text-white rounded p-1" href="{{ route('users.reset', $user->id) }}">Send Password Reset Link</a>--}}
+{{--                            </td>--}}
                         </tr>
                         @endforeach
                         

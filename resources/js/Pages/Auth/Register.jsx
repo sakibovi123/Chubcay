@@ -24,7 +24,7 @@ export default function Register({fee}) {
         month: '',
         year: '',
         cvv: '',
-        membership_type: ''
+
     });
 
     // function capturing selfie
@@ -281,38 +281,7 @@ export default function Register({fee}) {
                     <InputError message={errors.password_confirmation} className="mt-2"/>
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="Membership Type" value="Membership Type"/>
 
-                    {/*<TextInput*/}
-                    {/*    id="mebership_type"*/}
-                    {/*    type="password"*/}
-                    {/*    name="password_confirmation"*/}
-                    {/*    value={data.password_confirmation}*/}
-                    {/*    className=""*/}
-                    {/*    autoComplete="new-password"*/}
-                    {/*    onChange={(e) => setData('password_confirmation', e.target.value)}*/}
-                    {/*    required*/}
-                    {/*/>*/}
-
-                    <select
-                        name="membership_type" id="membership_type"
-                        value={data.membership_type}
-                        className={"mt-1 block w-full border-gray-200 rounded-md"}
-                        onChange={
-                            (e) => setData('membership_type', e.target.value)
-                        }
-                        required
-                    >
-
-                        <option selected disabled value="">Select Membership Type</option>
-                        <option value="Social">Social</option>
-                        <option value="Legacy">Legacy</option>
-
-                    </select>
-
-                    <InputError message={errors.password_confirmation} className="mt-2"/>
-                </div>
 
                 {/* payment infos */}
                 {/* <div className="mt-4">

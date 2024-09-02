@@ -55,18 +55,36 @@
             </div>
 
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="membership_type">Membership Type</label>
-                <select required name="membership_type" class="p-2 rounded w-full border">
-                    <option disabled value="">Select Membership Type</option>
-                    <option value="Social" {{ $user->membership_type == 'Social' ? 'selected' : '' }}>Social</option>
-                    <option value="Legacy" {{ $user->membership_type == 'Legacy' ? 'selected' : '' }}>Legacy</option>
+                <label class="text-gray-600 font-bold text-md" for="status">Status</label>
+                <select required name="status" class="p-2 rounded w-full border">
+                    <option disabled value="">Select Status</option>
+                    <option value="Pending" {{ $user->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="Active" {{ $user->status == 'Active' ? 'selected' : '' }}>Active</option>
                 </select>
             </div>
 
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Balance</label>
-                <input value="{{ $user->balance }}" required name="balance" id="balance" type="text" placeholder="0.00" class="p-2 rounded w-full border">
+                <label class="text-gray-600 font-bold text-md" for="membership_type">Payment Status</label>
+                <select required name="payment_status" class="p-2 rounded w-full border">
+                    <option disabled value="">Select Payment Status</option>
+                    <option value="paid" {{ $user->payment_status == 'paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="due" {{ $user->payment_status == 'due' ? 'selected' : '' }}>Due</option>
+                </select>
             </div>
+
+{{--            <div class="w-full">--}}
+{{--                <label class="text-gray-600 font-bold text-md" for="membership_type">Membership Type</label>--}}
+{{--                <select required name="membership_type" class="p-2 rounded w-full border">--}}
+{{--                    <option disabled value="">Select Membership Type</option>--}}
+{{--                    <option value="Social" {{ $user->membership_type == 'Social' ? 'selected' : '' }}>Social</option>--}}
+{{--                    <option value="Legacy" {{ $user->membership_type == 'Legacy' ? 'selected' : '' }}>Legacy</option>--}}
+{{--                </select>--}}
+{{--            </div>--}}
+
+{{--            <div class="w-full">--}}
+{{--                <label class="text-gray-600 font-bold text-md" for="">Balance</label>--}}
+{{--                <input value="{{ $user->balance }}" required name="balance" id="balance" type="text" placeholder="0.00" class="p-2 rounded w-full border">--}}
+{{--            </div>--}}
 
         </div>
 

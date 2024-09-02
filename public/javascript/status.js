@@ -38,29 +38,52 @@ $(document).ready(function() {
 //     });
 // });
 
-$(document).on('change', '[id^="statusChange_"]', function() {
-    var userId = $(this).prev('input').val();
-    var status = $(this).val();
+// $(document).on('change', '[id^="statusChange_"]', function() {
+//     var userId = $(this).prev('input').val();
+//     var status = $(this).val();
+//
+//     // if (status === 'Active') {
+//     //     $('#modalUserId').val(userId);
+//     //     $('#feeModal').removeClass('hidden'); // Show the modal
+//     // } else {
+//     //     // $('#modalUserId').val(userId);
+//     //     // $('#feeModal').removeClass('hidden');
+//     //     updateStatus(userId, status);
+//     // }
+// });
 
-    if (status === 'Active') {
-        $('#modalUserId').val(userId);
-        $('#feeModal').removeClass('hidden'); // Show the modal
-    } else {
-        updateStatus(userId, status);
-    }
+// $('#modalActivator').on('click', function () {
+//
+//     var userId = $("#user_id_input").val();
+//     $('#modalUserId').val(userId);
+//     $('#feeModal').removeClass('hidden').show();
+// });
+
+// Open up the modal and set the user ID
+$(document).on('click', '.modalActivator', function () {
+    console.log('Opening modal');
+
+    var userId = $(this).data('user-id'); // Get the user ID from the data attribute of the clicked button
+    $('#modalUserId').val(userId); // Set the hidden input field in the modal with the user ID
+
+    $('#feeModal').removeClass('hidden').show();
 });
+
 
 // Close modal
 $('[data-close="modal"]').on('click', function() {
-    $('#feeModal').addClass('hidden'); // Hide the modal
+    console.log('Closing modal');
+    $('#feeModal').addClass('hidden');
 });
+
+
 
 // Submit form inside modal
 $('#feeForm').on('submit', function(e) {
     e.preventDefault();
 
     var userId = $('#modalUserId').val();
-    var status = 'Active';
+    var status = 'Pending';
     var fee = $('#fee').val();
 
     // Show loading indicator

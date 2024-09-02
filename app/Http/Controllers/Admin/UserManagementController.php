@@ -41,27 +41,28 @@ class UserManagementController extends Controller
                 // send mail if only accepted
                 $message = "Your request has been accepted";
 
-                if($user->status == 'Active'){
+//                if($user->status == 'Active'){
 
-                    // creating feeCheckout
-                    $feeObj = FeeCheckout::create([
-                        'user_id' => $user->id,
-                        'total_charge' => $request->fee,
-                        'payment_status' => 'due',
-                        'due' => $request->fee
-                    ]);
+                // creating feeCheckout
+                $feeObj = FeeCheckout::create([
+                    'user_id' => $user->id,
+                    'total_charge' => $request->fee,
+                    'payment_status' => 'due',
+                    'due' => $request->fee
+                ]);
 
-                    $link = route('user.takeFee', [
-                        'feeId' => $feeObj->id
-                    ]);
-                    // dd($link);
-                    $user->fee = $request->fee;
-                    $user->save();
+                $link = route('user.takeFee', [
+                    'feeId' => $feeObj->id
+                ]);
+                // dd($link);
+                $user->fee = $request->fee;
+                $user->save();
 
-                    Mail::to($user->email)
-                        ->send(new SendMailAfterAcceptingRequest(
-                            $message, $request->input('fee'), $link, $user));
-                } 
+                Mail::to($user->email)
+                    ->send(new SendMailAfterAcceptingRequest(
+                        $message, $request->input('fee'), $link, $user));
+
+//                }
 
                 return response()->json(['message' => 'User updated successfully!']);
             }
@@ -86,7 +87,7 @@ class UserManagementController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
             'city' => 'required|string',
-            'membership_type' => 'required|in:Social,Legacy'
+//            'membership_type' => 'required|in:Social,Legacy'
             // 'balance' => 'numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
 
@@ -118,9 +119,11 @@ class UserManagementController extends Controller
             $user->country = $request->input('country');
             $user->city = $request->input('city');
             $user->phone = $request->input('phone');
-            $user->balance = $request->input('balance');
+//            $user->balance = $request->input('balance');
+            $user->status = $request->input('status');
+            $user->payment_status = $request->input('payment_status');
 
-            $user->membership_type = $request->input('membership_type');
+//            $user->membership_type = $request->input('membership_type');
 
             $user->save();
 

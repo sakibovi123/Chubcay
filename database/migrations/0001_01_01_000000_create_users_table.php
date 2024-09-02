@@ -41,13 +41,15 @@ return new class extends Migration
                 ->default('0.00')
                 ->nullable();
 
+            // payment status
+            $table->enum('payment_status', [
+                'paid', 'due'
+            ])->default('due');
+
             // user's fee
             $table->decimal('fee', 10, 2)->nullable();
 
-            // membership type
-            $table->enum('membership_type', [
-                'Social', 'Legacy'
-            ])->nullable();
+
         });
 
 

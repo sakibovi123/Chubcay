@@ -10,6 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <link href="toastr.css" rel="stylesheet"/> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
 
 
@@ -71,6 +72,8 @@
 
         const payment = document.getElementById('manage-payments');
 
+        const membership_type = document.getElementById('membership_type');
+
         if (dashboard) {
             dashboard.addEventListener('click', function() {
                 window.location.href = "{{ route('admin.index') }}";
@@ -109,6 +112,12 @@
         if( payment ) {
             payment.addEventListener('click', function () {
                 window.location.href = "{{ route('payment.index') }}"
+            })
+        }
+
+        if( membership_type ) {
+            membership_type.addEventListener('click', function() {
+                window.location.href = "{{ route('types.index') }}"
             })
         }
 

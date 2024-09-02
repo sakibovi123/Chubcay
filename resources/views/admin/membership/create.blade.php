@@ -16,6 +16,18 @@
             <label class="text-gray-600 font-bold text-md" for="">Title</label><br>
             <input required name="title" type="text" placeholder="Enter title..." class="p-2 rounded w-full border">
         </div>
+
+        <div class="w-full">
+            <label class="text-gray-600 font-bold text-md" for="">Title</label><br>
+            <select required name="membership_type_id" class="p-2 rounded w-full border">
+                <option Selected disabled value="">Select Membership Type</option>
+                @foreach($types as $type)
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                @endforeach
+
+            </select>
+        </div>
+        
         <div class="my-3 flex items-center jusitify-between gap-5">
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md" for="">Sub title</label><br>

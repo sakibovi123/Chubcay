@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\MembershipType;
 use App\Models\Package;
 use App\Rules\DurationRule;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ class MembershipController extends Controller
     public function memberShipIndex()
     {
         $plans = Package::all();
+
         return view('admin.membership.index', [
             'plans' => $plans
         ]);
@@ -21,7 +23,10 @@ class MembershipController extends Controller
     // create
     public function createMembership()
     {
-        return view('admin.membership.create');
+        $types = MembershipType::all();
+        return view('admin.membership.create', [
+            'types' => $types
+        ]);
     }
 
     // store
@@ -38,6 +43,7 @@ class MembershipController extends Controller
             'features' => 'array',
             'features.*.key' => 'nullable|string',
             'features.*.value' => 'nullable|string',
+            'membership_type_id' => 'required'
         ]);
         
         $data = $request->all();
@@ -88,8 +94,10 @@ class MembershipController extends Controller
     public function editMembership( $slug )
     {
         $package = Package::where('slug', $slug)->first();
+        $types = MembershipType::all();
         return view('admin.membership.update', [
-            'package' => $package
+            'package' => $package,
+            'types' => $types
         ]);
     }
 
@@ -109,6 +117,7 @@ class MembershipController extends Controller
             $package->title = $request->input('title');
             $package->sub_title = $request->input('sub_title');
             $package->price = $request->input('price');
+            $package->membership_type_id = $request->input('membership_type_id');
 
             // if discount is present
             if( $request->input('discount') ) 

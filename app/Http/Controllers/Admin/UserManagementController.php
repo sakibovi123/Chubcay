@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Mail\PasswordResetMail;
 use App\Mail\SendMailAfterAcceptingRequest;
 use App\Models\FeeCheckout;
+use App\Models\Record;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -58,11 +60,13 @@ class UserManagementController extends Controller
                 $user->fee = $request->fee;
                 $user->save();
 
+
+
                 Mail::to($user->email)
                     ->send(new SendMailAfterAcceptingRequest(
                         $message, $request->input('fee'), $link, $user));
 
-//                }
+//                dd("asdasd");
 
                 return response()->json(['message' => 'User updated successfully!']);
             }
@@ -171,5 +175,147 @@ class UserManagementController extends Controller
             ->send(new PasswordResetMail($link));
 
         return back()->with('message', 'Password reset link sent');
+    }
+
+
+    public function createFee(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+    {
+        $users = User::where('is_admin', 0)
+            ->get();
+
+        return view('admin.users.create_fee', [
+            'users' => $users
+        ]);
+    }
+
+
+    // generate registration fee
+    public function payFeeByAdmin( Request $request )
+    {
+        $charge = 0.00;
+//        dd($request->all());
+        $validatedData = $request->validate([
+           'user_id' => 'required',
+           'payment_status' => 'required|in:due,paid',
+            'payment_method' => 'required|in:card,cash'
+        ]);
+
+
+        $user = User::where('id', $validatedData['user_id'])
+            ->first();
+
+//        dd($user->fee);
+
+        $fee = FeeCheckout::create([
+            'user_id' => $validatedData['user_id'],
+            'total_charge' => $user->fee
+        ]);
+
+
+        if ( $request->payment_method == 'card' )
+        {
+            if( $request->payment_term == 'full' ) {
+                // always have to pay the due
+                $charge = $fee->due;
+//                $fee->paid += $charge;
+                $fee->paid = $user->fee;
+                $fee->due = 0.00;
+
+                $fee->save();
+                // dd($charge);
+            }
+            else {
+                $charge = $request->amount;
+                $paid = $request->amount;
+
+                $fee->paid += $request->amount;
+                $fee->due = $user->fee - $fee->paid;
+
+                $fee->save();
+            }
+
+            $feeRequest = [
+                "amount" => $charge * 100,
+                "currency" => "USD",
+                "description" => "Registration fee",
+                'card' => [
+                    'number' => $request->card_number,
+                    'expMonth' => $request->mm,
+                    'expYear' => $request->yy
+                ],
+            ];
+
+            $initiatePayment = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+                ->asForm()
+                ->post('https://api.shift4.com/charges', $feeRequest);
+
+
+            if( $initiatePayment->status() == 200 ) {
+                $paymentStatus = 'success';
+                $user->status = 'Active';
+                $updatedUser = User::where('id', $user->id)->first();
+                $updatedUser->save();
+
+                // updating checkout fee
+                $fee->method = $request->input('method');
+                $fee->card_number = $request->card_number;
+                $fee->status = 'success';
+                $fee->payment_status = 'paid';
+                $fee->term = $request->term;
+
+                $fee->save();
+
+                // save record
+
+                Record::create([
+                    'user_id' => $fee->user->id,
+                    'action' => 'registration fee',
+                    'total_amount' => $fee->total_charge,
+                    'paid_amount' => $fee->paid,
+                    'due_amount' => $fee->due
+                ]);
+
+                return redirect()->back()
+                    ->with('message', 'Payment successfully!');
+            }
+            else {
+                return redirect()->back()->with('message', 'Payment failed please try again!');
+            }
+        }
+        else # payment_method == 'cash'
+        {
+            if( $request->payment_term == 'partial' ) {
+                $charge = $request->amount;
+                $paid = $request->amount;
+
+                $fee->paid += $paid;
+                $fee->due = $user->fee - $fee->paid;
+
+                $fee->save();
+            }
+            else {
+                $charge = $fee->due;
+                $fee->paid = $user->fee;
+                $fee->due = 0.00;
+
+                $fee->save();
+            }
+
+            $fee->payment_status = $request->payment_status;
+//            dd($fee->paid, $fee->due);
+            $fee->save();
+
+            Record::create([
+                'user_id' => $fee->user->id,
+                'action' => 'registration fee',
+                'total_amount' => $fee->total_charge,
+                'paid_amount' => $fee->paid,
+                'due_amount' => $fee->due
+            ]);
+
+            return redirect()->back()
+                ->with('message', 'Payment successfully!');
+        }
+
     }
 }

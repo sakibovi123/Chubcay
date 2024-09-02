@@ -81,8 +81,47 @@ Route::middleware('admin')->group(function(){
         Route::get('/send-password-reset-link/{userId}', [
             UserManagementController::class, 'sendPasswordResetLink'
         ])->name('users.reset');
+
+        // creating record
+        Route::get('/create-fee-record', [
+            UserManagementController::class, 'createFee'
+        ])->name('users.create_fee_record');
+
+        // creating record -> post method
+        Route::post('/create-fee-record', [
+            UserManagementController::class, 'payFeeByAdmin'
+        ])->name('users.create_record');
     });
 
+    Route::prefix('/admin/membership-types')->group(function () {
+
+        Route::get('/', [
+            \App\Http\Controllers\Admin\AdminMemberShipTypeController::class, 'index'
+        ])->name('types.index');
+
+        Route::get('/create-membership-type', [
+            \App\Http\Controllers\Admin\AdminMemberShipTypeController::class, 'create'
+        ])->name('types.create');
+
+        Route::post('/create-membership-type', [
+            \App\Http\Controllers\Admin\AdminMemberShipTypeController::class, 'store'
+        ])->name('types.store');
+
+        Route::get('/{typeId}', [
+            \App\Http\Controllers\Admin\AdminMemberShipTypeController::class, 'details'
+        ])->name('types.details');
+
+        Route::put('/{typeId}', [
+            \App\Http\Controllers\Admin\AdminMemberShipTypeController::class, 'update'
+        ])->name('types.update');
+
+        Route::delete('/delete/{typeId}', [
+            \App\Http\Controllers\Admin\AdminMemberShipTypeController::class, 'destroy'
+        ])->name('types.destroy');
+
+    });
+
+    // order urls
     Route::prefix('/admin/orders')->group(function(){
 
         Route::get('/', [ CheckoutManagementController::class, 'index' ])

@@ -10,6 +10,9 @@
                 <a href="{{ route('users.create') }}" class="p-2 bg-sky-600 rounded-xl text-white transition-all delay-5 hover:bg-sky-700">
                     Add user
                 </a>
+                <a href="{{ route('users.create_fee_record') }}" class="p-2 bg-sky-600 rounded-xl text-white transition-all delay-5 hover:bg-sky-700">
+                    Create Record
+                </a>
                 <a class="flex items-center gap-3 justify-center text-white p-2 bg-blue-500 rounded-xl" href="{{ route('users.export') }}">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
@@ -96,11 +99,30 @@
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                                         </svg>
                                     </a>
-                                <a class="bg-blue-500 text-white rounded p-1" href="{{ route('users.reset', $user->id) }}">Send Password Reset Link</a>
-{{--                                <input id="user_id_input" type="hidden" value="{{ $user->id }}" name="user_id">--}}
-{{--                                <button id="modalActivator" class="p-1 bg-blue-500 rounded text-white">Set Fee</button>--}}
+                                <a data-tooltip-target="tooltip-default" class="p-1" href="{{ route('users.reset', $user->id) }}">
+                                    <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15.141 6 5.518 4.95a1.05 1.05 0 0 1 0 1.549l-5.612 5.088m-6.154-3.214v1.615a.95.95 0 0 0 1.525.845l5.108-4.251a1.1 1.1 0 0 0 0-1.646l-5.108-4.251a.95.95 0 0 0-1.525.846v1.7c-3.312 0-6 2.979-6 6.654v1.329a.7.7 0 0 0 1.344.353 5.174 5.174 0 0 1 4.652-3.191l.004-.003Z"/>
+                                    </svg>
+
+                                </a>
+                                <div id="tooltip-default" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    Send password link
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+
+
                                 <input type="hidden" class="user_id_input" value="{{ $user->id }}" name="user_id">
-                                <button class="modalActivator p-1 bg-blue-500 rounded text-white" data-user-id="{{ $user->id }}">Set Fee</button>
+                                <button data-tooltip-target="tooltip-default-cash" class="modalActivator p-1" data-user-id="{{ $user->id }}">
+                                    <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+                                    </svg>
+
+                                    <div id="tooltip-default-cash" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                        Set Fee
+                                        <div class="tooltip-arrow" data-popper-arrow></div>
+                                    </div>
+
+                                </button>
 
                             </td>
 
@@ -122,7 +144,7 @@
         </div>
     </div>
     {{-- modal --}}
-    <div class="fixed inset-0 flex items-center justify-center z-50 hidden" id="feeModal">
+    <div class="fixed inset-0 flex items-center justify-center z-50 hidden backdrop-blur-sm" id="feeModal">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
           <div class="flex justify-between items-center border-b p-4">
             <h5 class="text-lg font-medium" id="feeModalLabel">Set Registration Fee</h5>

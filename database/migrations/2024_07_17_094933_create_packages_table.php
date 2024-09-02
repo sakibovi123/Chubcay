@@ -35,6 +35,10 @@ return new class extends Migration
             ])->default('Active')->nullable();
 
             // need to generate QR after purchasing
+
+            // relation with membership type
+            $table->foreignIdFor(\App\Models\MembershipType::class, 'membership_type_id')
+                ->nullable();
         });
     }
 

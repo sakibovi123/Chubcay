@@ -483,14 +483,15 @@ export default function Edit({user, existing_package, profile_image, records, me
                                                         <td className="p-3 text-center border uppercase">{existing_package?.checkout.payment_option}</td>
                                                         <td className="p-3 text-center border">
                                                             {
-                                                                existing_package?.checkout <= 0 ? (
-                                                                    <a href={route('checkout.edit', existing_package?.checkout.id)} className="cursor-pointer transition-all font-bold delay-5 bg-green-400 p-1 rounded">PAY</a>
-                                                                )
-                                                                : (
+                                                                existing_package?.checkout.due < 0 ? (
                                                                     <p className="bg-green-400 font-bold p-1 rounded-full">PAID</p>
                                                                 )
+                                                                : (
+                                                                    <a href={route('checkout.edit', existing_package?.checkout.id)}
+                                                                           className="cursor-pointer transition-all font-bold delay-5 bg-green-400 p-1 rounded">PAY</a>
+                                                                    )
                                                             }
-                                                            
+
                                                         </td>
                                                     </tr>
                                                     
@@ -528,20 +529,37 @@ export default function Edit({user, existing_package, profile_image, records, me
                                                     <tr className="border bg-green-100">
                                                         <td className="p-3 text-center border">{formatDate(feeRecords.created_at)}</td>
                                                         <td className="p-3 text-center border">${feeRecords.total_charge}</td>
-                                                        <td className="p-3 text-center border">${feeRecords.paid}</td>
                                                         <td className="p-3 text-center border">
                                                             {
-                                                                feeRecords.due < 0 ? 
-                                                                (<>
-                                                                    $0.00
-                                                                </>):(<> ${feeRecords.due}
+                                                                feeRecords.paid === null ?
+                                                                    (
+                                                                        <>
+                                                                            $0.00
+                                                                        </>)
+                                                                    :
+                                                                    (
+                                                                        <> ${feeRecords.paid}
+                                                                        </>)
+                                                            }
+
+                                                        </td>
+                                                        <td className="p-3 text-center border">
+                                                            {
+                                                                feeRecords.due === null ?
+                                                                (
+                                                                    <>
+                                                                        $0.00
+                                                                    </>)
+                                                                    :
+                                                                (
+                                                                    <> ${feeRecords.due}
                                                                 </>) 
                                                             }
                                                             
                                                         </td>
                                                         <td className="p-3 text-center border">
                                                             {
-                                                                feeRecords.due == 0.00 ? (
+                                                                feeRecords.due <= 0.00 ? (
                                                                     <p className="bg-green-400 p-1 rounded-full font-bold">
                                                                         PAID
                                                                     </p>

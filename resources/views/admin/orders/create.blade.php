@@ -41,7 +41,7 @@
                 <label class="text-gray-600 font-bold text-md">Select Payment Status</label><br>
                 <select required name="payment_status" class="p-2 rounded w-full border">
                     <option value="Paid">Paid</option>
-                    <option selected value="Due">Due</option>
+                    <option selected value="Unpaid">Unpaid</option>
                 </select>
             </div>
 

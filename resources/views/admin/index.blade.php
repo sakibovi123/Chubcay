@@ -75,14 +75,10 @@
                                 </td>
                                 
                                 <td class="p-3">
-                                    @if ($order->status == 'Success')
-                                        <p class="bg-green-400 p-1 rounded-xl">{{ $order->payment_status }}</p>
-                                    @elseif ( $order->status == 'Pending' )
-                                        <p class="bg-yellow-400 p-1 rounded-xl">{{ $order->status }}</p>
-                                    @elseif ( $order->status == 'Returned' )
-                                        <p class="bg-red-400 p-1 rounded-xl">{{ $order->status }}</p>
+                                    @if($order->payment_status == 'Paid')
+                                        <span class="text-xs bg-green-400 p-2 rounded-full">{{ $order->payment_status }}</span>
                                     @else
-                                        <p class="bg-red-400 p-1 rounded-xl">{{ $order->status }}</p>
+                                        <span class="text-xs bg-red-200 p-2 rounded-full">{{ $order->payment_status }}</span>
                                     @endif
                                 </td>
                                 

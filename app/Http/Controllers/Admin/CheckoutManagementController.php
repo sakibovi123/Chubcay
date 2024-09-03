@@ -62,6 +62,7 @@ class CheckoutManagementController extends Controller
         ]);
 
         // dd($validated);
+//        dd($request->payment_status, $request->payment_term);
 
         $checkout = Checkout::create([
             'first_name' => $user->first_name,
@@ -158,6 +159,10 @@ class CheckoutManagementController extends Controller
                     $checkout->due = $checkout->grand_total - $checkout->paid;
 
                 }
+
+                // saving payment method
+
+                $checkout->payment_method = $request->payment_method;
 
                 $checkout->save();
 

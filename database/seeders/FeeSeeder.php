@@ -20,49 +20,13 @@ class FeeSeeder extends Seeder
                 'user_id' => 1,
                 'method' => 'check',
                 'total_charge' => 500.00,
+                'due' => 500.00,
+                'paid' => 0.00,
                 'status' => 'success',
                 'payment_status' => 'paid'
             ],
-            [
-                'created_at' => Carbon::now(),
-                'user_id' => 1,
-                'method' => 'check',
-                'total_charge' => 500.00,
-                'status' => 'failed',
-                'payment_status' => 'due'
-            ],
-            [
-                'created_at' => Carbon::now(),
-                'user_id' => 1,
-                'method' => 'check',
-                'total_charge' => 500.00,
-                'status' => 'success',
-                'payment_status' => 'paid'
-            ],
-            [
-                'created_at' => Carbon::now(),
-                'user_id' => 1,
-                'method' => 'check',
-                'total_charge' => 500.00,
-                'status' => 'failed',
-                'payment_status' => 'due'
-            ],
-            [
-                'created_at' => Carbon::now(),
-                'user_id' => 1,
-                'method' => 'check',
-                'total_charge' => 500.00,
-                'status' => 'success',
-                'payment_status' => 'paid'
-            ],
-            [
-                'created_at' => Carbon::now(),
-                'user_id' => 1,
-                'method' => 'check',
-                'total_charge' => 500.00,
-                'status' => 'failed',
-                'payment_status' => 'due'
-            ]
+
+
         ]);
     }
 }

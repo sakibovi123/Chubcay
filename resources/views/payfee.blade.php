@@ -7,12 +7,13 @@
 
 @if (Auth::user()->id == $feeLink->user->id)
 <form method="post"
+
 {{-- {{ $feeLink->id }} --}}
  class="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow-md" action="{{ route('user.feeCheckout', $feeLink) }}">
 @csrf
 @method('post')
 <h2 class="text-2xl font-bold mb-4">Make a Payment</h2>
-<p class="mb-5">Total: ${{ $fee }}</p>
+<p class="mb-5">Total: ${{ $feeLink->total_charge }}</p>
 <p class="mb-5">
     Paid: 
     @if ($feeLink->paid == 0.00)
@@ -100,9 +101,13 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
+
     $(document).ready(function() {
+
     $('#payment_method').change(function() {
+
         let selectedMethod = $(this).val();
 
         if (selectedMethod === 'check') {
@@ -125,7 +130,7 @@
     // checking payment
     $('#payment_term').change(function(){
         let selectedTerm = $(this).val();
-        // let fee = '{{ $fee }}'; 
+        // let fee = '{{ $fee }}';
         // console.log(selectedTerm);
 
         if(selectedTerm == 'partial') {
@@ -136,37 +141,37 @@
             $('#payment-amount').hide();
             // $('#submit_card').text('Pay $' + fee);
         }
-        
+
     });
     $('#payment_term').trigger('change');
 
     // validating payment amount
-    $('#paid-amount').on('input', function(){
-    let amount = $(this).val();
+{{--    $('#paid-amount').on('input', function(){--}}
+{{--    let amount = $(this).val();--}}
 
-    // Remove any non-numeric characters (allow only integers)
-    amount = amount.replace(/[^0-9]/g, '');
+{{--    // Remove any non-numeric characters (allow only integers)--}}
+{{--    amount = amount.replace(/[^0-9]/g, '');--}}
 
-    // Convert the cleaned value to an integer
-    amount = parseInt(amount, 10);
+{{--    // Convert the cleaned value to an integer--}}
+{{--    amount = parseInt(amount, 10);--}}
 
-    // Check if the amount is a valid number
-    if (isNaN(amount)) {
-        amount = ''; // Reset amount if it's not a number
-    } else {
-        // Assuming $fee is set to 400 in your script
-        const fee = {{ $fee }};
+{{--    // Check if the amount is a valid number--}}
+{{--    if (isNaN(amount)) {--}}
+{{--        amount = ''; // Reset amount if it's not a number--}}
+{{--    } else {--}}
+{{--        // Assuming $fee is set to 400 in your script--}}
+{{--        const fee = @json($fee);--}}
 
-        // If the amount is greater than the fee, set it back to the fee
-        if (amount > fee) {
-            amount = fee;
-            alert("Amount can't be greater than the total charge of $" + fee);
-        }
-    }
+{{--        // If the amount is greater than the fee, set it back to the fee--}}
+{{--        if (amount > fee) {--}}
+{{--            amount = fee;--}}
+{{--            alert("Amount can't be greater than the total charge of $" + fee);--}}
+{{--        }--}}
+{{--    }--}}
 
-    // Set the input value to the validated integer amount
-    $(this).val(amount);
-});
+{{--    // Set the input value to the validated integer amount--}}
+{{--    $(this).val(amount);--}}
+{{--});--}}
 
 
     // Credit Card input formatting

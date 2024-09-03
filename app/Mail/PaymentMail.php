@@ -30,7 +30,7 @@ class PaymentMail extends Mailable
     
     public function build()
     {
-        return $this->subject('QR Information')
+        return $this->subject('Chubcay Fee Payment')
             ->view('mail.payment')
             ->with([
                 'package' => $this->package,

@@ -31,7 +31,7 @@ class SendMailAfterAcceptingRequest extends Mailable
 
     public function build()
     {
-        return $this->subject('QR Information')
+        return $this->subject('Chubcay Membership Request')
             ->view('mail.accept')
             ->with([
                 'message', $this->message,

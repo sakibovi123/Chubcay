@@ -166,9 +166,9 @@ export default function Edit({user, existing_package, profile_image, records, me
                         ) : (
                             <div className="md:w-[30%] w-full">
                                 <div className="border w-full flex gap-3 p-5">
-                                    {/*<h2 className="p-2 font-extrabold">*/}
-                                    {/*    Balance: <span>${user?.balance}</span>*/}
-                                    {/*</h2>*/}
+                                    <h2 className="p-2 font-extrabold bg-blue-500 text-white p-2 rounded">
+                                        Total spent: <span class="font-bold">${user?.balance}</span>
+                                    </h2>
                                     {/*<p onClick={handleRechargeClick}*/}
                                     {/*    className="flex items-center cursor-pointer text-white p-1 rounded bg-blue-500">*/}
                                     {/*    Recharge*/}

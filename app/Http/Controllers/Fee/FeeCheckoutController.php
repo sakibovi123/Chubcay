@@ -50,6 +50,10 @@ class FeeCheckoutController extends Controller
                 $feeObj->paid += $charge;
                 $feeObj->due = 0.00;
 
+                // adding spent money to user's balance
+                $user->balance += $feeObj->paid;
+                $user->save();
+
                 $feeObj->save();
                 // dd($charge);
             }
@@ -62,6 +66,9 @@ class FeeCheckoutController extends Controller
                 $feeObj->paid += $paid;
                 $feeObj->due -= $paid;
 //                dd($feeObj->due, $paid, $user->fee);
+                $user->balance += $feeObj->paid;
+                $user->save();
+
                 $feeObj->save();
             }
 

@@ -224,6 +224,11 @@ class UserManagementController extends Controller
                 $charge = $fee->due;
 //                $fee->paid += $charge;
                 $fee->paid = $user->fee;
+
+                // adding spent money to user's balance
+                $user->balance += $fee->paid;
+                $user->save();
+
                 $fee->due = 0.00;
 
                 $fee->save();
@@ -235,6 +240,10 @@ class UserManagementController extends Controller
 
                 $fee->paid += $request->amount;
                 $fee->due = $user->fee - $fee->paid;
+
+                // adding spent money to user's balance
+                $user->balance += $fee->paid;
+                $user->save();
 
                 $fee->save();
             }
@@ -296,12 +305,20 @@ class UserManagementController extends Controller
                 $fee->paid += $paid;
                 $fee->due = $user->fee - $fee->paid;
 
+                // adding spent money to user's balance
+                $user->balance += $fee->paid;
+                $user->save();
+
                 $fee->save();
             }
             else {
                 $charge = $fee->due;
                 $fee->paid = $user->fee;
                 $fee->due = 0.00;
+
+                // adding spent money to user's balance
+                $user->balance += $fee->paid;
+                $user->save();
 
                 $fee->save();
             }

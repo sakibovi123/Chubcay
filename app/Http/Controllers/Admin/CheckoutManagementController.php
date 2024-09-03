@@ -112,11 +112,20 @@ class CheckoutManagementController extends Controller
                 {
                     $checkout->paid += $request->amount;
 
+                    // adding spent money to user's balance
+                    $user->balance += $checkout->paid;
+                    $user->save();
+
                     $checkout->due = $checkout->grand_total - $checkout->paid;
                 }
                 else
                 {
                     $checkout->paid = $checkout->grand_total;
+
+                    // adding spent money to user's balance
+                    $user->balance += $checkout->paid;
+                    $user->save();
+
                     $checkout->due = 0.00;
                 }
 
@@ -163,6 +172,8 @@ class CheckoutManagementController extends Controller
                 // saving payment method
 
                 $checkout->payment_method = $request->payment_method;
+
+
 
                 $checkout->save();
 

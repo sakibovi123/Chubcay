@@ -110,6 +110,9 @@ public function handleCheckout( Request $request )
 
                     $checkout->payment_option = 'partial';
 
+                    $auth->balance += $checkout->paid;
+                    $auth->save();
+
                     $checkout->save();
 
                     Record::create([
@@ -131,6 +134,9 @@ public function handleCheckout( Request $request )
                     // savhing payment option
 
                     $checkout->payment_option = 'full';
+
+                    $auth->balance += $checkout->paid;
+                    $auth->save();
 
                     $checkout->save();
 
@@ -317,6 +323,10 @@ public function handleCheckout( Request $request )
                 $charge = $request->amount;
                 $checkout->paid += $charge;
                 $checkout->due = $checkout->grand_total - $checkout->paid;
+
+                $auth->balance += $checkout->paid;
+                $auth->save();
+
                 $checkout->save();
 
                 // saving records
@@ -335,6 +345,9 @@ public function handleCheckout( Request $request )
 
                 // saving payment option
                 $checkout->payment_option = 'full';
+
+                $auth->balance += $checkout->paid;
+                $auth->save();
 
                 $checkout->save();
                 Record::create([

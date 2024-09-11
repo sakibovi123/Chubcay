@@ -117,7 +117,7 @@ public function handleCheckout( Request $request )
 
                     Record::create([
                         'user_id' => $checkout->user->id,
-                        'action' => 'membership fee',
+                        'action' => 'plan checkout fee',
                         'total_amount' => $checkout->grand_total,
                         'paid_amount' => $checkout->paid,
                         'due_amount' => $checkout->due
@@ -142,7 +142,7 @@ public function handleCheckout( Request $request )
 
                     Record::create([
                         'user_id' => $checkout->user->id,
-                        'action' => 'membership fee',
+                        'action' => 'plan checkout fee',
                         'total_amount' => $checkout->grand_total,
                         'paid_amount' => $checkout->paid,
                         'due_amount' => $checkout->due
@@ -332,7 +332,7 @@ public function handleCheckout( Request $request )
                 // saving records
                 Record::create([
                     'user_id' => $checkout->user->id,
-                    'action' => 'membership fee',
+                    'action' => 'plan checkout fee',
                     'total_amount' => $checkout->grand_total,
                     'paid_amount' => $checkout->paid,
                     'due_amount' => $checkout->due
@@ -352,7 +352,7 @@ public function handleCheckout( Request $request )
                 $checkout->save();
                 Record::create([
                     'user_id' => $checkout->user->id,
-                    'action' => 'membership fee',
+                    'action' => 'plan checkout fee',
                     'total_amount' => $checkout->grand_total,
                     'paid_amount' => $checkout->paid,
                     'due_amount' => $checkout->due

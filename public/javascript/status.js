@@ -86,6 +86,8 @@ $('#feeForm').on('submit', function(e) {
     var status = 'Pending';
     var fee = $('#fee').val();
 
+
+    console.log(fee)
     // Show loading indicator
     $('#loadingIndicator').removeClass('hidden');
 

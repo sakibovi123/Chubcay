@@ -20,9 +20,7 @@ return new class extends Migration
 
 
 
-            $table->enum('action', [
-                'recharge', 'refund', 'spend', 'registration fee', 'membership fee'
-            ]);
+            $table->string('action')->nullable();
 
             $table->decimal('total_amount', 10, 2)
                 ->default('0.00');

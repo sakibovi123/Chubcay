@@ -118,7 +118,7 @@
                                     </svg>
 
                                     <div id="tooltip-default-cash" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                        Set Fee
+                                        Set Membership Type
                                         <div class="tooltip-arrow" data-popper-arrow></div>
                                     </div>
 
@@ -147,7 +147,7 @@
     <div class="fixed inset-0 flex items-center justify-center z-50 hidden backdrop-blur-sm" id="feeModal">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
           <div class="flex justify-between items-center border-b p-4">
-            <h5 class="text-lg font-medium" id="feeModalLabel">Set Registration Fee</h5>
+            <h5 class="text-lg font-medium" id="feeModalLabel">Set Membership Type</h5>
             <button type="button" class="text-gray-500 hover:text-gray-700" data-close="modal">
               <span class="text-xl">&times;</span>
             </button>
@@ -155,9 +155,18 @@
           <div class="p-4">
             <form id="feeForm">
               <div class="mb-4">
-                <label for="fee" class="block text-gray-700">Fee</label>
-                <input type="number" class="form-input mt-1 block w-full p-2 border rounded" id="fee" name="fee" required>
+                <label for="fee" class="block text-gray-700">Select Membership Type</label>
+                <select class="form-input mt-1 block w-full p-2 border rounded"
+                        id="fee" name="fee" required>
+                    <option selected disabled value="">Select Membership Type</option>
+                        @foreach( $types as $type )
+                        <option value="{{ $type->id }}" data-price="{{ $type->price }}">{{ $type->name }}</option>
+                        @endforeach
+                </select>
               </div>
+
+                <p id="total_price">Total: $0.00</p>
+
               <input type="hidden" id="modalUserId">
               <div class="flex justify-end">
                 <button type="submit" class="flex items-center gap-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
@@ -169,16 +178,26 @@
                     <span class="sr-only">Loading...</span>
                 </button>
               </div>
-              {{-- <div class="mt-4 text-center" id="loadingIndicator">
-                <div role="status">
-                    
-                </div>
-                
-            </div> --}}
 
             </form>
           </div>
         </div>
       </div>
+
+
+
+    <script>
+        document.getElementById('fee').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const price = selectedOption.getAttribute('data-price');
+            const totalPriceElement = document.getElementById('total_price');
+
+            if (price) {
+                totalPriceElement.textContent = `Total: $${parseFloat(price).toFixed(2)}`;
+            } else {
+                totalPriceElement.textContent = "Total: $0.00";
+            }
+        });
+    </script>
       
 @endsection

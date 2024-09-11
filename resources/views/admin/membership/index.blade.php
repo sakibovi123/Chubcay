@@ -20,7 +20,7 @@
                         <th class="text-sm p-2 sm:p-3">CREATED AT</th>
                         <th class="text-sm p-2 sm:p-3">PACKAGE NAME</th>
                         <th class="text-sm p-2 sm:p-3">PLAN NAME</th>
-                        <th class="text-sm p-2 sm:p-2">MEMBERSHIP TYPE</th>
+{{--                        <th class="text-sm p-2 sm:p-2">MEMBERSHIP TYPE</th>--}}
                         <th class="text-sm p-2 sm:p-3">PRICE</th>
                         <th class="text-sm p-2 sm:p-3">STATUS</th>
                         <th class="text-sm p-2 sm:p-3">ACTIONS</th>
@@ -33,14 +33,14 @@
                         <td class="p-2 sm:p-3">{{ $plan->created_at->format('Y-m-d') }}</td>
                         <td class="p-2 sm:p-3">{{ $plan->title }}</td>
                         <td class="p-2 sm:p-3">{{ $plan->duration_title }}</td>
-                        <td class="p-2 sm:p-3">
-                            @if( $plan->membershiptype )
-                                {{ $plan->membershiptype->name }}
-                            @else
-                                N/A
-                            @endif
+{{--                        <td class="p-2 sm:p-3">--}}
+{{--                            @if( $plan->membershiptype )--}}
+{{--                                {{ $plan->membershiptype->name }}--}}
+{{--                            @else--}}
+{{--                                N/A--}}
+{{--                            @endif--}}
 
-                        </td>
+{{--                        </td>--}}
                         <td class="p-2 sm:p-3">${{ $plan->price }}</td>
                         <td class="p-2 sm:p-3">
                             @if ($plan->status == 'Active')

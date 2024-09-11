@@ -32,6 +32,7 @@ return new class extends Migration
 
             // Admin
             $table->boolean('is_admin')->default(0);
+
             $table->enum('status', [
                 'Active', 'Pending', 'Cancel'
             ])->default('Pending');
@@ -49,6 +50,10 @@ return new class extends Migration
             // user's fee
             $table->decimal('fee', 10, 2)->nullable();
 
+            // relation with membership type
+
+            $table->foreignIdFor(\App\Models\MembershipType::class, 'membership_id')
+                ->nullable();
 
         });
 

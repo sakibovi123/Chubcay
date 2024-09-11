@@ -67,6 +67,8 @@ class ProfileController extends Controller
         $feeRecords = FeeCheckout::where('user_id', auth()->user()->id)
             ->first();
 
+//        dd($feeRecords);
+
 
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,

@@ -101,7 +101,7 @@ class UserManagementController extends Controller
             'password' => 'required|min:8',
             'city' => 'required|string',
 //            'membership_type' => 'required|in:Social,Legacy'
-            // 'balance' => 'numeric|regex:/^\d+(\.\d{1,2})?$/'
+             'balance' => 'numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
 
         $data = $request->all();
@@ -132,7 +132,7 @@ class UserManagementController extends Controller
             $user->country = $request->input('country');
             $user->city = $request->input('city');
             $user->phone = $request->input('phone');
-//            $user->balance = $request->input('balance');
+            $user->balance = $request->input('balance');
             $user->status = $request->input('status');
             $user->payment_status = $request->input('payment_status');
 

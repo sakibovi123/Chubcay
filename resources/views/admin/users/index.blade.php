@@ -33,6 +33,7 @@
                        
                         <th class="p-2">EMAIL</th>
                         <th class="p-2">STATUS</th>
+                        <th class="p-2">BALANCE</th>
                         <th class="p-2">ROLE</th>
                         <th class="p-2">Fee</th>
 
@@ -68,6 +69,15 @@
 {{--                                   --}}
 {{--                                </select>--}}
                             </td>
+
+                            <td class="p-3">
+                                @if( $user->balance == 0.00 )
+                                    $0.00
+                                @else
+                                    ${{ $user->balance }}
+                                @endif
+                            </td>
+
                             <td class="p-3">
                                 
                                 @if ($user->is_admin == 1)

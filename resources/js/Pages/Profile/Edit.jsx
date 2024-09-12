@@ -169,10 +169,10 @@ export default function Edit({user, existing_package, profile_image, records, me
                                     <h2 className="p-2 font-extrabold bg-blue-500 text-white p-2 rounded">
                                         Total spent: <span class="font-bold">${user?.balance}</span>
                                     </h2>
-                                    {/*<p onClick={handleRechargeClick}*/}
-                                    {/*    className="flex items-center cursor-pointer text-white p-1 rounded bg-blue-500">*/}
-                                    {/*    Recharge*/}
-                                    {/*</p>*/}
+                                    <p onClick={handleRechargeClick}
+                                        className="flex items-center cursor-pointer text-white p-1 rounded bg-blue-500">
+                                        Recharge
+                                    </p>
                                     <RechargeModal
                                         show={showModal} onClose={handleCloseModal}
                                     />

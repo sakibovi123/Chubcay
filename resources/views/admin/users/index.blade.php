@@ -170,12 +170,72 @@
                         id="fee" name="fee" required>
                     <option selected disabled value="">Select Membership Type</option>
                         @foreach( $types as $type )
-                        <option value="{{ $type->id }}" data-price="{{ $type->price }}">{{ $type->name }}</option>
+                        <option value="{{ $type->id }}" data-price="{{ $type->price }}">{{ $type->name }} ${{ $type->price }}</option>
                         @endforeach
-                </select>
+                </select><br>
+
+
+
+{{--                  payment option--}}
+                <div id="payment_option_section">
+                    <label for="fee" class="block text-gray-700">Payment Option</label>
+                    <select name="payment_option" id="payment_option" class="form-input mt-1 block w-full p-2 border rounded">
+                        <option selected disabled value="">Select Payment Option</option>
+                        <option value="send_link">Send Payment Link</option>
+                        <option value="pay_now">Pay Now</option>
+
+                    </select><br>
+                </div>
+
+                  <div id="payment_method_section" hidden>
+                      <label for="fee" class="block text-gray-700">Payment Method</label>
+                      {{--                      <select disabled name="payment_method" id="payment_method" class="form-input mt-1 block w-full p-2 border rounded">--}}
+                      {{--                          <option selected disabled value="">Cash</option>--}}
+                      {{--                      </select><br>--}}
+                      <input id="method_input" class="form-input mt-1 block w-full p-2 border rounded"
+                             disabled type="text" value="cash">
+
+                  </div>
+                  <br>
+
+{{--                  payment option end--}}
+
+{{--                  payment type--}}
+                  <div id="payment_type_section" hidden>
+                      <label for="fee" class="block text-gray-700">Payment Type</label>
+                      <select name="payment_type" id="payment_type" class="form-input mt-1 block w-full p-2 border rounded">
+                          <option selected disabled value="">Select Payment Type</option>
+                          <option value="full">Full</option>
+                          <option value="partial">Partial</option>
+                      </select><br>
+
+                  </div>
+
+{{--                payment type end--}}
+{{--                  amount section--}}
+                  <div hidden id="amount_section" class="w-full">
+                      <label for="">Amount</label><br>
+                      <input
+                              id="amount_input"
+                              class="w-full p-2 rounded border border-gray-200 outline-none"
+                              type="text" placeholder="$0.00" name="amount">
+                  </div>
+
+{{--                  amount section end--}}
+
+                  <div id="payment_status_section" hidden>
+                      <label for="fee" class="block text-gray-700">Payment Status</label>
+                      <select name="payment_status" id="payment_status" class="form-input mt-1 block w-full p-2 border rounded">
+                          <option selected disabled value="">Select Payment Status</option>
+                          <option value="paid">Paid</option>
+                          <option value="due">Due</option>
+                      </select><br>
+
+                  </div>
+
               </div>
 
-                <p id="total_price">Total: $0.00</p>
+{{--                <p id="total_price">Total: $0.00</p>--}}
 
               <input type="hidden" id="modalUserId">
               <div class="flex justify-end">
@@ -197,17 +257,59 @@
 
 
     <script>
+
+        let selectedPrice = 0
+
         document.getElementById('fee').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const price = selectedOption.getAttribute('data-price');
             const totalPriceElement = document.getElementById('total_price');
 
             if (price) {
+                selectedPrice = parseFloat(price)
                 totalPriceElement.textContent = `Total: $${parseFloat(price).toFixed(2)}`;
             } else {
                 totalPriceElement.textContent = "Total: $0.00";
             }
         });
+
+        document.getElementById('payment_option').addEventListener('change', function () {
+            var paymentTypeSection = document.getElementById('payment_type_section')
+            var methodSection = document.getElementById('payment_method_section')
+            if( this.value === 'pay_now' ) {
+                paymentTypeSection.removeAttribute('hidden')
+                payment_method_section.removeAttribute('hidden')
+            }
+            else {
+                paymentTypeSection.setAttribute('hidden', true)
+                amount_section.setAttribute('hidden', true)
+            }
+        })
+
+        document.getElementById('payment_type')
+            .addEventListener('change', function () {
+                const selectedOption = this.options[this.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                const amountSection = document.getElementById('amount_section')
+                const amountInput = document.getElementById('amount_input')
+                const paymentStatusSection = document.getElementById('payment_status_section')
+                // console.log("price", selectedPrice.toFixed(2))
+                if ( this.value === 'full' ) {
+                    amountSection.removeAttribute('hidden')
+                    amountInput.setAttribute('disabled', true)
+                    amountInput.value = `$${selectedPrice.toFixed(2)}`
+                    paymentStatusSection.removeAttribute('hidden')
+                }
+                else {
+                    amountSection.removeAttribute('hidden')
+                    amountInput.value = 0.00
+                    amountInput.removeAttribute('disabled')
+                    // amountInput.value.replace(/[^0-9.]/g, '')
+                    paymentStatusSection.removeAttribute('hidden')
+
+                }
+            })
+
     </script>
       
 @endsection

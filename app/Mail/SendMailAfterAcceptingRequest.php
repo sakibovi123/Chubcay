@@ -17,16 +17,18 @@ class SendMailAfterAcceptingRequest extends Mailable
     public $fee;
     public $link;
     public $user;
+    public $stat;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($message, $fee, $link, $user)
+    public function __construct($message, $fee, $link, $user, $stat)
     {
         $this->message = $message;
         $this->fee = $fee;
         $this->link = $link;
         $this->user = $user;
+        $this->stat = $stat;
     }
 
     public function build()
@@ -38,6 +40,7 @@ class SendMailAfterAcceptingRequest extends Mailable
                 'fee', $this->fee,
                 'link', $this->link,
                 'user', $this->user,
+                'stat', $this->stat
             ]);
      }
 

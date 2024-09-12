@@ -17,4 +17,9 @@ class MembershipType extends Model
     {
         return $this->hasMany(Package::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

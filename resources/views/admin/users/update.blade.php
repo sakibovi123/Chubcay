@@ -72,14 +72,20 @@
                 </select>
             </div>
 
-{{--            <div class="w-full">--}}
-{{--                <label class="text-gray-600 font-bold text-md" for="membership_type">Membership Type</label>--}}
-{{--                <select required name="membership_type" class="p-2 rounded w-full border">--}}
-{{--                    <option disabled value="">Select Membership Type</option>--}}
-{{--                    <option value="Social" {{ $user->membership_type == 'Social' ? 'selected' : '' }}>Social</option>--}}
-{{--                    <option value="Legacy" {{ $user->membership_type == 'Legacy' ? 'selected' : '' }}>Legacy</option>--}}
-{{--                </select>--}}
-{{--            </div>--}}
+            <div class="w-full">
+                <label class="text-gray-600 font-bold text-md" for="membership_type">Membership Type</label>
+                <select required name="membership_id" class="p-2 rounded w-full border">
+                    <option disabled selected value="">Select Membership Type</option>
+                    @foreach($types as $type)
+                        <option value="{{ $type->id }}" {{ $user->membership_type && $user->membership_type->name == $type->name ? 'selected' : '' }}>
+                            {{ $type->name }}
+                        </option>
+                    @endforeach
+
+
+                    {{--                    <option value="Legacy" {{ $user->membership_type == 'Legacy' ? 'selected' : '' }}>Legacy</option>--}}
+                </select>
+            </div>
 
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md" for="">Balance</label>

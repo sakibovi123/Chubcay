@@ -28,7 +28,7 @@ class User extends Authenticatable
         'city',
         'is_admin',
         'balance',
-        'membership_type'
+        'membership_id'
     ];
 
     /**
@@ -69,4 +69,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(FeeCheckout::class);
     }
+
+    public function membership_type(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(MembershipType::class, 'membership_id');
+    }
+
 }

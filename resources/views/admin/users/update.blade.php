@@ -146,7 +146,7 @@
 
         phoneInput.addEventListener('input', function() {
             // Replace any character that is not a number, dash, or parentheses
-            var cleanedInput = phoneInput.value.replace(/[^0-9\-\(\)\+]/g, '');
+            var cleanedInput = phoneInput.value.replace(/[^0-9\-\(\)\+\s]/g, '');
 
             // Update the input field with the cleaned value
             phoneInput.value = cleanedInput;

@@ -26,8 +26,11 @@ class AdminMemberShipTypeController extends Controller
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validatedData = $request->validate([
-            'name' => 'required|string'
+            'name' => 'required|string',
+            'price' => 'required'
         ]);
+
+//        dd($request->all());
 
         MembershipType::create($validatedData);
 
@@ -56,10 +59,12 @@ class AdminMemberShipTypeController extends Controller
         )->first();
 
         $validatedData = $request->validate([
-            'name' => 'required|string'
+            'name' => 'required|string',
+            'price' => 'required'
         ]);
 
         $type->name = $validatedData['name'];
+        $type->price = $validatedData['price'];
 
         $type->save();
 

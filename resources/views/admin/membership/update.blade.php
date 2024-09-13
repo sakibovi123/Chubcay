@@ -14,22 +14,22 @@
         @method('put')
         @csrf
         <div class="w-full">
-            <label class="text-gray-600 font-bold text-md" for="">Title</label><br>
+            <label class="text-gray-600 font-bold text-md" for="">Title <span class="text-red-600">*</span></label><br>
             <input value="{{ $package->title }}" required name="title" type="text" placeholder="Enter title..." class="p-2 rounded w-full border">
         </div>
 
-        <div class="w-full">
-            <label class="text-gray-600 font-bold text-md" for="membership_type_id">Membership Type</label><br>
-            <select required name="membership_type_id" class="p-2 rounded w-full border">
-                <option disabled value="">Select Membership Type</option>
-                @foreach($types as $type)
-                    <option value="{{ $type->id }}"
-                            {{ $package->membership_type_id == $type->id ? 'selected' : '' }}>
-                        {{ $type->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+{{--        <div class="w-full">--}}
+{{--            <label class="text-gray-600 font-bold text-md" for="membership_type_id">Membership Type</label><br>--}}
+{{--            <select required name="membership_type_id" class="p-2 rounded w-full border">--}}
+{{--                <option disabled value="">Select Membership Type</option>--}}
+{{--                @foreach($types as $type)--}}
+{{--                    <option value="{{ $type->id }}"--}}
+{{--                            {{ $package->membership_type_id == $type->id ? 'selected' : '' }}>--}}
+{{--                        {{ $type->name }}--}}
+{{--                    </option>--}}
+{{--                @endforeach--}}
+{{--            </select>--}}
+{{--        </div>--}}
 
 
 
@@ -39,13 +39,13 @@
                 <input value="{{ $package->sub_title }}" required name="sub_title" type="text" placeholder="Enter sub title..." class="p-2 rounded w-full border">
             </div>
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Price</label>
+                <label class="text-gray-600 font-bold text-md" for="">Price <span class="text-red-600">*</span></label>
                 <input value="{{ $package->price }}" required name="price" id="price" type="text" placeholder="Enter price..." class="p-2 rounded w-full border">
                 
             </div> 
 
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Activate this package</label>
+                <label class="text-gray-600 font-bold text-md" for="">Activate this package <span class="text-red-600">*</span></label>
                 <select required name="status" class="p-2 rounded w-full border">
                     <option selected value="{{ $package->status }}">Selected Status: {{ $package->status }}</option>
                     <option value="Active">Activate</option>
@@ -60,9 +60,9 @@
                 <input value="{{ $package->discount }}" name="discount" type="float" placeholder="discount" class="p-2 rounded w-full border">
             </div>
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Duration</label>
+                <label class="text-gray-600 font-bold text-md" for="">Duration <span class="text-red-600">*</span></label>
                 <select required name="duration_title" class="p-2 rounded w-full border">
-                    <option value="{{ $package->duration_title }}">Selected plan: {{ $package->duration_title }}</option>
+                    <option value="{{ $package->duration_title }}">Selected duration: {{ $package->duration_title }}</option>
                     <option value="monthly">Monthly</option>
                     <option value="quaterly">Quaterly</option>
                     <option value="yearly">Yearly</option>
@@ -72,7 +72,7 @@
         </div>
 
         <div class="w-full">
-            <label class="text-gray-600 font-bold text-md" for="">Features</label>
+            <label class="text-gray-600 font-bold text-md" for="">Features <span class="text-red-600">*</span></label>
 
             {{-- <div id="container">
                 @foreach ($package->features as $key => $value)

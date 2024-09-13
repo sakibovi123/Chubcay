@@ -10,11 +10,16 @@ class MembershipType extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name', 'price'
     ];
 
     public function package()
     {
         return $this->hasMany(Package::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 }

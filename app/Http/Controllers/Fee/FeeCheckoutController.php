@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
+
 class FeeCheckoutController extends Controller
 {
     public function feeTemplate( $feeId )
@@ -61,6 +62,7 @@ class FeeCheckoutController extends Controller
                 $charge = $request->amount;
 
                 $paid = $request->amount;
+//                dd($paid);
 //                $due = $user->fee - $paid;
 
                 $feeObj->paid += $paid;
@@ -70,6 +72,8 @@ class FeeCheckoutController extends Controller
                 $user->save();
 
                 $feeObj->save();
+
+//                dd($feeObj->paid);
             }
 
             // dd($charge);
@@ -77,7 +81,7 @@ class FeeCheckoutController extends Controller
             $feeRequest = [
                 "amount" => $charge * 100,
                 "currency" => "USD",
-                "description" => "Registration fee",
+                "description" => "Membership fee",
                 'card' => [
                         'number' => $request->card_number,
                         'expMonth' => $request->mm,
@@ -113,7 +117,7 @@ class FeeCheckoutController extends Controller
 
                 Record::create([
                     'user_id' => $feeObj->user->id,
-                    'action' => 'registration fee',
+                    'action' => 'membership fee',
                     'total_amount' => $feeObj->total_charge,
                     'paid_amount' => $feeObj->paid,
                     'due_amount' => $feeObj->due

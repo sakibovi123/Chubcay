@@ -13,20 +13,20 @@
     <form class="w-full my-7" action="{{ route('membership.store') }}" method="post">
         @csrf
         <div class="w-full">
-            <label class="text-gray-600 font-bold text-md" for="">Title</label><br>
+            <label class="text-gray-600 font-bold text-md" for="">Title <span class="text-red-600">*</span></label><br>
             <input required name="title" type="text" placeholder="Enter title..." class="p-2 rounded w-full border">
         </div>
 
-        <div class="w-full">
-            <label class="text-gray-600 font-bold text-md" for="">Title</label><br>
-            <select required name="membership_type_id" class="p-2 rounded w-full border">
-                <option Selected disabled value="">Select Membership Type</option>
-                @foreach($types as $type)
-                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                @endforeach
+{{--        <div class="w-full">--}}
+{{--            <label class="text-gray-600 font-bold text-md" for="">Title</label><br>--}}
+{{--            <select required name="membership_type_id" class="p-2 rounded w-full border">--}}
+{{--                <option Selected disabled value="">Select Membership Type</option>--}}
+{{--                @foreach($types as $type)--}}
+{{--                    <option value="{{ $type->id }}">{{ $type->name }}</option>--}}
+{{--                @endforeach--}}
 
-            </select>
-        </div>
+{{--            </select>--}}
+{{--        </div>--}}
         
         <div class="my-3 flex items-center jusitify-between gap-5">
             <div class="w-full">
@@ -34,13 +34,13 @@
                 <input required name="sub_title" type="text" placeholder="Enter sub title..." class="p-2 rounded w-full border">
             </div>
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Price</label>
+                <label class="text-gray-600 font-bold text-md" for="">Price <span class="text-red-600">*</span></label>
                 <input required name="price" id="price" type="text" placeholder="Enter price..." class="p-2 rounded w-full border">
                 
             </div> 
 
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Activate this package</label>
+                <label class="text-gray-600 font-bold text-md" for="">Activate this package <span class="text-red-600">*</span></label>
                 <select required name="status" class="p-2 rounded w-full border">
                     {{-- <option selected value="">Select Status</option> --}}
                     <option value="Active">Activate</option>
@@ -55,9 +55,9 @@
                 <input name="discount" type="float" placeholder="discount" class="p-2 rounded w-full border">
             </div>
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Duration</label>
+                <label class="text-gray-600 font-bold text-md" for="">Duration <span class="text-red-600">*</span></label>
                 <select required name="duration_title" class="p-2 rounded w-full border">
-                    <option value="">Select plan</option>
+                    <option disabled value="">Select Duration</option>
                     <option value="monthly">Monthly</option>
                     <option value="quaterly">Quaterly</option>
                     <option value="yearly">Yearly</option>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="w-full">
-            <label class="text-gray-600 font-bold text-md" for="">Features</label>
+            <label class="text-gray-600 font-bold text-md" for="">Features <span class="text-red-600">*</span></label>
 
             <div id="container">
                 <div id="featureContainer" class="w-full flex items-center justify-between gap-3 mt-2">

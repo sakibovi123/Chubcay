@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +16,14 @@ class MembershipTypeSeeder extends Seeder
     {
         DB::table('membership_types')->insert([
             [
-                'name' => 'Social'
+                'created_at' => Carbon::now(),
+                'name' => 'Social',
+                'price' => 50000.00
             ],
             [
-                'name' => 'Legacy'
+                'created_at' => Carbon::now(),
+                'name' => 'Legacy',
+                'price' => 80000.00
             ],
         ]);
     }

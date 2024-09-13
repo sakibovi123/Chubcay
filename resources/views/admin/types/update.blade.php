@@ -20,7 +20,14 @@
             @csrf
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md" for="">Membership Type</label><br>
+                <br>
                 <input value="{{ $type->name }}" required name="name" type="text" placeholder="Enter..." class="p-2 rounded w-full border">
+            </div>
+
+            <div class="my-5 w-full">
+                <label class="text-gray-600 font-bold text-md" for="">Membership Type Price</label><br>
+                <br>
+                <input value="{{ $type->price }}" required name="price" type="text" placeholder="Enter..." class="p-2 rounded w-full border">
             </div>
 
 

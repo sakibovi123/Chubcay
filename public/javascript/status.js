@@ -85,7 +85,13 @@ $('#feeForm').on('submit', function(e) {
     var userId = $('#modalUserId').val();
     var status = 'Pending';
     var fee = $('#fee').val();
+    var paymentOption = $('#payment_option').val();
+    var paymentType = $('#payment_type').val();
+    var amount = $('#amount_input').val();
+    var paymentStatus = $('#payment_status').val();
 
+
+    // console.log(fee)
     // Show loading indicator
     $('#loadingIndicator').removeClass('hidden');
 
@@ -96,7 +102,11 @@ $('#feeForm').on('submit', function(e) {
         data: {
             user_id: userId,
             status: status,
-            fee: fee
+            fee: fee,
+            payment_option: paymentOption,
+            payment_type: paymentType,
+            amount: amount,
+            payment_status: paymentStatus
         },
         success: function(response) {
             $('#feeModal').addClass('hidden'); // Hide the modal

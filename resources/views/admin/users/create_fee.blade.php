@@ -29,8 +29,18 @@
             </div>
 
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md">Set Fee</label><br>
-                <input name="fee" type="number" class="p-2 rounded w-full border" placeholder="$">
+                <label class="text-gray-600 font-bold text-md">Set Membership Type</label><br>
+
+                <select name="type" class="p-2 rounded w-full border">
+                    <option selected disabled value="">Select Membership Type</option>
+                    @foreach($types as $type)
+                        <option value="{{ $type->id }}">
+                            {{ $type->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <p>Total: </p>
             </div>
 
 

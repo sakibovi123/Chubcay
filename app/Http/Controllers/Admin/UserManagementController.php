@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\PasswordResetMail;
 use App\Mail\SendMailAfterAcceptingRequest;
 use App\Models\FeeCheckout;
+use App\Models\MembershipType;
 use App\Models\Record;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -25,48 +26,83 @@ class UserManagementController extends Controller
             ->where('is_admin', 0)
             ->orderByDesc('created_at')
             ->get();
+
+        $types = MembershipType::all();
+
         return view('admin.users.index', [
-            'users' => $users
+            'users' => $users,
+            'types' => $types
         ]);
     }
 
     public function activateUser( Request $request )
     {
+//        dd($request->all());
+        $stat = "";
         if ($request->ajax()) {
+//            dd($request->all());
             $user = User::find($request->input('user_id'));
             // dd($user->email);
             if ($user) {
-                $user->status = $request->input('status');
+                $user->status = 'Active';
 
                 $user->save();
 
                 // send mail if only accepted
                 $message = "Your request has been accepted";
 
-//                if($user->status == 'Active'){
+                $type = MembershipType::where('id', $request->fee)
+                    ->first();
 
-                // creating feeCheckout
                 $feeObj = FeeCheckout::create([
                     'user_id' => $user->id,
-                    'total_charge' => $request->fee,
+                    'total_charge' => $type->price,
                     'payment_status' => 'due',
-                    'due' => $request->fee
+                    'due' => $type->price,
+                    'payment_status' => $request->payment_status
                 ]);
 
                 $link = route('user.takeFee', [
                     'feeId' => $feeObj->id
                 ]);
-                // dd($link);
-                $user->fee = $request->fee;
+
+                $user->fee = $type->price;
                 $user->save();
 
+                if( $request->payment_option == 'send_link' ) {
+                    $stat = "direct";
+                    Mail::to($user->email)
+                        ->send(new SendMailAfterAcceptingRequest(
+                            $message, $type->price, $link, $user, $stat));
+
+                    return response()->json(['message' => 'Payment link sent']);
+                }
+                else if ( $request->payment_option == 'pay_now' ) {
+                    $stat = "manual";
+                    if( $request->payment_type == 'full' ) {
+                        $feeObj->payment_status = 'paid';
+                        $feeObj->save();
+                    }
+                    else {
+                        $feeObj->paid += $request->amount;
+                        $feeObj->due -= $request->amount;
+
+                        $feeObj->save();
+
+                    }
+
+                    Mail::to($user->email)
+                        ->send(new SendMailAfterAcceptingRequest(
+                            $message, $type->price, $link, $user, $stat));
+                }
+
+//                else {
+//                    return response()->json([
+//                        'message' => '400 bad request'
+//                    ]);
+//                }
 
 
-                Mail::to($user->email)
-                    ->send(new SendMailAfterAcceptingRequest(
-                        $message, $request->input('fee'), $link, $user));
-
-//                dd("asdasd");
 
                 return response()->json(['message' => 'User updated successfully!']);
             }
@@ -80,11 +116,15 @@ class UserManagementController extends Controller
 
     public function create()
     {
-        return view('admin.users.create');
+        $types = MembershipType::all();
+        return view('admin.users.create', [
+            'types' => $types
+        ]);
     }
 
     public function store( Request $request )
     {
+//        dd($request->membership_type);
         $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -92,13 +132,25 @@ class UserManagementController extends Controller
             'password' => 'required|min:8',
             'city' => 'required|string',
 //            'membership_type' => 'required|in:Social,Legacy'
-            // 'balance' => 'numeric|regex:/^\d+(\.\d{1,2})?$/'
+             'balance' => 'numeric|regex:/^\d+(\.\d{1,2})?$/',
+//            'membership_type' => ''
         ]);
 
+
         $data = $request->all();
+
         $data['password'] = Hash::make($data['password']);
-        
+
+//        dd($request->membership_type);
+
+
         $user = User::create($data);
+
+        if( $request->membership_id ) {
+            $user->membership_id = $request->membership_id;
+            $user->save();
+        }
+
         // dd($user);
         return redirect()->back()->with('message', 'User added successfully');
         
@@ -107,7 +159,14 @@ class UserManagementController extends Controller
     public function edit( $userId )
     {
         $user = User::find($userId);
-        return view('admin.users.update', ['user' => $user]);
+        $types = MembershipType::all();
+
+//        dd($user->membership_type->name);
+
+        return view('admin.users.update', [
+            'user' => $user,
+            'types' => $types
+        ]);
     }
 
     public function update( Request $request, $userId )
@@ -116,6 +175,7 @@ class UserManagementController extends Controller
         // dd($user);
         if( $user )
         {
+//            dd($request->all());
             $user->first_name = $request->input('first_name');
             $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
@@ -123,9 +183,12 @@ class UserManagementController extends Controller
             $user->country = $request->input('country');
             $user->city = $request->input('city');
             $user->phone = $request->input('phone');
-//            $user->balance = $request->input('balance');
+            $user->balance = $request->input('balance');
             $user->status = $request->input('status');
             $user->payment_status = $request->input('payment_status');
+
+            $user->membership_id = $request->membership_id;
+
 
 //            $user->membership_type = $request->input('membership_type');
 
@@ -171,6 +234,7 @@ class UserManagementController extends Controller
 
         $link = route('password.request');
 
+
         Mail::to($user->email)
             ->send(new PasswordResetMail($link));
 
@@ -183,8 +247,11 @@ class UserManagementController extends Controller
         $users = User::where('is_admin', 0)
             ->get();
 
+        $types = MembershipType::all();
+
         return view('admin.users.create_fee', [
-            'users' => $users
+            'users' => $users,
+            'types' => $types
         ]);
     }
 
@@ -193,19 +260,23 @@ class UserManagementController extends Controller
     public function payFeeByAdmin( Request $request )
     {
         $charge = 0.00;
-//        dd($request->all());
+//        dd($request->type);
+
         $validatedData = $request->validate([
-           'user_id' => 'required',
-           'payment_status' => 'required|in:due,paid',
+            'user_id' => 'required',
+            'payment_status' => 'required|in:due,paid',
             'payment_method' => 'required|in:card,cash',
-            'fee' => 'required'
+            'type' => 'required'
         ]);
 
 
         $user = User::where('id', $validatedData['user_id'])
             ->first();
 
-        $user->fee = $validatedData['fee'];
+        $type = MembershipType::where('id', $validatedData['type'])
+            ->first();
+
+        $user->fee = $type->price;
 
         $user->save();
 
@@ -213,7 +284,7 @@ class UserManagementController extends Controller
 
         $fee = FeeCheckout::create([
             'user_id' => $validatedData['user_id'],
-            'total_charge' => $user->fee
+            'total_charge' => $type->price
         ]);
 
 
@@ -251,7 +322,7 @@ class UserManagementController extends Controller
             $feeRequest = [
                 "amount" => $charge * 100,
                 "currency" => "USD",
-                "description" => "Registration fee",
+                "description" => "Membership Type fee",
                 'card' => [
                     'number' => $request->card_number,
                     'expMonth' => $request->mm,
@@ -271,7 +342,7 @@ class UserManagementController extends Controller
                 $updatedUser->save();
 
                 // updating checkout fee
-                $fee->method = $request->input('method');
+                $fee->method = $request->input('payment_method');
                 $fee->card_number = $request->card_number;
                 $fee->status = 'success';
                 $fee->payment_status = 'paid';
@@ -283,7 +354,7 @@ class UserManagementController extends Controller
 
                 Record::create([
                     'user_id' => $fee->user->id,
-                    'action' => 'registration fee',
+                    'action' => 'membership fee',
                     'total_amount' => $fee->total_charge,
                     'paid_amount' => $fee->paid,
                     'due_amount' => $fee->due
@@ -309,6 +380,7 @@ class UserManagementController extends Controller
                 $user->balance += $fee->paid;
                 $user->save();
 
+                $fee->method = $request->input('payment_method');
                 $fee->save();
             }
             else {
@@ -320,6 +392,7 @@ class UserManagementController extends Controller
                 $user->balance += $fee->paid;
                 $user->save();
 
+                $fee->method = $request->input('payment_method');
                 $fee->save();
             }
 
@@ -329,7 +402,7 @@ class UserManagementController extends Controller
 
             Record::create([
                 'user_id' => $fee->user->id,
-                'action' => 'registration fee',
+                'action' => 'membership fee',
                 'total_amount' => $fee->total_charge,
                 'paid_amount' => $fee->paid,
                 'due_amount' => $fee->due

@@ -21,8 +21,9 @@
                     <table class="w-full">
                         <thead class="border-b-2">
 
-                        {{-- <th class="p-2">CREATED AT</th> --}}
-                        <th class="p-2">MEMBER SHIP TYPE NAME</th>
+                         <th class="p-2">CREATED AT</th>
+                        <th class="p-2">MEMBERSHIP TYPE NAME</th>
+                        <th class="p-2">MEMBERSHIP TYPE PRICE</th>
 
                         <th class="p-2">ACTIONS</th>
                         </thead>
@@ -31,9 +32,23 @@
 
                         @foreach ($types as $type)
                             <tr class="w-full border-b-2 border-gray-100 cursor-pointer transition-all delay-5 hover:bg-gray-50">
+                                @if($type->created_at)
+                                    <td class="p-3">
+                                        {{ $type->created_at->format('Y-m-d') }}
+                                    </td>
+                                @else
+                                    <td class="p-3">
+                                        N/A
+                                    </td>
+                                @endif
+
 
                                 <td class="p-3">
                                     {{ $type->name }}
+                                </td>
+
+                                <td class="p-3 font-bold">
+                                    ${{ $type->price }}
                                 </td>
 
                                 <td class="p-3 flex items-center h-full justify-center gap-4">

@@ -14,10 +14,12 @@ class RechargeController extends Controller
 {
     public function rechargeBalance( Request $request )
     {
+//        dd($request->all());
         try {
             $user = User::where('id', Auth::user()->id)->first();
             $data = $request->validate([
-                'amount' => 'required',
+                'total_amount' => 'required',
+//                'paid_amount' => 'required',
                 'cardNumber' => 'required',
                 'month' => 'required',
                 'year' => 'required',
@@ -25,7 +27,7 @@ class RechargeController extends Controller
             ]);
             // dd($data);
             $paymentRequest = [
-                "amount" => $data['amount'],
+                "amount" => $data['total_amount'],
                 "currency" => "USD",
                 "description" => "Recharge Balance",
                 'card' => [
@@ -40,7 +42,7 @@ class RechargeController extends Controller
                 ->post('https://api.shift4.com/charges', $paymentRequest);
             
             if ( $initiatePayment->status() == 200 )  {
-                $user->balance += $data['amount'];
+                $user->balance += $data['total_amount'];
 
                 $user->save();
 
@@ -48,7 +50,9 @@ class RechargeController extends Controller
                 Record::create([
                     'user_id' => $user->id,
                     'action' => 'recharge',
-                    'amount' => $data['amount']
+                    'total_amount' => $data['total_amount'],
+                    'paid_amount' => $data['total_amount'],
+                    'due_amount' => 0.00
                 ]);
                 return back()->with('success', 'Balance updated successfully!');
             }

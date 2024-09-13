@@ -16,6 +16,10 @@ return new class extends Migration
             $table->timestamps();
 
             $table->string('name', 255);
+
+            $table->decimal('price', 10, 2)
+                ->default(0.00)
+                ->nullable();
         });
 
 

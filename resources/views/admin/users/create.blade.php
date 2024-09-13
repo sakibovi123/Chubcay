@@ -54,19 +54,23 @@
                 <input required name="city" id="city" type="text" placeholder="Enter city name" class="p-2 rounded w-full border">
             </div>
 
-{{--            <div class="w-full">--}}
-{{--                <label class="text-gray-600 font-bold text-md" for="">Membership Type</label>--}}
-{{--                <select required name="membership_type" class="p-2 rounded w-full border">--}}
-{{--                    <option selected disabled value="">Select Membership Type</option>--}}
+            <div class="w-full">
+                <label class="text-gray-600 font-bold text-md" for="">Membership Type</label>
+                <select required name="membership_id" class="p-2 rounded w-full border">
+                    <option selected disabled value="">Select Membership Type</option>
+                    @foreach($types as $type)
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
+
 {{--                    <option value="Social">Social</option>--}}
 {{--                    <option value="Legacy">Legacy</option>--}}
-{{--                </select>--}}
-{{--            </div>--}}
+                </select>
+            </div>
 
-{{--            <div class="w-full">--}}
-{{--                <label class="text-gray-600 font-bold text-md" for="">Balance</label>--}}
-{{--                <input required name="balance" id="balance" type="text" placeholder="0.00" class="p-2 rounded w-full border">--}}
-{{--            </div>--}}
+            <div class="w-full">
+                <label class="text-gray-600 font-bold text-md" for="">Balance</label>
+                <input required name="balance" id="balance" type="text" placeholder="0.00" class="p-2 rounded w-full border">
+            </div>
 
         </div>
 

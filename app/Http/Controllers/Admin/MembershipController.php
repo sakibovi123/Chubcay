@@ -43,7 +43,6 @@ class MembershipController extends Controller
             'features' => 'array',
             'features.*.key' => 'nullable|string',
             'features.*.value' => 'nullable|string',
-            'membership_type_id' => 'required'
         ]);
         
         $data = $request->all();
@@ -117,7 +116,6 @@ class MembershipController extends Controller
             $package->title = $request->input('title');
             $package->sub_title = $request->input('sub_title');
             $package->price = $request->input('price');
-            $package->membership_type_id = $request->input('membership_type_id');
 
             // if discount is present
             if( $request->input('discount') ) 

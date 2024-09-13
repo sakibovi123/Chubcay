@@ -8,7 +8,7 @@ function RechargeModal({ show, onClose }) {
     if (!show) return null; // Do not render the modal if show is false
 
     const {data, setData, post, processing, errors, reset} = useForm({
-        amount: '',
+        total_amount: '',
         cardNumber: '',
         month: '',
         year: '',
@@ -16,7 +16,7 @@ function RechargeModal({ show, onClose }) {
     })
 
     const handleInputChange = (field, value) => {
-        if (field === 'amount') {
+        if (field === 'total_amount') {
             if (/^\d*$/.test(value) && value <= 5000) {
                 setData(field, value);
             }
@@ -65,9 +65,9 @@ function RechargeModal({ show, onClose }) {
 
                 <label htmlFor="Recharge Amount">Enter Amount</label>
 
-                <input onChange={(e) => handleInputChange('amount', e.target.value)}
+                <input onChange={(e) => handleInputChange('total_amount', e.target.value)}
                     type="text"
-                    name="amount"
+                    name="total_amount"
                     className="border-gray-200 rounded"
                 />
 

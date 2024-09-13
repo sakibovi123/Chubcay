@@ -4,6 +4,16 @@
 
 @section('content')
 
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+
+
+
     <div class="w-full my-5 p-3 container md:mx-auto">
         @if (session('message'))
             <div class="my-3 w-full bg-orange-200 rounded shadow-xl p-2">
@@ -20,7 +30,14 @@
             @csrf
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md" for="">Membership Type</label><br>
+                <br>
                 <input required name="name" type="text" placeholder="Enter..." class="p-2 rounded w-full border">
+            </div>
+
+            <div class="my-5 w-full">
+                <label class="text-gray-600 font-bold text-md" for="">Membership Type Price</label><br>
+                <br>
+                <input required name="price" type="number" placeholder="Price...." class="p-2 rounded w-full border">
             </div>
 
 

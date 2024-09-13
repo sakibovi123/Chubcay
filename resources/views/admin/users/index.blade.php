@@ -33,6 +33,7 @@
                        
                         <th class="p-2">EMAIL</th>
                         <th class="p-2">STATUS</th>
+                        <th class="p-2">BALANCE</th>
                         <th class="p-2">ROLE</th>
                         <th class="p-2">Fee</th>
 
@@ -68,6 +69,15 @@
 {{--                                   --}}
 {{--                                </select>--}}
                             </td>
+
+                            <td class="p-3">
+                                @if( $user->balance == 0.00 )
+                                    $0.00
+                                @else
+                                    ${{ $user->balance }}
+                                @endif
+                            </td>
+
                             <td class="p-3">
                                 
                                 @if ($user->is_admin == 1)
@@ -118,7 +128,7 @@
                                     </svg>
 
                                     <div id="tooltip-default-cash" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                        Set Fee
+                                        Set Membership Type
                                         <div class="tooltip-arrow" data-popper-arrow></div>
                                     </div>
 
@@ -150,7 +160,7 @@
     <div class="fixed inset-0 flex items-center justify-center z-50 hidden backdrop-blur-sm" id="feeModal">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
           <div class="flex justify-between items-center border-b p-4">
-            <h5 class="text-lg font-medium" id="feeModalLabel">Set Registration Fee</h5>
+            <h5 class="text-lg font-medium" id="feeModalLabel">Set Membership Type</h5>
             <button type="button" class="text-gray-500 hover:text-gray-700" data-close="modal">
               <span class="text-xl">&times;</span>
             </button>
@@ -158,9 +168,78 @@
           <div class="p-4">
             <form id="feeForm">
               <div class="mb-4">
-                <label for="fee" class="block text-gray-700">Fee</label>
-                <input type="number" class="form-input mt-1 block w-full p-2 border rounded" id="fee" name="fee" required>
+                <label for="fee" class="block text-gray-700">Select Membership Type</label>
+                <select class="form-input mt-1 block w-full p-2 border rounded"
+                        id="fee" name="fee" required>
+                    <option selected disabled value="">Select Membership Type</option>
+                        @foreach( $types as $type )
+                        <option value="{{ $type->id }}" data-price="{{ $type->price }}">{{ $type->name }} ${{ $type->price }}</option>
+                        @endforeach
+                </select><br>
+
+
+
+{{--                  payment option--}}
+                <div id="payment_option_section">
+                    <label for="fee" class="block text-gray-700">Payment Option</label>
+                    <select name="payment_option" id="payment_option" class="form-input mt-1 block w-full p-2 border rounded">
+                        <option selected disabled value="">Select Payment Option</option>
+                        <option value="send_link">Send Payment Link</option>
+                        <option value="pay_now">Pay Now</option>
+
+                    </select><br>
+                </div>
+
+                  <div id="payment_method_section" hidden>
+                      <label for="fee" class="block text-gray-700">Payment Method</label>
+                      {{--                      <select disabled name="payment_method" id="payment_method" class="form-input mt-1 block w-full p-2 border rounded">--}}
+                      {{--                          <option selected disabled value="">Cash</option>--}}
+                      {{--                      </select><br>--}}
+                      <input id="method_input" class="form-input mt-1 block w-full p-2 border rounded"
+                             disabled type="text" value="cash">
+
+                  </div>
+                  <br>
+
+{{--                  payment option end--}}
+
+{{--                  payment type--}}
+                  <div id="payment_type_section" hidden>
+                      <label for="fee" class="block text-gray-700">Payment Type</label>
+                      <select name="payment_type" id="payment_type" class="form-input mt-1 block w-full p-2 border rounded">
+                          <option selected disabled value="">Select Payment Type</option>
+                          <option value="full">Full</option>
+                          <option value="partial">Partial</option>
+                      </select><br>
+
+                  </div>
+
+{{--                payment type end--}}
+{{--                  amount section--}}
+                  <div hidden id="amount_section" class="w-full">
+                      <label for="">Amount</label><br>
+                      <input
+                              id="amount_input"
+                              class="w-full p-2 rounded border border-gray-200 outline-none"
+                              type="text" placeholder="$0.00" name="amount">
+                  </div>
+
+{{--                  amount section end--}}
+
+                  <div id="payment_status_section" hidden>
+                      <label for="fee" class="block text-gray-700">Payment Status</label>
+                      <select name="payment_status" id="payment_status" class="form-input mt-1 block w-full p-2 border rounded">
+                          <option selected disabled value="">Select Payment Status</option>
+                          <option value="paid">Paid</option>
+                          <option value="due">Due</option>
+                      </select><br>
+
+                  </div>
+
               </div>
+
+{{--                <p id="total_price">Total: $0.00</p>--}}
+
               <input type="hidden" id="modalUserId">
               <div class="flex justify-end">
                 <button type="submit" class="flex items-center gap-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
@@ -172,16 +251,68 @@
                     <span class="sr-only">Loading...</span>
                 </button>
               </div>
-              {{-- <div class="mt-4 text-center" id="loadingIndicator">
-                <div role="status">
-                    
-                </div>
-                
-            </div> --}}
 
             </form>
           </div>
         </div>
       </div>
+
+
+
+    <script>
+
+        let selectedPrice = 0
+
+        document.getElementById('fee').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const price = selectedOption.getAttribute('data-price');
+            const totalPriceElement = document.getElementById('total_price');
+
+            if (price) {
+                selectedPrice = parseFloat(price)
+                totalPriceElement.textContent = `Total: $${parseFloat(price).toFixed(2)}`;
+            } else {
+                totalPriceElement.textContent = "Total: $0.00";
+            }
+        });
+
+        document.getElementById('payment_option').addEventListener('change', function () {
+            var paymentTypeSection = document.getElementById('payment_type_section')
+            var methodSection = document.getElementById('payment_method_section')
+            if( this.value === 'pay_now' ) {
+                paymentTypeSection.removeAttribute('hidden')
+                payment_method_section.removeAttribute('hidden')
+            }
+            else {
+                paymentTypeSection.setAttribute('hidden', true)
+                amount_section.setAttribute('hidden', true)
+            }
+        })
+
+        document.getElementById('payment_type')
+            .addEventListener('change', function () {
+                const selectedOption = this.options[this.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                const amountSection = document.getElementById('amount_section')
+                const amountInput = document.getElementById('amount_input')
+                const paymentStatusSection = document.getElementById('payment_status_section')
+                // console.log("price", selectedPrice.toFixed(2))
+                if ( this.value === 'full' ) {
+                    amountSection.removeAttribute('hidden')
+                    amountInput.setAttribute('disabled', true)
+                    amountInput.value = `$${selectedPrice.toFixed(2)}`
+                    paymentStatusSection.removeAttribute('hidden')
+                }
+                else {
+                    amountSection.removeAttribute('hidden')
+                    amountInput.value = 0.00
+                    amountInput.removeAttribute('disabled')
+                    // amountInput.value.replace(/[^0-9.]/g, '')
+                    paymentStatusSection.removeAttribute('hidden')
+
+                }
+            })
+
+    </script>
       
 @endsection

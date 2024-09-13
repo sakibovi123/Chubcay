@@ -18,7 +18,6 @@ class Package extends Model
         'features',
         'duration',
         'duration_title',
-        'membership_type_id'
     ];
 
     protected $casts = [
@@ -34,10 +33,7 @@ class Package extends Model
         return $this->hasMany(Checkout::class);
     }
 
-    public function membershiptype()
-    {
-        return $this->belongsTo(MembershipType::class, 'membership_type_id');
-    }
+
 
 
 }

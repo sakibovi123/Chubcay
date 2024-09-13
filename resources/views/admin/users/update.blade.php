@@ -88,7 +88,7 @@
             </div>
 
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Balance</label>
+                <label class="text-gray-600 font-bold text-md" for="">Funding</label>
                 <input value="{{ $user->balance }}" required name="balance" id="balance" type="text" placeholder="0.00" class="p-2 rounded w-full border">
             </div>
 

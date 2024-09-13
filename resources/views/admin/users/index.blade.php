@@ -22,6 +22,13 @@
             </div>
             
         </div>
+
+        @if (session('message'))
+            <div id="notification_section" class="my-3 w-full bg-green-200 rounded shadow-xl p-2">
+                {{ session('message') }}
+            </div>
+        @endif
+
         <div class="w-full bg-white rounded-xl shadow-md md:p-3 my-5">
             @if ($users->count() > 0)
             <div class="md:max-w-full max-w-80 overflow-x-auto">
@@ -312,6 +319,14 @@
 
                 }
             })
+
+    </script>
+
+    <script>
+        setTimeout(function() {
+            document.getElementById("notification_section").style.display = "none";
+        }, 3000);
+        
 
     </script>
       

@@ -12,7 +12,7 @@
     </div>
     
     <div class="w-full p-1 md:p-3 my-5">
-        @if ($plans)
+        @if ($plans->count() > 0)
         <div class="bg-white rounded max-w-80 md:max-w-full relative overflow-x-auto ">
             <table class="w-full">
                 <thead class="bg-white border-b-2">

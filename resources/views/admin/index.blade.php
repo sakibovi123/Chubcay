@@ -42,14 +42,19 @@
                 </p>
             </div>
         </div>
+
+
+
         {{-- order table --}}
         <div class="w-full bg-white rounded-xl shadow-md p-3 my-5">
             <div class="w-full flex items-center justify-between gap-2">
                 <h1 class="uppercase p-2 text-lg font-semibold">Latest Orders</h1>
                 <a href="{{ route('checkout.index') }}" class="font-semibold p-2 bg-blue-600 text-white rounded-full uppercase">Go to all orders</a>
             </div>
-            
-            @if ($orders)
+
+
+
+            @if ($orders->count() > 0)
             <div class="overflow-x-auto">
                 <table class="table-auto w-full my-4">
                     <thead class="w-full bg-gray-100 border-b-2">

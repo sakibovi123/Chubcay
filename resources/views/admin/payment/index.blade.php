@@ -23,7 +23,7 @@
         </div>
         <div class="w-full p-1 md:p-3 my-5">
             
-            @if ($fees)
+            @if ($fees->count() > 0)
             <div class="md:max-w-full max-w-80 overflow-x-auto">
                 <table class="w-full bg-white rounded">
                     <thead class="border-b-2">
@@ -100,7 +100,7 @@
             @else
                 <p class="text-2xl text-center font-bold">No Data Found!</p>
             @endif
-            @if( $records )
+            @if( $records->count() > 0 )
                 <div class="flex items-center justify-between">
                     <h1 class="text-2xl font-bold my-5">Records</h1>
 

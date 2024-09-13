@@ -16,7 +16,7 @@
 
         </div>
         <div class="w-full bg-white rounded-xl shadow-md md:p-3 my-5">
-            @if ($types)
+            @if ($types->count() > 0)
                 <div class="md:max-w-full max-w-80 overflow-x-auto">
                     <table class="w-full">
                         <thead class="border-b-2">

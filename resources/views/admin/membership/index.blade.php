@@ -73,7 +73,9 @@
             </table>
         </div>
         @else
-            <p class="text-2xl text-center font-bold">No Data Found!</p>
+            <div class="w-full flex items-center justify-center">
+                <img src="{{ asset('images/no-data.png') }}" alt="">
+            </div>
         @endif
     </div>
     

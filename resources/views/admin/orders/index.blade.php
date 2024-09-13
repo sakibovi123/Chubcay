@@ -22,8 +22,8 @@
             
         </div>
         <div class="w-full p-1 md:p-3 my-5">
-            
-            @if ($orders)
+
+            @if ( $orders->count() > 0 )
             <div class="md:max-w-full max-w-80 overflow-x-auto">
                 <table class="w-full bg-white rounded">
                     <thead class="text-sm border-b-2">
@@ -126,7 +126,11 @@
             </div>
             
             @else
-                <p class="text-2xl text-center font-bold">No Data Found!</p>
+                <div class="w-full flex items-center justify-center">
+{{--                    <p class="text-2xl text-center font-bold">No Data Found!</p>    --}}
+                    <img src="{{ asset('images/no-data.png') }}" alt="">
+                </div>
+                
             @endif
             
         </div>

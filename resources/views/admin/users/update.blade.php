@@ -38,11 +38,12 @@
                 <input value="{{ $user->password }}" required name="password" id="password" type="password" placeholder="********" class="p-2 rounded w-full border">
                 
             </div> --}}
-            
+
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md" for="">Phone</label>
-                <input value="{{ $user->phone }}" required name="phone" id="phone" type="number" placeholder="Enter phone" class="p-2 rounded w-full border">
+                <label class="text-gray-600 font-bold text-md" for="phone">Phone</label>
+                <input required name="phone" id="phone" type="text" placeholder="Enter phone" class="p-2 rounded w-full border">
             </div>
+
 
             <div class="w-full">
                 <label class="text-gray-600 font-bold text-md" for="">Country</label>
@@ -137,5 +138,20 @@
         // Restore cursor position
         this.setSelectionRange(cursorPos, cursorPos);
     });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var phoneInput = document.getElementById('phone');
+
+        phoneInput.addEventListener('input', function() {
+            // Replace any character that is not a number, dash, or parentheses
+            var cleanedInput = phoneInput.value.replace(/[^0-9\-\(\)\+]/g, '');
+
+            // Update the input field with the cleaned value
+            phoneInput.value = cleanedInput;
+        });
+    });
+
 </script>
 @endsection

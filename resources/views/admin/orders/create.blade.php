@@ -22,17 +22,21 @@
                 <label class="text-gray-600 font-bold text-md">Select User or <a class="text-blue-700" href="{{ route('users.create') }}">Create User</a></label><br>
                 <select required name="user_id" class="p-2 rounded w-full border">
                     @foreach ($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->first_name }}</option>
+                        <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
                     @endforeach
                     
                 </select>
             </div>
 
             <div class="w-full">
-                <label class="text-gray-600 font-bold text-md">Select Package</label><br>
-                <select required name="package_id" class="p-2 rounded w-full border">
+                <label class="text-gray-600 font-bold text-md">Select Plan</label><br>
+                <select required name="package_id" id="package_select" class="p-2 rounded w-full border">
+                    <option selected disabled value="">Select Plan</option>
                     @foreach ($packages as $package)
-                        <option value="{{ $package->id }}">{{ $package->title }} ${{ $package->price }}</option>
+                        <option value="{{ $package->id }}"
+                                data-price="{{ $package->price }}">
+                            {{ $package->title }} ${{ $package->price }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -61,10 +65,16 @@
                 
                 <select id="method" required name="payment_method" class="p-2 rounded w-full border">
                     <option value="" selected>Select Method</option>
-                    <option value="card">Card</option>
+                    <option value="cheque">Cheque</option>
                     <option value="cash">Cash</option>
                 </select>
 
+            </div>
+
+            <div id="cheque_section" class="w-full hidden">
+                <label class="text-gray-600 font-bold text-md" for="">Cheque</label><br>
+                <input id="cheque" maxlength="30"  name="cheque" type="text" placeholder="xxxxxxxx"
+                       class="p-2 rounded w-full border">
             </div>
 
             <div id="term" class="w-full hidden">
@@ -106,10 +116,11 @@
                 </div>
             </div>
 
-            {{-- <div class="w-full flex items-center gap-3">
-                <h4 class="text-gray-600 font-bold text-md" for="">Total: <span></span></h4><br>
-               
-            </div> --}}
+             <div id="total_section" class="hidden w-full flex items-center gap-3">
+                <h4 class="text-gray-600 font-bold text-md" for="">Total: <span id="total_price"></span></h4></br>
+
+            </div>
+
            
         </div>
 
@@ -140,7 +151,29 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // let method = $('#method');
+        let price = 0;
             $(document).ready(function() {
+                $('#package_select').on('change', function() {
+                    // Get the selected option
+                    var selectedOption = $(this).find('option:selected');
+                    console.log(selectedOption)
+                    // Get the price from the data-price attribute
+                    price = selectedOption.data('price');
+
+                    // Check if a valid package is selected
+                    // if (price) {
+                    //     // Update the total price span
+                    //     $('#total_price').text('$' + price);
+                    //
+                    //     // Show the total section
+                    //     $('#total_section').removeClass('hidden');
+                    // } else {
+                    //     // If no valid package is selected, hide the total section
+                    //     $('#total_section').addClass('hidden');
+                    // }
+                });
+
+
                 $('#payment_method').on('change', function() {
                     if ($(this).val() === 'pay_now') {
                         $('#cardOrcash').show();  // Show cardOrcash section
@@ -160,9 +193,14 @@
                 if ($(this).val() === 'card') {
                     $('.payment-section').show();  // Show payment section
                     $('#card_number, #month, #yy, #cvv').attr('required', true);  // Make card fields required
-                } else {
+                } else if( $(this).val() === 'cheque' ) {
                     $('.payment-section').hide();  // Hide payment section
+                    $('#cheque_section').show();
                     $('#card_number, #month, #yy, #cvv').removeAttr('required');  // Remove required from card fields
+                }
+                else {
+                    $('#cheque_section').hide();
+                    $('#card_number, #month, #yy, #cvv').removeAttr('required');
                 }
             });
 
@@ -174,6 +212,17 @@
                 } else {
                     $('#amount_section').hide();  // Hide amount section
                     $('#amount').removeAttr('required');  // Remove required from amount
+                    $('#total_section').show();
+
+                    if (price) {
+                        // Update the total price span
+                        $('#total_price').text('$' + price);
+                        // Show the total section
+                        $('#total_section').removeClass('hidden');
+                    } else {
+                        // If no valid package is selected, hide the total section
+                        $('#total_section').addClass('hidden');
+                    }
                 }
             });
         });
@@ -254,5 +303,6 @@
     });
 
 </script>
+
 
 @endsection

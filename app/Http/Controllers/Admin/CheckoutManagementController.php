@@ -142,136 +142,141 @@ class CheckoutManagementController extends Controller
 
                 return back()->with('message', 'Plan bought successfully');
             }
-            // initiate payment using shift4
-            $cardNumber = $request->input('card_number');
-            $month = $request->input('month');
-            $yy = $request->input('yy');
-            $cvv = $request->input('cvv');
 
-            $gateway = new Shift4Gateway(env('SHIFT4_SECRET'));
-    
-                // creating customer
-                $customerRequest = [
-                    'email' => $checkout->user->email,
-                ];
-                
-                $response = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
-                    ->asForm()
-                    ->post('https://api.shift4.com/customers', $customerRequest);
-                
-                // checking term
-                $charge = 0.00;
-                if( $request->payment_term == 'partial' ) {
-                    $charge = $request->amount;
+//            dd($request->cheque);
 
-                    $checkout->paid += $request->amount;
-                    $checkout->due = $checkout->grand_total - $checkout->paid;
+            $charge = 0.00;
 
-                }
+            if( $request->payment_term == 'partial' ) {
+                $charge = $request->amount;
 
-                // saving payment method
+                $checkout->paid += $request->amount;
+                $checkout->due = $checkout->grand_total - $checkout->paid;
 
-                $checkout->payment_method = $request->payment_method;
+            } else {
+                $checkout->paid = $checkout->grand_total;
+                $checkout->due = 0.00;
+            }
+
+            // saving payment method
+            $checkout->cheque = $request->cheque;
+            $checkout->payment_method = $request->payment_method;
+            $checkout->save();
+
+//            dd($checkout);
+
+            // saving records
+            Record::create([
+                'user_id' => $checkout->user->id,
+                'action' => 'plan checkout fee',
+                'total_amount' => $checkout->grand_total,
+                'paid_amount' => $checkout->paid,
+                'due_amount' => $checkout->due
+            ]);
+
+
+            // initiate payment using cheque
+//            $cardNumber = $request->input('card_number');
+//            $month = $request->input('month');
+//            $yy = $request->input('yy');
+//            $cvv = $request->input('cvv');
+//
+//            $gateway = new Shift4Gateway(env('SHIFT4_SECRET'));
+//
+//                // creating customer
+//                $customerRequest = [
+//                    'email' => $checkout->user->email,
+//                ];
+//
+//                $response = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+//                    ->asForm()
+//                    ->post('https://api.shift4.com/customers', $customerRequest);
+//
+            // checking term
 
 
 
-                $checkout->save();
 
-                $sh_request = [
-                    'amount' => $checkout->grand_total * 100,
-                    'currency' => 'USD',
-                    // 'customerId' => $checkout->user_id,
-                    'card' => [
-                        'number' => $cardNumber,
-                        'expMonth' => $month,
-                        'expYear' => $yy
-                    ],
-                    'customerId' => $response['id'],
-                    'metadata' =>  [
-                        'plan' => $checkout->package->title,
-                        'duration' => $checkout->package->duration . 'days'
-                    ]
-                     
-                ];
 
-                try{
-                    $charge = $gateway->createCharge($sh_request);
-                    
-                    $chargeId = $charge->getId();
-                    
-                    if( $charge->getStatus() == "successful" ) {
-                        $checkout->status = "Success";
-                        $checkout->payment_status = "Paid";
-                        if( $request->payment_temr == 'full' )
-                        {
-                            $checkout->paid = $checkout->grand_total;
-                            $checkout->due = 0.00;
-                        }
-                        
-                        $checkout->save();
-                        
-                        // saving package expiration model
-                        // need to check if one already exist then replace the package
-                        
-                        $existed_package = PackageExpiration::where("user_id", $request->user()->id)
-                            ->first();
 
-                        if( !$existed_package )
-                        {
-                            $pkg_exp = PackageExpiration::create([
-                                "checkout_id" => $checkout->id,
-                                "package_id" => $checkout->package->id,
-                                "user_id" => $checkout->user->id,
-                                "duration" => $checkout->package->duration
-                            ]);
-                        }
-                        else {
-                            $existed_package->package_id = $checkout->package->id;
-                            $existed_package->duration = $checkout->package->duration;
-                            $existed_package->save();
-                        }
-
-                        // creating plans and subs
-                        $planRequest = [
-                            'amount' => $checkout->grand_total * 100,
-                            'currency' => 'USD',
-                            'interval' => 'day',
-                            'intervalCount' => $checkout->package->duration,
-                            'name' => $checkout->package->duration_title,
-                        ];
-
-                        $responsePlan = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
-                            ->asForm()
-                            ->post('https://api.shift4.com/plans', $planRequest);
-                        
-                        // processing subscription
-                        $subRequest = [
-                            'planId' => $responsePlan['id'],
-                            'customerId' => $response['id'],
-                        ];
-
-                        $responseSub = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
-                            ->asForm()
-                            ->post('https://api.shift4.com/subscriptions', $subRequest);
-
-                        // saving records
-
-                        Record::create([
-                            'user_id' => $checkout->user->id,
-                            'action' => 'plan checkout fee',
-                            'total_amount' => $checkout->grand_total,
-                            'paid_amount' => $checkout->paid,
-                            'due_amount' => $checkout->due
-                        ]);
-
-                        return redirect()->back()->with('message', 'Plan bought successfully!');
-                    }
-                } catch( Shift4Exception $e ) {
-                    $checkout->status = "Cancelled";
-                    $checkout->payment_status = "Unpaid";
-                    $checkout->save();
-                    return $e->getMessage();
-                }
+//                try{
+//                    $charge = $gateway->createCharge($sh_request);
+//
+//                    $chargeId = $charge->getId();
+//
+//                    if( $charge->getStatus() == "successful" ) {
+//                        $checkout->status = "Success";
+//                        $checkout->payment_status = "Paid";
+//                        if( $request->payment_temr == 'full' )
+//                        {
+//                            $checkout->paid = $checkout->grand_total;
+//                            $checkout->due = 0.00;
+//                        }
+//
+//                        $checkout->save();
+//
+//                        // saving package expiration model
+//                        // need to check if one already exist then replace the package
+//
+//                        $existed_package = PackageExpiration::where("user_id", $request->user()->id)
+//                            ->first();
+//
+//                        if( !$existed_package )
+//                        {
+//                            $pkg_exp = PackageExpiration::create([
+//                                "checkout_id" => $checkout->id,
+//                                "package_id" => $checkout->package->id,
+//                                "user_id" => $checkout->user->id,
+//                                "duration" => $checkout->package->duration
+//                            ]);
+//                        }
+//                        else {
+//                            $existed_package->package_id = $checkout->package->id;
+//                            $existed_package->duration = $checkout->package->duration;
+//                            $existed_package->save();
+//                        }
+//
+//                        // creating plans and subs
+////                        $planRequest = [
+////                            'amount' => $checkout->grand_total * 100,
+////                            'currency' => 'USD',
+////                            'interval' => 'day',
+////                            'intervalCount' => $checkout->package->duration,
+////                            'name' => $checkout->package->duration_title,
+////                        ];
+//
+////                        $responsePlan = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+////                            ->asForm()
+////                            ->post('https://api.shift4.com/plans', $planRequest);
+////
+////                        // processing subscription
+////                        $subRequest = [
+////                            'planId' => $responsePlan['id'],
+////                            'customerId' => $response['id'],
+////                        ];
+////
+////                        $responseSub = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+////                            ->asForm()
+////                            ->post('https://api.shift4.com/subscriptions', $subRequest);
+////
+////                        // saving records
+//
+//                        Record::create([
+//                            'user_id' => $checkout->user->id,
+//                            'action' => 'plan checkout fee',
+//                            'total_amount' => $checkout->grand_total,
+//                            'paid_amount' => $checkout->paid,
+//                            'due_amount' => $checkout->due
+//                        ]);
+//
+//                        return redirect()->back()->with('message', 'Plan bought successfully!');
+//                    }
+//                } catch( Shift4Exception $e ) {
+//                    $checkout->status = "Cancelled";
+//                    $checkout->payment_status = "Unpaid";
+//                    $checkout->save();
+//                    return $e->getMessage();
+//                }
             
         }
 

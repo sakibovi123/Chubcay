@@ -67,6 +67,9 @@ return new class extends Migration
             $table->json('custom_fields')
                 ->nullable();
 
+            $table->string('cheque')
+                ->nullable();
+
         });
     }
 

@@ -33,7 +33,7 @@
                 <p class="text-sm text-gray-400">New orders</p>
                 <h1 class="font-bold text-3xl">{{ $totalOrders }}</h1>
                 <p class="text-red-500 flex items-center gap-3">
-                    15% deacrease
+                    15% decrease
                     <svg class="w-6 h-6 text-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4.5V19a1 1 0 0 0 1 1h15M7 10l4 4 4-4 5 5m0 0h-3.207M20 15v-3.207"/>
                       </svg>
@@ -42,8 +42,6 @@
                 </p>
             </div>
         </div>
-
-
 
         {{-- order table --}}
         <div class="w-full bg-white rounded-xl shadow-md p-3 my-5">

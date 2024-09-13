@@ -38,7 +38,7 @@
     <label for="payment_method" class="block text-gray-700 mb-2">Payment Method</label>
     <select name="method" id="payment_method" class="block w-full p-2 border rounded">
         <option value="" disabled selected>Select a payment method</option>
-{{--         <option value="check">Pay with Check</option>--}}
+         <option value="wallet">Pay with Wallet</option>
         <option value="credit_card">Pay with Credit Card</option>
     </select>
 </div>
@@ -63,12 +63,13 @@
 
 <!-- Check Payment Section -->
 <div id="check_section" class="hidden">
-    <div class="mb-4">
-        <label for="check_number" class="block text-gray-700 mb-2">Check Number</label>
-        <input name="check_number" type="text" id="check_number" class="block w-full p-2 border rounded" placeholder="Enter check number">
-    </div>
+{{--    <div class="mb-4">--}}
+{{--        <label for="check_number" class="block text-gray-700 mb-2"></label>--}}
+{{--        <input name="check_number" type="text" id="check_number" class="block w-full p-2 border rounded" placeholder="Enter check number">--}}
+{{--    </div>--}}
     <button type="submit" id="submit_check" class="w-full bg-blue-500 text-white p-2 rounded">Pay</button>
 </div>
+{{--<button hidden type="submit" id="submit_check" class="w-full bg-blue-500 text-white p-2 rounded">Pay</button>--}}
 
 <!-- Credit Card Payment Section -->
 <div id="credit_card_section" class="hidden">
@@ -110,8 +111,9 @@
 
         let selectedMethod = $(this).val();
 
-        if (selectedMethod === 'check') {
+        if (selectedMethod === 'wallet') {
             $('#check_section').show();
+            // $('#submit_check').show();
             $('#credit_card_section').hide();
         } else if (selectedMethod === 'credit_card') {
             $('#check_section').hide();
@@ -135,6 +137,7 @@
 
         if(selectedTerm == 'partial') {
             $('#payment-amount').show();
+            // $('#payment-amount').show();
             // $('#submit_card').text('Pay');
         }
         else {

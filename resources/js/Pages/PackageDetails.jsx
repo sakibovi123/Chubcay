@@ -24,6 +24,7 @@ function PackageDetails({package_details}) {
         year: '',
         cvc: '',
         payment_option: '',
+        payment_method: '',
     });
 
     const handleCheckout = (e) => {
@@ -123,6 +124,21 @@ function PackageDetails({package_details}) {
                         className="w-full rounded border-gray-300" />
 
                         {errors.phone && <div>{errors.phone}</div>}
+
+                    <label htmlFor="Payment Option">Payment Method</label>
+                    <select
+                        name="payment_method"
+                        id=""
+                        className="w-full rounded border-gray-300"
+                        value={data.payment_method}
+                        onChange={(e) => setData('payment_method', e.target.value)}
+                    >
+                        <option value="" selected disabled>Select Payment Method</option>
+                        <option value="card">Card</option>
+                        <option value="wallet">Wallet</option>
+                    </select>
+
+                    {errors.payment_method && <div>{errors.payment_method}</div>}
                     
                     <label htmlFor="Payment Option">Payment Option</label>
                     <select 
@@ -158,65 +174,73 @@ function PackageDetails({package_details}) {
                         )
                     }
 
-                                       
-                    <label htmlFor="card number">Card Number</label>
-                    <input
-                        required
-                        type="text"
-                        maxLength={16}
-                        value={data.card_number}
-                        onChange={(e) => setData('card_number', e.target.value)}
-                        className="w-full rounded border-gray-300"
-                        placeholder="4242 4242 4242 4242"
-                        />
+                    {
+                        data.payment_method === 'card' && (
+                            <div>
+                                <label htmlFor="card number">Card Number</label>
+                                <input
+                                    required
+                                    type="text"
+                                    maxLength={16}
+                                    value={data.card_number}
+                                    onChange={(e) => setData('card_number', e.target.value)}
+                                    className="my-2 w-full rounded border-gray-300"
+                                    placeholder="4242 4242 4242 4242"
+                                />
 
-                        {errors.card_number && <div>{errors.card_number}</div>}
+                                {errors.card_number && <div>{errors.card_number}</div>}
 
-                    <label htmlFor="card number">Expiry & CVC</label>
-                    <div className="w-full flex items-center gap-2">
-                        <input
-                            required
-                            type="text"              
-                            id="card-expiration-input"
-                            value={data.mm}
-                            onChange={(e) => setData('mm', e.target.value.replace(/[^0-9]/g, ''))}
-                            placeholder="mm"
-                            className="w-full rounded border-gray-300" maxLength={2} />
+                                <label htmlFor="card number">Expiry & CVC</label>
+                                <div className="w-full flex items-center gap-2">
+                                    <input
+                                        required
+                                        type="text"
+                                        id="card-expiration-input"
+                                        value={data.mm}
+                                        onChange={(e) => setData('mm', e.target.value.replace(/[^0-9]/g, ''))}
+                                        placeholder="mm"
+                                        className="w-full rounded border-gray-300" maxLength={2} />
 
-                            {errors.mm && <div>{errors.mm}</div>}
+                                    {errors.mm && <div>{errors.mm}</div>}
 
-                            <input
-                                required
-                                type="text"
-                                id="card-expiration-input"
-                                value={data.year}
-                                onChange={(e) => setData('year', e.target.value.replace(/[^0-9]/g, ''))}
-                                placeholder="yy"
-                                maxLength={2}
-                                // min={2}
-                                className="w-full rounded border-gray-300" />
+                                    <input
+                                        required
+                                        type="text"
+                                        id="card-expiration-input"
+                                        value={data.year}
+                                        onChange={(e) => setData('year', e.target.value.replace(/[^0-9]/g, ''))}
+                                        placeholder="yy"
+                                        maxLength={2}
+                                        // min={2}
+                                        className="w-full rounded border-gray-300" />
 
-                            {errors.year && <div>{errors.year}</div>}
-                            
-                            <input
-                                required
-                                type="text"
-                                id="card-expiration-input"
-                                value={data.cvc}
-                                onChange={(e) => setData('cvc', e.target.value)}
-                                placeholder="cvc"
-                                maxLength={3}
-                                className="w-full rounded border-gray-300" />
+                                    {errors.year && <div>{errors.year}</div>}
 
-                            {errors.cvc && <div>{errors.cvc}</div>}
-                    </div>
-                    
+                                    <input
+                                        required
+                                        type="text"
+                                        id="card-expiration-input"
+                                        value={data.cvc}
+                                        onChange={(e) => setData('cvc', e.target.value)}
+                                        placeholder="cvc"
+                                        maxLength={3}
+                                        className="w-full rounded border-gray-300" />
+
+                                    {errors.cvc && <div>{errors.cvc}</div>}
+                            </div>
+                        </div>
+                    )
+                }
+
+
+
+
 
                     <div className="flex gap-2 items-center my-2">
                         <input required type="checkbox" />
                         <p>I agree with the terms & conditions</p>
                     </div>
-                    
+
                 {/* <div className="bg-blue-600 w-full p-2">
                         <button className="shift4-button w-full bg-blue-600"></button>
                 </div> */}

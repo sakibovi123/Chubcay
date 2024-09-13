@@ -89,7 +89,8 @@
                                     
                                 </td>
                             </tr>
-                            
+                            {{ $fees->links() }}
+
                         @endforeach
                         
                         
@@ -176,6 +177,7 @@
 
                             @endforeach
 
+                            {{ $records->links() }}
 
                             </tbody>
                         </table>

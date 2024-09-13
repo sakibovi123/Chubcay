@@ -17,8 +17,8 @@ class AdminFeeController extends Controller
 
     public function index()
     {
-        $fees = FeeCheckout::all();
-        $records = Record::orderBy('created_at', 'desc')->get();
+        $fees = FeeCheckout::paginate(10);
+        $records = Record::orderBy('created_at', 'desc')->paginate(10);
 
         return view('admin.payment.index', [
             'fees' => $fees,

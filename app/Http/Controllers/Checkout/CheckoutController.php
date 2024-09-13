@@ -33,12 +33,12 @@ class CheckoutController extends Controller
     }
 
     
-public function handleCheckout( Request $request ) 
-    {   
+public function handleCheckout( Request $request )
+    {
         $paid = 0.00;
         $due = 0.00;
         $charge = 0.00;
-
+//        dd($request->payment_method);
         try {
             $auth = Auth::user();
             $currency = 'USD';
@@ -50,11 +50,8 @@ public function handleCheckout( Request $request )
                 "last_name" => "required|string",
                 "email" => "required|email",
                 "phone" => "required|string",
-                // "card_number" => "required|number|max:16",
-                // "cvc" => "required|number|max:3"
             ]);
-            // dd(auth()->user()->id);
-            // $data = $request->all();
+
             $data = [
                 "first_name" => $request->get('first_name'),
                 "last_name" => $request->get('last_name'),
@@ -63,7 +60,7 @@ public function handleCheckout( Request $request )
                 "user_id" => $auth->id,
                 "invoice" => mt_rand(1, 9999),
                 "payment_option" => $request->payment_option,
-                "payment_method" => 'card'
+                "payment_method" => $request->payment_method
             ];
 
             // dd($data);
@@ -78,9 +75,9 @@ public function handleCheckout( Request $request )
             if ( $package ) {
                 $checkout = Checkout::create($data);
                 $checkout->total = $checkout->package->price;
-                
+
                 // $checkout->total = $checkout->package_id->price;
-                if( $checkout->tax ) 
+                if( $checkout->tax )
                 {
                     $checkout->grand_total += $checkout->total
                          + 100 / $checkout->tax;
@@ -92,25 +89,28 @@ public function handleCheckout( Request $request )
                 $gateway = new Shift4Gateway(env('SHIFT4_SECRET'));
 
                 // creating customer
+                if( $request->payment_method == 'card' ) {
 
-                $customerRequest = [
-                    'email' => $data['email'],
-                ];
-                
-                $response = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
-                    ->asForm()
-                    ->post('https://api.shift4.com/customers', $customerRequest);
-                
+                    $customerRequest = [
+                        'email' => $data['email'],
+                    ];
+
+                    $response = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+                        ->asForm()
+                        ->post('https://api.shift4.com/customers', $customerRequest);
+
+                }
+
                 if( $request->payment_option == 'partial' ) {
                     $charge = $request->amount;
                     $checkout->paid += $charge;
                     $checkout->due = $checkout->grand_total - $checkout->paid;
 
-                    // savhing payment option
+                    // saving payment option
 
                     $checkout->payment_option = 'partial';
 
-                    $auth->balance += $checkout->paid;
+//                    $auth->balance += $checkout->paid;
                     $auth->save();
 
                     $checkout->save();
@@ -131,11 +131,11 @@ public function handleCheckout( Request $request )
 
                     $checkout->due = 0.00;
 
-                    // savhing payment option
+                    // saving payment option
 
                     $checkout->payment_option = 'full';
 
-                    $auth->balance += $checkout->paid;
+//                    $auth->balance += $checkout->paid;
                     $auth->save();
 
                     $checkout->save();
@@ -149,99 +149,143 @@ public function handleCheckout( Request $request )
                     ]);
                 }
 
-                $sh_request = [
-                    'amount' => $charge * 100,
-                    'currency' => 'USD',
-                    // 'customerId' => $checkout->user_id,
-                    'card' => [
-                        'number' => $request->get('card_number'),
-                        'expMonth' => $mm,
-                        'expYear' => $yy
-                    ],
-                    'customerId' => $response['id'],
-                    'metadata' =>  [
-                        'plan' => $checkout->package->title,
-                        'duration' => $checkout->package->duration . 'days'
-                    ]
-                     
-                ];
-                // dd($sh_request['amount']);
+                if ( $request->payment_method == 'wallet' ) {
 
-                try{
-                    $charge = $gateway->createCharge($sh_request);
-                    
-                    $chargeId = $charge->getId();
-                    
-                    if( $charge->getStatus() == "successful" ) {
-                        $checkout->status = "Success";
-                        $checkout->payment_status = "Paid";
-                        $checkout->save();
-                        
-                        // saving package expiration model
-                        // need to check if one already exist then replace the package
-                        
-                        $existed_package = PackageExpiration::where("user_id", $request->user()->id)
-                            ->first();
-
-                        if( !$existed_package )
-                        {
-                            // dd($checkout->package->duration);
-                            $pkg_exp = PackageExpiration::create([
-                                "package_id" => $checkout->package->id,
-                                "user_id" => $auth->id,
-                                "duration" => $checkout->package->duration,
-                                "is_active" => true,
-                                "checkout_id" => $checkout->id
-                            ]);
-
-                            // dd($pkg_exp->duration);
-                        }
-                        else
-                        {
-                            $existed_package->package_id = $checkout->package->id;
-                            $existed_package->duration = $checkout->package->duration;
-                            $existed_package->is_active = true;
-                            $existed_package->checkout_id = $checkout->id;
-                            $existed_package->save();
-                        }
-
-                        // creating plans and subs
-
-
-                        $planRequest = [
-                            'amount' => $checkout->grand_total * 100,
-                            'currency' => 'USD',
-                            'interval' => 'day',
-                            'intervalCount' => $checkout->package->duration,
-                            'name' => $checkout->package->duration_title,
-                        ];
-
-                        $responsePlan = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
-                            ->asForm()
-                            ->post('https://api.shift4.com/plans', $planRequest);
-                        
-                        // processing subscription
-                        // dd($responsePlan['id']);
-                        $subRequest = [
-                            'planId' => $responsePlan['id'],
-                            'customerId' => $response['id'],
-                        ];
-
-                        $responseSub = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
-                            ->asForm()
-                            ->post('https://api.shift4.com/subscriptions', $subRequest);
-
-                        return redirect(route('checkout.success'));
+                    if( $request->payment_option == 'full' ) {
+                        $charge = $checkout->grand_total;
                     }
-                } catch( Shift4Exception $se ) {
-                    $checkout->status = "Cancelled";
-                    $checkout->payment_status = "Unpaid";
+
+                    $auth->balance -= $charge;
+
+                    $auth->save();
+
+                    $checkout->payment_status = "Paid";
                     $checkout->save();
-                    return Inertia::render("Failed", [
-                        "error" => $se->getMessage()
-                    ]);
+
+                    $existed_package = PackageExpiration::where("user_id", $request->user()->id)
+                        ->first();
+
+                    if( !$existed_package )
+                    {
+                        // dd($checkout->package->duration);
+                        $pkg_exp = PackageExpiration::create([
+                            "package_id" => $checkout->package->id,
+                            "user_id" => $auth->id,
+                            "duration" => $checkout->package->duration,
+                            "is_active" => true,
+                            "checkout_id" => $checkout->id
+                        ]);
+
+                        // dd($pkg_exp->duration);
+                    }
+                    else
+                    {
+                        $existed_package->package_id = $checkout->package->id;
+                        $existed_package->duration = $checkout->package->duration;
+                        $existed_package->is_active = true;
+                        $existed_package->checkout_id = $checkout->id;
+                        $existed_package->save();
+                    }
+
+                    return redirect(route('checkout.success'));
+
+
+                } else {
+                    $sh_request = [
+                        'amount' => $charge * 100,
+                        'currency' => 'USD',
+                        // 'customerId' => $checkout->user_id,
+                        'card' => [
+                            'number' => $request->get('card_number'),
+                            'expMonth' => $mm,
+                            'expYear' => $yy
+                        ],
+                        'customerId' => $response['id'],
+                        'metadata' =>  [
+                            'plan' => $checkout->package->title,
+                            'duration' => $checkout->package->duration . 'days'
+                        ]
+
+                    ];
+                    // dd($sh_request['amount']);
+
+                    try{
+                        $charge = $gateway->createCharge($sh_request);
+
+                        $chargeId = $charge->getId();
+
+                        if( $charge->getStatus() == "successful" ) {
+                            $checkout->status = "Success";
+                            $checkout->payment_status = "Paid";
+                            $checkout->save();
+
+                            // saving package expiration model
+                            // need to check if one already exist then replace the package
+
+                            $existed_package = PackageExpiration::where("user_id", $request->user()->id)
+                                ->first();
+
+                            if( !$existed_package )
+                            {
+                                // dd($checkout->package->duration);
+                                $pkg_exp = PackageExpiration::create([
+                                    "package_id" => $checkout->package->id,
+                                    "user_id" => $auth->id,
+                                    "duration" => $checkout->package->duration,
+                                    "is_active" => true,
+                                    "checkout_id" => $checkout->id
+                                ]);
+
+                                // dd($pkg_exp->duration);
+                            }
+                            else
+                            {
+                                $existed_package->package_id = $checkout->package->id;
+                                $existed_package->duration = $checkout->package->duration;
+                                $existed_package->is_active = true;
+                                $existed_package->checkout_id = $checkout->id;
+                                $existed_package->save();
+                            }
+
+                            // creating plans and subs
+
+                            $planRequest = [
+                                'amount' => $checkout->grand_total * 100,
+                                'currency' => 'USD',
+                                'interval' => 'day',
+                                'intervalCount' => $checkout->package->duration,
+                                'name' => $checkout->package->duration_title,
+                            ];
+
+                            $responsePlan = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+                                ->asForm()
+                                ->post('https://api.shift4.com/plans', $planRequest);
+
+                            // processing subscription
+                            // dd($responsePlan['id']);
+                            $subRequest = [
+                                'planId' => $responsePlan['id'],
+                                'customerId' => $response['id'],
+                            ];
+
+                            $responseSub = Http::withBasicAuth(env('SHIFT4_SECRET'), '')
+                                ->asForm()
+                                ->post('https://api.shift4.com/subscriptions', $subRequest);
+
+                            return redirect(route('checkout.success'));
+                        }
+                    } catch( Shift4Exception $se ) {
+                        $checkout->status = "Cancelled";
+                        $checkout->payment_status = "Unpaid";
+                        $checkout->save();
+                        return Inertia::render("Failed", [
+                            "error" => $se->getMessage()
+                        ]);
+                    }
                 }
-            
+
+
+
             }
             else {
                 return response()->json([
@@ -324,7 +368,7 @@ public function handleCheckout( Request $request )
                 $checkout->paid += $charge;
                 $checkout->due = $checkout->grand_total - $checkout->paid;
 
-                $auth->balance += $checkout->paid;
+//                $auth->balance += $checkout->paid;
                 $auth->save();
 
                 $checkout->save();
@@ -346,7 +390,7 @@ public function handleCheckout( Request $request )
                 // saving payment option
                 $checkout->payment_option = 'full';
 
-                $auth->balance += $checkout->paid;
+//                $auth->balance += $checkout->paid;
                 $auth->save();
 
                 $checkout->save();

@@ -198,14 +198,26 @@
 
                   <div id="payment_method_section" hidden>
                       <label for="fee" class="block text-gray-700">Payment Method</label>
-                      {{--                      <select disabled name="payment_method" id="payment_method" class="form-input mt-1 block w-full p-2 border rounded">--}}
-                      {{--                          <option selected disabled value="">Cash</option>--}}
-                      {{--                      </select><br>--}}
-                      <input id="method_input" class="form-input mt-1 block w-full p-2 border rounded"
-                             disabled type="text" value="cash">
+                            <select name="payment_method" id="payment_method" class="form-input mt-1 block w-full p-2 border rounded">
+                                <option selected disabled value="">Select Payment Method</option>
+                                <option value="">Cash</option>
+                                <option value="cheque">Cheque</option>
+                            </select><br>
+{{--                      <input id="method_input" class="form-input mt-1 block w-full p-2 border rounded"--}}
+{{--                             disabled type="text" value="cash">--}}
 
                   </div>
-                  <br>
+
+
+                  <div hidden id="cheque_section" class="w-full">
+                      <label for="">Cheque</label><br>
+                      <input
+                              id="cheque"
+                              class="w-full p-2 rounded border border-gray-200 outline-none"
+                              type="text" placeholder="xxxxxxxxxxxxx" name="cheque">
+                  </div>
+
+
 
 {{--                  payment option end--}}
 
@@ -222,6 +234,8 @@
 
 {{--                payment type end--}}
 {{--                  amount section--}}
+
+
                   <div hidden id="amount_section" class="w-full">
                       <label for="">Amount</label><br>
                       <input
@@ -292,6 +306,7 @@
             else {
                 paymentTypeSection.setAttribute('hidden', true)
                 amount_section.setAttribute('hidden', true)
+                methodSection.setAttribute('hidden', true)
             }
         })
 
@@ -318,6 +333,14 @@
 
                 }
             })
+
+        document.getElementById('payment_method').addEventListener('change', function () {
+            const paymentMethodVal = this.value
+            const chequeSection = document.getElementById('cheque_section')
+            if ( paymentMethodVal === 'cheque' ) {
+                chequeSection.removeAttribute('hidden')
+            }
+        })
 
     </script>
 

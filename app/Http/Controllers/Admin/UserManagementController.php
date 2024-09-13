@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Mockery\Exception;
 
 class UserManagementController extends Controller
 {
@@ -234,9 +235,14 @@ class UserManagementController extends Controller
 
         $link = route('password.request');
 
+        try{
+            Mail::to($user->email)
+                ->send(new PasswordResetMail($link));
+        }
 
-        Mail::to($user->email)
-            ->send(new PasswordResetMail($link));
+        catch (\Throwable $e){
+            throw $e;
+        }
 
         return back()->with('message', 'Password reset link sent');
     }
